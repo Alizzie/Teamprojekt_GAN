@@ -11,6 +11,8 @@ Manuskript/*.aux
 *.lol
 *.lot
 *.aux
+*.lof
+*.auxlock
 *.synctex.gz
 *.toc
 *.sznctex.gz
