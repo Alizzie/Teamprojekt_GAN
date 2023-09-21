@@ -1,0 +1,16 @@
+%%% Hier werden neue LaTeX-Befehle definiert, die im Dokument verwendet werden
+
+% aktiviert die chapterthumbs (Schwarze Balken mit Kapitelnummerierung in weiß) am rechten Rand der rechten/ungeraden Seiten. Dazu wird das nicht supportete Package "chapterthumbs" verwendet, dass im Ordner "styles", dieser Vorlage liegt.
+\newcommand{\kapitelbalken}[1]{\ifnum\value{#1}=1 \lohead[\putchapterthumb]{\putchapterthumb} \else\lohead[]{} \fi}
+
+% definiert den Befehl \TEX, um das Symbol von TEX-korrekt darstellen zu können
+\newcommand{\TEX}{$\mathrm{T\!_{\displaystyle E} \! X}$}
+
+% definiert den Befehl \LATEX2e, um das Symbol für LATEX2epsilon korrekt darzustellen.
+\newcommand{\LaTeXze}{\LaTeX $2_\varepsilon$}
+
+% definiert einen neuen Spaltentyp für Tabellen
+\newcolumntype{C}{>{\centering\arraybackslash}m{2cm}}
+
+% definiert ein hochgestelltes 'textregistered'-Symbol
+\newcommand{\registered}{$^{\tiny{\text{\textregistered}}}$}

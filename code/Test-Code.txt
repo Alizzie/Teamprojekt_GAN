@@ -1,0 +1,19 @@
+# add a select-field
+def add_select_field(self, target="", preselect="", content=[""], content_value=[""], field_type="submit", css_class="linkDefault"):
+
+    if len(content) != len(content_value):
+        result = self.b("Error in HTML: ") + "HTML.add_select_field content and content_value have different sizes"
+    else:
+        result="<select class=\""+css_class+"\" name=\""+target+"\""
+        if field_type == "submit":
+            result+=" onChange=\"this.form.submit()\""
+        result += ">"
+        for i in range(len(content)):
+            result+="<option value=\""+content_value[i]+"\""
+            if content_value[i] == preselect:
+                result += " selected ";
+            result += ">"
+            result += content[i]
+            result += "</option>"
+        result+="</select>"
+    self.add_code("\n" + result)

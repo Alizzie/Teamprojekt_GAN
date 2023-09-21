@@ -1,0 +1,31 @@
+% In dieser Datei werden Aussehen und Inhalt der Titelseite der Dokumentation festgelegt
+% Dabei sollten höchstens die Zeilen mit "\betrieb{}" und "\betreuer" verändert werden. Diese sollen nur dann eingefügt werden, wenn es sich um eine externe (nicht-hochschul-interne) Arbeit handelt.
+
+\thispagestyle{plain}
+\begin{titlepage}
+\begin{addmargin}[-1cm]{-2cm} % Gewährleistet eine  manuelle Anpassung der Seitenränder für die Titelseite, damit wegen der ungleichen Seitenränder, die durch das zweiseitige Dokument entstehen, die Titelseite richtig zentriert werden kann
+	\begin{center}
+		\includegraphics[width=\textwidth]{images/eTRainer-Logo.png}
+		\vspace{1cm}\rule{\textwidth}{0.04cm}	
+		\vspace{0.5cm}\LARGE{\art{}}\\
+		%\vspace{0.1cm}\large{im Unternehmen \betrieb{}}\\
+		\vspace{1cm}\LARGE\textbf{{\thema{}}}\\
+		\vspace{1cm}\LARGE\textbf{\themaEnglisch{}}\\
+		\vspace{2cm}\large{\autor{}}\\
+		\vspace{0.25cm}\large{Mat.Nr.: \matrikel{}}\\
+		\vspace{1cm}Betreuer:\\
+		\vspace{0.2cm}\prof{}\\
+		%\vspace{0.1cm}\betreuer{}\\
+		\vspace{1cm}Datum:\\
+		\vspace{0.2cm}\abgabedatum%\today
+	\end{center}
+\end{addmargin}
+\end{titlepage}
+
+\newpage 
+\thispagestyle{empty}
+\quad 
+\newpage
+\thispagestyle{scrheadings}
+% Beginnt Seitenzahl bei 1
+\setcounter{page}{1}

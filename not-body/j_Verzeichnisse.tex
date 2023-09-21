@@ -1,0 +1,47 @@
+% Hier werden alle Verzeichnisse erzeugt, die am Ende der Arbeit aufgelistet werden.
+% mit diesem Befehl wird dem Inhaltsverzeichniss das Kapitel "Verzeichnisse hinzugefügt
+\addcontentsline{toc}{chapter}{Verzeichnisse}
+
+\addcontentsline{toc}{section}{Literaturverzeichnis}
+\nocite{*}						% damit die ganze Literatur im Verzeichniss erscheint, auch, wenn diese nicht zitiert wurde! 
+\bibliographystyle{alphadin}	% Stil des Literaturverzeichnisses
+\bibliography{literatur}		% Literaturverzeichnis
+\cleardoublepage
+
+% Erstellt das Abbildungsverzeichnis
+\listoffigures
+\addcontentsline{toc}{section}{Abbildungsverzeichnis}   % Abbildungsverzeichnis	
+\cleardoublepage
+
+% Erstellt das Tabellenverzeichnis - Bei Bedarf einfügen
+\listoftables
+\addcontentsline{toc}{section}{Tabellenverzeichnis}		% Tabellenverzeichnis
+\cleardoublepage
+
+% Erstellt das Code-Auszugs-Verzeichnis - Bei Bedarf einfügen
+\lstlistoflistings
+\addcontentsline{toc}{section}{Code-Auszugs-Verzeichnis}% Code-Auszugs-Verzeichnis
+\cleardoublepage
+
+% Glossar
+\addcontentsline{toc}{section}{Glossar}
+\chapter*{Glossar}
+
+\begin{itemize}
+    \item \textbf{C++}:\\ Hardwarenahe, objektorientierte Programmiersprache.
+	\item \textbf{HTML}:\\ Hypertext Markup Language - textbasierte Auszeichnungssprache zur Strukturierung elektronischer Dokumente.
+	\item \textbf{HTTP}:\\ Hypertext Transfer Protocol - Protokoll zur Übertragung von Daten auf der Anwendungssicht über ein Rechnernetz.
+	\item \textbf{iARS}:\\ innovative Audio Response System - System mit zwei Applikationen (iARS-master-App; iARS-student-App), dass sich zum Einsetzten von e-TR-ainer-Inhalten in Vorlesungen eignet.
+	\item \textbf{ISO}:\\ Internationale Vereinigung von Normungsorganisationen.
+	\item \textbf{JavaScript}:\\ Skriptsprache zu Auswertung von Benutzerinteraktionen.
+	\item \textbf{Konstruktor}:\\ Beim Erzeugen einer Objektinstanz aufgerufene Methode zum Initialisieren von Eigenschaften.
+	\item \textbf{MySQL}:\\ Relationales Datenbankverwaltungssystem.
+	\item \textbf{OLAT}:\\ Online Learning and Training - Lernplattform für verschiedene Formen von webbasiertem Lernen.
+	\item \textbf{OOP}:\\  Objektorientierte Programmierung - Programmierparadigma, nach dem sich die Architektur eine Software an realen Objekten orientiert.
+	\item \textbf{Open Source}:\\ Software, die öffentlich von Dritten eingesehen, geändert und genutzt werden kann.
+	\item \textbf{PHP}:\\ Skriptsprache zur Erstellung von Webanwendungen.
+	\item \textbf{Python}:\\ Skript- und Programmiersprache, die unter Anderem objektorientiertes Programmieren ermöglicht.
+	\item \textbf{Shell}:\\ Shell oder auch Unix-Shell - traditionelle Benutzerschnittstelle von Unix-Betriebssystemen
+	\item \textbf{Spyder}:\\ Entwicklungsumgebung für wissenschaftliche Programmierung in der Programmiersprache Python.
+	\item \textbf{SymPy}:\\ Python-Bibliothek für symbolische Mathematik.
+\end{itemize} 

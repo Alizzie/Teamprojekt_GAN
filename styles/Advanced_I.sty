@@ -1,0 +1,17 @@
+% setzt Chapters höher als vorgesehen
+\renewcommand*{\chapterheadstartvskip}{\vspace*{-2cm}}
+%\thispagestyle{headings}
+
+% setzt eine Trennlinie unter eine Section
+%\titleformat{\section}[hang]{\sffamily\bfseries}{\Large\thesection}{12pt}{\Large}[{\titlerule[0.5pt]}]
+
+% schaltet die flexibele Gestaltung von Kopf- und Fußzeile zu
+\pagestyle{scrheadings}
+
+% setzt alle Felder beider Seitenstille auf leere Inhalte
+\clearpairofpagestyles
+
+\automark[section]{chapter}
+\ihead[]{\leftmark}
+\ohead[]{\rightmark}
+\ofoot[\pagemark]{\pagemark}

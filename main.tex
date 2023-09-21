@@ -1,0 +1,71 @@
+\documentclass[12pt, a4paper, twoside, ngerman, openright, headsepline=true, footsepline=false]{scrbook}
+
+% Präambel --> Nutzereingaben, Pakete und definierte Code-Darstellungen werden geladen.
+% =======================================================================================
+\input{not-body/a_Nutzereingaben}
+\input{not-body/b_packages}
+\input{not-body/c_Code-Darstellung}
+\input{not-body/d_newcommands}
+
+% Anfang des Dokuments --> Hier wird der Inhalt der Seiten definiert
+% Zunächst wird der Teil vor dem eigentlich Inhalt eingebunden.
+% =======================================================================================
+\begin{document}
+% Stellt die Seitennummerierung auf römische Zählung um
+\pagenumbering{Roman}
+
+% Titelseite
+\include{not-body/e_Titelseite}
+
+% Eidesstattliche Erklärung
+\include{not-body/f_Erklarung}
+
+% Danksagungen
+\include{not-body/g_Danksagung}
+
+% Abstract
+\include{not-body/h_Abstract}
+
+% Abkürzungsverzeichnis
+\include{not-body/i_Abkurzungsverzeichnis}
+
+% Inhaltsverzeichnis
+\tableofcontents
+\cleardoublepage
+
+% beginnt mit Seitennummerierung, arabische Zahlen und speichert die bisherige Zählung in römischen Ziffern in der Variable Romanpagecount ab --> wird in dieser Version der Vorlage nicht weiter verwendet. Er könnte aber verwendet werden, um bspw. die Seiten der Verzeichnisse am Ende der Dokumentation in römischen Zahlen mit gleicher Nummerierung weiter zählen zu lassen.
+\newcounter{Romanpagecount}
+\setcounter{Romanpagecount}{\value{page}}
+\pagenumbering{arabic}
+
+% aktiviert die chapterthumbs (Schwarze Balken mit Kapitelnummerierung in weiß) am rechten Rand der rechten/ungeraden Seiten. Dazu wird das nicht supportete Package "chapterthumbs" verwendet, dass im Ordner "styles", dieser Vorlage liegt.
+\kapitelbalken{kb}
+
+
+% Anfang des Dokuments --> Hier wird der Inhalt der Seiten definiert
+% =======================================================================================
+
+\include{chapters/01_Einleitung}
+\include{chapters/02_Grundlagen}
+\include{chapters/03_Hauptteil_1}
+\include{chapters/04_Hauptteil_2}
+\include{chapters/05_Hauptteil_3}
+\include{chapters/06_Evaluation}
+\include{chapters/07_FazitundAusblick}
+
+%%%======================================================================================
+
+% Anhang
+\appendix
+\kapitelbalken{akb}
+\input{not-body/z_AnhangA}
+\input{not-body/z_AnhangB}
+
+% deaktiviert die chapterthumbs wieder, sodass sie nicht in den Verzeichnissen auftauchen.
+\lohead[]{}
+
+% Verzeichnisse
+\Ifpdfoutput{\ihead[]{}}{}
+\input{not-body/j_Verzeichnisse}
+
+\end{document}

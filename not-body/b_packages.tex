@@ -1,0 +1,123 @@
+% Diese Datei "b_packages.tex" ist dafür gedacht alle Packages einzubinden, die benötigt werden. Außerdem werden einige Einstellungen vorgenommen.
+
+%=== Einstellungen ==============================================
+% Erstzeileneinzug ausschalten
+\setlength{\parindent}{0cm}
+
+%=== Text- und Sprachpackages ===================================
+% Setzt die Inputcodierung zu utf8
+\usepackage[utf8]{inputenc}
+% korrekte Silbentrennung für Westeuropäische Sprachen
+\usepackage[T1]{fontenc}
+
+% neue deutsche Rechtschreibung, Anführungszeichen; als zweite Sprache wird Englisch verwendet
+\usepackage[main=ngerman, english]{babel}
+
+%=== Packages zum Layout des Dokuments =========================
+% Stellt die Ränder der Seiten ein
+\usepackage[top=4cm, bottom=3cm]{geometry}
+
+% Stellt die Möglichkeit zum Spezifizieren und Definieren von Farben zur Verfügung.
+\usepackage{xcolor}
+\definecolor{HSTmint}{HTML}{8FD6BD}     % Mint-Farbton der Hochschule-Trier
+\definecolor{HSTorange}{HTML}{BE531C}   % Orange-Farbton der Hochschule-Trier
+\definecolor{HSTgelb}{HTML}{D9C756}     % Senfgelb-Farbton der Hochschule-Trier
+\definecolor{HSTpetrol}{HTML}{115E67}   % Petrol-Farbton der Hochschule-Trier
+
+% Stellt das Aussehen und die Verwendung von Verlinkungen ein
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    urlcolor=HSTorange,
+    breaklinks=true,
+    urlbordercolor=HSTmint,
+    pdftitle={\thema\ -\ \autor\ -\ \abgabedatum},
+    pdfauthor=\autor,
+}
+
+% stellt die chapterthumbs (Schwarze Balken mit Kapitelnummerierung in weiß) am rechten Rand der rechten/ungeraden Seiten zur Verfügung. Dazu wird das nicht supportete Package "chapterthumbs" verwendet, dass im Ordner "styles", dieser Vorlage liegt.
+\usepackage{styles/chapterthumb}
+%\usepackage{scrlayer-scrpage}  % schon in "chapterthumb" enthalten (wird dort required)
+% verwendet die in "Advanced_I" definierten Layout-Design-Vorgaben für die Darstellung der Dokumentation. Die Datei ist eine überarbeitete Version einer Vorlage (mit gleichem Namen), die bereits in der vorherigen Version dieser Vorlage existierte.
+\usepackage{styles/Advanced_I}
+
+% Dieses Package stellt die Kapitelnummerieung mit großen (grauen) Zahlen/Buchstaben ein. Dabei können auch Zitate links neben der Kapitelnummerierung eingeblendet werden.
+\usepackage[avantgarde]{quotchap}
+
+%erlaubt das Hinzufügen von doppelten horizontalen Linien
+\usepackage{hhline}
+
+%erlaubt das Einfügen mehrerer Spalten nebeneinander. Sowohl im Fließtext, als auch in Tabellen
+\usepackage{multicol}
+
+%=== Grafikpackages ============================================
+% Ermöglicht das Einbinden von Bildern
+\usepackage{graphicx}
+
+% Erlaubt es Abbildungen neben dem Fließtext zu platzieren
+\usepackage{wrapfig}
+
+% Optionen für Bildunterschriften
+\usepackage[format=hang, font={footnotesize,sf}, labelfont={bf}, margin=1cm, aboveskip=5pt, position=bottom]{caption}
+
+% Beschriftung von figures mit subfigures
+\usepackage{subcaption}
+
+% bindet [H] zum positionieren ein
+\usepackage{float}
+
+% bindet den Befehl \afterpage ein, der es ermöglicht floats (sicher) am Anfang der nächsten Seite zu verwenden. Siehe dazu die Dokumentation des Packages
+\usepackage{afterpage}
+
+% Package zur Visualisierung. Ermöglicht das erstellen von Grafiken in LaTeX
+\usepackage{tikz}
+
+% Dieses Package ist ein mächtiges Visualisierungs-Werkzeug, dass gut geeignet ist um wissenschaftliche/technische Grafiken zu erstellen. ACHTUNG: Jeder der so erstellten Grafiken kann die Render-/Erstellungszeit des Dokuments massiv erhöhen.
+\usepackage{pgfplots}
+\pgfplotsset{width=10cm,compat=1.9}
+% Die folgenden beiden Zeilen sorgen dafür, dass die mit tikz oder pgfplots erstellten Grafiken extern (in anderen PDF-Dateien) gespeichert werden. Somit kann die Render-/Erstellungszeit für die Hauptdatei reduziert werden.
+\usepgfplotslibrary{external}
+\tikzexternalize
+
+% Erlaubt es PDF-Dateien in der eigenen Datei einzubinden.
+\usepackage{pdfpages}
+
+%=== Tabellen-Packages =========================================
+% erweiterte Optionen für Tabellen
+\usepackage{array}
+
+% implementiert eine Umgebung zur Verwendung von mehrseitigen Tabellen.
+\usepackage{longtable}
+
+%=== Code-Auszüge-Packages =====================================
+% ermöglicht das Einbinden von Code als Auszug
+\usepackage{listings}
+% Ändert den Namen von 'Listing' zu 'Code-Auszug'
+\renewcommand{\lstlistingname}{Code-Auszug}
+% stellt Beschriftungen von Code-Auszügen ein
+\captionsetup[lstlisting]{font={small,rm}}
+% Ändert den Namen des Code-Verzeichnisses von 'Listings' zu 'Code-Auszugs-Verzeichnis'
+\renewcommand\lstlistlistingname{Code-Auszugs-Verzeichnis}
+
+%=== Auflistungs-Packages ======================================
+%bindet \outline ein um Nummerierungen schön formatiere verwenden zu können
+\usepackage{outlines}
+
+%=== Zitier-Packages ===========================================
+% erlaubt das Angeben von Zitaten, direkt gekoppelt mit der Quellenangabe (unter Anderem \cite)
+\usepackage{csquotes}
+% bindet Zitierstyle nach DIN ein.
+\usepackage[numbers,round, sort]{natbib}
+
+%=== Mathematik-Pakete =========================================
+% ermöglicht es vergleichsweise einfach SI-konforme Zahlen- und Einheitendarstellung zu verwenden
+\usepackage[locale=DE]{siunitx}
+% Definiert Umgebungen für mathematische Gleichungen - verwendet das Package "amsmath" als Grundlage --> Übergabeparameter können in Dokumentation von amsmath nachgeschlagen werden
+\usepackage[intlimits]{empheq}
+% ermöglicht es alle mathematischen Symbole der American Mathematical Society zu verwenden
+\usepackage{amssymb}
+% ermöglicht das Stilisieren von Symbolen um beispielsweise die Symbole der LaPlace oder Fourier-Transformation darzustellen
+\usepackage{mathrsfs}
+% erlaubt das Stilisieren von Symbolen, um bspw. die Zeichen für natürliche Zahlen, ganze Zahlen etc. zu generieren.
+\usepackage{bbm}

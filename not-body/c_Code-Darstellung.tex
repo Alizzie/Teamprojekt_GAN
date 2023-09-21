@@ -1,0 +1,84 @@
+% Hier wird für verschiedene Programmiersprachen die Darstellung des Codes, wenn dieser in der Ausarbeitung eingebunden wird, eingestellt. Damit die Darestellung auch für den eigenen Code korrekt ist müssen Änderungen an den Schlüsselwörtern/keywords vorgenommen werden.
+
+% Mit der folgenden Zeile können Standard-Definitionen für die Darstellung verschiedener Programmiersprachen geladen werden. Siehe dazu die Dokumentation zum Package "listings"
+%\lstloadlanguages{Python, C++}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ES FOLGT DIE DEFINITON DER PYTHON-DARSTELLUNG
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Definition der Farben für die Darstellung des Python-Codes
+	\definecolor{py_bak_col}{HTML}{19232D}
+	\definecolor{py_com_col}{HTML}{62A192}
+	\definecolor{py_str_col}{HTML}{B0E686}
+	\definecolor{py_key_col}{HTML}{C670E0}
+	\definecolor{py_self_col}{HTML}{EE6772}
+	\definecolor{py_buin_col}{HTML}{FAB16C}
+	\definecolor{py_def_col}{HTML}{57D6E4}
+
+% Definition der Darstellung des Python-Codes
+  	\lstdefinelanguage{pyhaff}[]{Python}
+  	{
+  	sensitive=false,
+  	morecomment=[l]{\#},
+	morestring=[s][\color{py_str_col}]{"}{"},
+	morestring=[s][\color{py_str_col}]{f"}{"},
+	basicstyle=\rmfamily\selectfont\color{white},
+	classoffset=0,
+	morekeywords={for, in, if, elif, else, while, pass, not, and, or, return, def, class, from, import},keywordstyle={\color{py_key_col}\bfseries},
+  	classoffset=1,
+  	morekeywords={len,range},keywordstyle=\color{py_buin_col},
+  	classoffset=2,
+  	morekeywords={self},keywordstyle=\color{py_self_col},
+  	classoffset=3,
+  	morekeywords={add_select_field, send_html_2_user, create_exercise},keywordstyle=\color{py_def_col},
+  	classoffset=0,
+	%identifierstyle={\color{Navy}},
+  	commentstyle={\color{py_com_col}},
+  	%morecomment=[s][\color{darkgray}]{/*}{*/}
+  	stringstyle=\color{py_str_col},
+  	%morestring=[s][\color{py_str_col}]{'}{'},
+  	backgroundcolor={\color{py_bak_col}},
+  	breaklines=true,
+  	columns=flexible,
+  	frame=single,
+  	framesep=6pt,
+  	xleftmargin=11mm,
+  	framexleftmargin=8mm,
+  	float=hb,   %Einstellung für Platzierung des Objekts: h=genau an dieser Stelle, b=bottom, unteres Ende der Seite
+  	numbers=left,
+  	rulecolor=\color{white},
+  	captionpos=b, % Position des Kommentars, hier unterer Rand.
+  	escapeinside={(*@}{@*)},
+  	}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ES FOLGT DIE DEFINITON DER C-DARSTELLUNG
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Definition der Farben für die Darstellung des C-Codes
+	\definecolor{cpp_com_col}{HTML}{7F007F}
+	\definecolor{cpp_str_col}{HTML}{017F01}
+	\definecolor{cpp_idn_col}{HTML}{40409F}
+	\definecolor{cpp_key_col}{HTML}{587AE4}
+
+% Definition der Darstellung des C-Codes  	
+	\lstdefinelanguage{Chaff}[]{C++}
+	{
+	basicstyle=\rmfamily,%\small,
+	keywordstyle={\color{cpp_key_col}\bfseries},
+	identifierstyle={\color{cpp_idn_col}},
+	commentstyle={\color{cpp_com_col}},
+	%morecomment=[s][\color{darkgray}]{/*}{*/}
+	stringstyle=\color{cpp_str_col},
+	morestring=[s][\color{cpp_str_col}]{"}{"},
+	backgroundcolor={\color{white}},
+	breaklines=true,
+	columns=flexible,
+	frame=single,
+	framesep=6pt,
+	xleftmargin=11mm,
+	framexleftmargin=8mm,
+	float=hb,   %Einstellung für Platzierung des Objekts: h=genau an dieser Stelle, b=bottom, unteres Ende der Seite
+	numbers=left,	
+	captionpos=b, % Position des Kommentars, hier unterer Rand.
+	escapeinside={(*@}{@*)}
+	}
