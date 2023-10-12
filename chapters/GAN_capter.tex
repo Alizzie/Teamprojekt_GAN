@@ -1,0 +1,30 @@
+\chapter*{Generative Adversial Network}
+
+
+Generative Adversial Networks, kurz GANs, sind eine neu aufkommende Technologie im Bereich des maschinellen Lernens und künstlichen Intelligenz. Inspiriert von Ian Goodfellow und seinen Kollegen im Jahre 2014 bieten die GANs eine effiziente Möglichkeit tiefe Repräsentationen von Daten zu erlernen, ohne dass die Notwendigkeit besteht große Mengen von annotierten Trainingsdaten bereitzuerstellen. 
+Dies wird durch das Backpropagationsverfahren und ein Wettbewerb zwischen zwei neuronalen Netzwerken, den Generator und den Diskriminator, erzielt. 
+Dadurch werden viele neue Lösungsansätze zur Erzeugung von realistischen Inhalten angeboten. 
+Ihre Anwendungen reichen von der Bildgenerierung bis zur Superresolution und der Erzeugung von Text. 
+
+\section*{Verfahren}
+Die Hauptkomponenten von einem GAN ist der Generator und Diskriminator. Beide neuronalen Netze werden gleichzeitig trainiert und stehen in einem Wettbewerb, bei dem der Generator versucht den Diskriminator durch die Erzeugung von synthetischen Inhalten zu täuschen. Das gesamte Netzwerk wird so trainiert, dass die Glaubwürdigkeit des Generators erhöht wird, so dass der Diskriminator nicht mehr zwischen den Eingaben unterscheiden kann. Die Netzwerke werden typisch von mehrschichtigen Netzwerken aus convolutional und fully connected layers implementiert. 
+
+\subsection*{Generator}
+Der Generator wird zum Generieren von unechten Daten, wie Bilder und Text, verwendet. 
+Dieser besitzt keinen Zugriff auf den realen Datensatz und lernt in Folge dessen nur durch die Interaktion mit dem Diskriminator. Dieser gilt als optimal, falls der Diskriminator nur noch 50\% der Eingaben richtig voraussagt. 
+
+\subsection*{Diskriminator}
+Die Aufgabe des Diskriminator besteht darin, zwischen den realen und unechten Eingaben unterscheiden zu können. Er kann sowohl auf die synthetischen Daten und auf den realen Datensatz zugreifen. 
+Falls der Diskriminator nicht mehr richtig unterscheiden kann, so gilt er als konvergiert und optimal, falls seine Genauigkeit zur Klassifierzierung maximiert wird. In Falle eines optimalen Diskriminators, wird sein Training gestoppt und der Generator wird allein weitertrainiert, um seine Genauigkeit wieder zu senken. 
+
+\subsection*{Training}
+Das Training erfolgt durch das Finden der Parameter für beide Netze. Dabei wird das Backpropagation auf beide Netze angewendet, um die Parameter zu verbessern. Das Ziel ist die Optimierung beider Netze. Dabei wird das Training häufig als herausfordernd und instabil beschrieben, da einerseits das Finden der Konvergenz beider Modell schwierig erscheint. Andererseits kann der Generator für verschiedene Eingaben sehr ähnliche Muster erzeugen und der Diskriminatorverlust schnell gegen Null konvergiert, so dass kein zuverlässiger Weg für den Gradientenaktualisierung zum Generator existiert. 
+Um den Problemen entgegenzukommen, wurden verschiedene Ansätze vorgeschlagen, wie das Verwenden von heuritsichen Verlustfunktionen. Ebenso könnte ein zusätzliches Rauschen auf den Datensatz vor der Verwendung Abhilfe schaffen.
+
+\section*{Anwendung}
+Ursprünglich ist die Entwicklung von GAN für das unüberwachtes maschinellen Lernen gedacht. Jedoch weist die Architektur ebenso gute Ergebnnise in semi-überwachtes und in Reinforcement Learning auf. 
+Dadurch wird sie in umfangreichen Bereichen, wie im Healthcare, Mechanik und Banking verwendet. Beispielsweise werden GAN in der Medizin für die Identifizierung von chronischen Erkranken angewendet. Jedoch können durch die Nutzung von GANs ebenso 3D Objekte identifiziert und reale Bilder und Text generiert werden.
+
+\section*{Limitationen}
+Aufgrund dessen, dass ein Generative Adversial Network Inhalte erzeugen kann, die dem realen fast identisch aussehen, kann dies Probleme im realen Welt schaffen, insbesondere bei der menschlichen Bildsynthese. Die Bilder können von Betrügern verwendet werden, um in den sozialen Medien falsche Profile zu erstellen. 
+Diese kann ebenso durch den Einsatz von GANs verhindert werden, indem einzigartige und pragmatische Bilder von Personen erzeugt werden, die nicht existieren
