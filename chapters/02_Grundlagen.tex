@@ -45,3 +45,16 @@ Der Diskriminator nimmt die Form eines PatchGAN-Modells an und bewertet Patches 
 
 \subsection{Anwendungen von Pix2Pix}
 Hier können Sie über die Anwendungen von Pix2Pix schreiben.
+
+\section{CycleGAN}
+CycleGAN, eingeführt von Jun-Yan Zhu et al. im Jahr 2017, repräsentiert eine wegweisende Entwicklung im Bereich des maschinellen Lernens, insbesondere in der Bildübersetzung zwischen unpaaren Domänen. Dieses Kapitel erläutert im Detail die Mechanismen, die CycleGAN ermöglichen, und vertieft sich in die komplexen Wechselwirkungen zwischen Generatoren und Diskriminatoren. 
+CycleGAN erweitert das klassische GAN-Paradigma, indem es Generatoren und Diskriminatoren einführt, die speziell darauf abzielen, Bildübersetzungen zwischen zwei unterschiedlichen Domänen zu erzeugen. Der Generator $G$ transformiert Bilder aus Domäne $X$ in Domäne $Y$, während der Generator $F$ den umgekehrten Prozess durchführt. Diese Transformationen erfolgen ohne die Notwendigkeit für gepaarte Trainingsdaten.
+
+\subsection{CycleGAN - Kernkonzepte}
+\input{chapters/cycleGan_chapter.tex}
+
+\subsection{Anwendungen von CycleGAN}
+CycleGAN hat sich als äußerst vielseitiges Modell erwiesen und findet in verschiedenen Anwendungsbereichen Anwendung. Die Fähigkeit, Bildübersetzungen zwischen unpaaren Domänen durchzuführen, hat zu zahlreichen innovativen Anwendungen geführt.
+\\
+Eine der prominentesten Anwendungen von CycleGAN ist die Bild-zu-Bild-Übersetzung. Dies umfasst die Transformation von Bildern zwischen verschiedenen Stilen, Szenarien oder Kunstwerken. Zum Beispiel kann CycleGAN dazu verwendet werden, Fotos in den Stil berühmter Kunstwerke zu überführen, was einen einzigartigen und kreativen Ansatz zur Bildbearbeitung ermöglicht.
+Der Stiltransfer ist ein weiteres aufregendes Anwendungsgebiet von CycleGAN. Hierbei können Stile von einem Bild auf ein anderes übertragen werden, ohne dass gepaarte Trainingsdaten benötigt werden. Dies ermöglicht es, den Stil eines Gemäldes auf ein Fotografiebild anzuwenden oder umgekehrt. CycleGAN kann auch für die Übersetzung zwischen verschiedenen Farbdomänen verwendet werden. Zum Beispiel könnte es genutzt werden, um Schwarz-Weiß-Bilder in farbige Versionen zu übersetzen oder den Farbton von Bildern anzupassen, ohne dass dazu paare Trainingsdaten notwendig sind.
