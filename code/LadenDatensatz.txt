@@ -1,0 +1,4 @@
+path_to_zip = tf.keras.utils.get_file(
+fname=f"{dataset_name}.tar.gz",
+origin=_URL,
+extract=True)
