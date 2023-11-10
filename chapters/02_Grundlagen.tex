@@ -1,25 +1,25 @@
 \chapter{Grundlagen}
 
 \section{Generatuve Adversarial Netowrks}
-Generative Adversarial Networks, kurz GANs, sind eine aufstrebende Technologie im Bereich des maschinellen Lernens und der künstlichen Intelligenz. Inspiriert von Ian Goodfellow und seinen Kollegen im Jahr 2014, bieten GANs eine effiziente Möglichkeit, tiefe Repräsentationen von Daten zu erlernen, ohne dass große Mengen an annotierten Trainingsdaten benötigt werden. 
+Generative Adversarial Networks, kurz GANs, sind eine aufstrebende Technologie im Bereich des maschinellen Lernens und der künstlichen Intelligenz. Inspiriert von Ian Goodfellow und seinen Kollegen im Jahr 2014, bieten GANs eine effiziente Möglichkeit, tiefe Repräsentationen von Daten zu erlernen, ohne dass große Mengen an annotierten Trainingsdaten benötigt werden\cite{Creswell.2018}. 
 Dies wird durch die Verwendung von Backpropagation und den Wettbewerb zwischen zwei neuronalen Netzen - dem Generator und dem Diskriminator - erreicht. 
 Daraus ergeben sich zahlreiche neue Ansätze zur Generierung realistischer Inhalte. 
-Die Anwendungen reichen von der Bildgenerierung bis hin zur Superauflösung und Textgenerierung.
+Die Anwendungen reichen von der Bildgenerierung bis hin zur Superauflösung und Textgenerierung \cite{Aggarwal.2021}.
 
 \subsection*{Funktionsweise}
-Der Generator und der Diskriminator sind die Hauptkomponenten eines GAN. Die beiden neuronalen Netze werden gleichzeitig trainiert und konkurrieren miteinander, wobei der Generator versucht, den Diskriminator zu täuschen, indem er synthetische Inhalte erzeugt. Um die Glaubwürdigkeit des Generators zu erhöhen, so dass der Diskriminator nicht mehr zwischen den Eingaben unterscheiden kann, wird das gesamte Netz trainiert. Die Netze werden in der Regel als Mehrschichtnetze implementiert, die aus Faltungsschichten und vollständig verbundenen Schichten bestehen.
+Der Generator und der Diskriminator sind die Hauptkomponenten eines GAN. Die beiden neuronalen Netze werden gleichzeitig trainiert und konkurrieren miteinander, wobei der Generator versucht, den Diskriminator zu täuschen, indem er synthetische Inhalte erzeugt. Um die Glaubwürdigkeit des Generators zu erhöhen, so dass der Diskriminator nicht mehr zwischen den Eingaben unterscheiden kann, wird das gesamte Netz trainiert. Die Netze werden in der Regel als mehrschichtige Netzwerke implementiert, die aus Convolutional und Fully-Connected Layers bestehen\cite{Creswell.2018}.
 
 \subsubsection*{Generator}
 Der Generator dient zur Erzeugung künstlicher Daten wie Bilder und Texte. 
-Der Generator ist nicht mit dem realen Datensatz verbunden und lernt daher nur durch die Interaktion mit dem Diskriminator. Wenn der Diskriminator nur noch 50\% der Eingaben richtig vorhersagt, gilt der Generator als optimal.
+Der Generator ist nicht mit dem realen Datensatz verbunden und lernt daher nur durch die Interaktion mit dem Diskriminator. Wenn der Diskriminator nur noch 50\% der Eingaben richtig vorhersagt, gilt der Generator als optimal\cite{Creswell.2018}.
 
 \subsubsection*{Diskriminator}
 Die Unterscheidung zwischen echten und unechten Eingaben ist Aufgabe des Diskriminators. Der Diskriminator kann sowohl künstliche als auch reale Daten verwenden. 
-Wenn der Diskriminator nicht mehr richtig unterscheiden kann, wird er als konvergierend bezeichnet. Andernfalls wird er als optimal bezeichnet, wenn seine Klassifizierungsgenauigkeit maximiert ist. Im Falle eines optimalen Diskriminators wird das Training des Diskriminators gestoppt und der Generator trainiert alleine weiter, um die Genauigkeit des Diskriminators wieder zu verbessern.
+Wenn der Diskriminator nicht mehr richtig unterscheiden kann, wird er als konvergierend bezeichnet\cite{Aggarwal.2021}. Andernfalls wird er als optimal bezeichnet, wenn seine Klassifizierungsgenauigkeit maximiert ist. Im Falle eines optimalen Diskriminators wird das Training des Diskriminators gestoppt und der Generator trainiert alleine weiter, um die Genauigkeit des Diskriminators wieder zu verbessern\cite{Creswell.2018}.
 
 \subsubsection*{Training}
-Durch das Finden von Parametern für beide Netze wird das Training durchgeführt. Ziel ist die Optimierung beider Netze durch Anwendung von Backpropagation zur Verbesserung der Parameter. Das Training wird oft als schwierig und instabil beschrieben, da es einerseits schwierig erscheint, beide Modelle konvergieren zu lassen. Auf der anderen Seite kann der Generator sehr ähnliche Muster für verschiedene Eingaben erzeugen, und der Diskriminatorverlust kann schnell gegen Null konvergieren, so dass es keinen zuverlässigen Weg für die Gradientenaktualisierung zum Generator gibt. 
-Zur Lösung dieser Probleme wurden verschiedene Ansätze vorgeschlagen, wie z.B. die Verwendung heuristischer Verlustfunktionen. Eine weitere Möglichkeit, die von Sonderby et al. vorgeschlagen wurde, besteht darin, den Datensatz vor der Verwendung zu verrauschen.
+Durch das Finden von Parametern für beide Netze wird das Training durchgeführt. Ziel ist die Optimierung beider Netze durch Anwendung von Backpropagation zur Verbesserung der Parameter. Das Training wird oft als schwierig und instabil beschrieben, da es einerseits schwierig erscheint, beide Modelle konvergieren zu lassen. Auf der anderen Seite kann der Generator sehr ähnliche Muster für verschiedene Eingaben erzeugen (MODE COLLAPSE), und der Diskriminatorverlust kann schnell gegen Null konvergieren, so dass es keinen zuverlässigen Weg für die Gradientenaktualisierung zum Generator gibt. 
+Zur Lösung dieser Probleme wurden verschiedene Ansätze vorgeschlagen, wie z.B. die Verwendung heuristischer Verlustfunktionen. Eine weitere Möglichkeit, die von Sonderby et al. vorgeschlagen wurde, besteht darin, den Datensatz vor der Verwendung zu verrauschen\cite{Creswell.2018}.
 
 \subsection*{Adversarial Loss}
 Der Erfolg von GAN liegt zum Einen an dem verwendeten Adverarsial Verlustfunktion. Dieser 
@@ -27,12 +27,13 @@ Der Erfolg von GAN liegt zum Einen an dem verwendeten Adverarsial Verlustfunktio
 // TODO: PAPER ABBOUT THAT
 
 \subsection*{Anwendungen}
-GAN wurde ursprünglich für unüberwachtes maschinelles Lernen entwickelt. Die Architektur liefert jedoch ebenso gute Ergebnisse beim halbüberwachten Lernen und beim Reinforcement Learning. 
+GAN wurde ursprünglich für unüberwachtes maschinelles Lernen entwickelt. Die Architektur liefert jedoch ebenso gute Ergebnisse beim halbüberwachten Lernen und beim Reinforcement Learning\cite{Aggarwal.2021}. 
 Aus diesem Grund wird sie in einer Vielzahl von Bereichen wie dem Gesundheitswesen, dem Maschinenbau und dem Bankwesen eingesetzt. Beispielsweise wird GAN in der Medizin zur Erkennung und Behandlung chronischer Krankheiten eingesetzt. Aber auch die Identifikation von 3D-Objekten und die Generierung von realen Bildern und Texten ist durch den Einsatz von GANs möglich.
 
 \section*{Limitationen}
 Die Tatsache, dass ein Generative Adversial Network in der Lage ist, Inhalte zu erzeugen, die nahezu identisch mit realen Inhalten sind, kann in der realen Welt zu Problemen führen, insbesondere bei der menschlichen Bildsynthese. Diese Bilder können von Betrügern verwendet werden, um falsche Profile in sozialen Medien zu erstellen. 
-Auch dies kann durch den Einsatz von GANs verhindert werden, indem einzigartige und pragmatische Bilder von nicht existierenden Personen erzeugt werden.
+Auch dies kann durch den Einsatz von GANs verhindert werden, indem einzigartige und pragmatische Bilder von nicht existierenden Personen erzeugt werden\cite{Aggarwal.2021}.
+// TODO MODE COLLAPSE NACHLESEN
 
 
 \section{Pix2Pix}
@@ -47,14 +48,15 @@ Der Diskriminator nimmt die Form eines PatchGAN-Modells an und bewertet Patches 
 Hier können Sie über die Anwendungen von Pix2Pix schreiben.
 
 \section{CycleGAN}
-CycleGAN, eingeführt von Jun-Yan Zhu et al. im Jahr 2017, repräsentiert eine wegweisende Entwicklung im Bereich des maschinellen Lernens, insbesondere in der Bildübersetzung zwischen unpaaren Domänen. Dieses Kapitel erläutert im Detail die Mechanismen, die CycleGAN ermöglichen, und vertieft sich in die komplexen Wechselwirkungen zwischen Generatoren und Diskriminatoren. 
-CycleGAN erweitert das klassische GAN-Paradigma, indem es Generatoren und Diskriminatoren einführt, die speziell darauf abzielen, Bildübersetzungen zwischen zwei unterschiedlichen Domänen zu erzeugen. Der Generator $G$ transformiert Bilder aus Domäne $X$ in Domäne $Y$, während der Generator $F$ den umgekehrten Prozess durchführt. Diese Transformationen erfolgen ohne die Notwendigkeit für gepaarte Trainingsdaten.
+CycleGAN, das 2017 von Jun-Yan Zhu et al. vorgestellt wurde, stellt eine neue Entwicklung im Bereich des maschinellen Lernens und insbesondere der Bildübersetzung zwischen unpaaren Domänen dar. Es erweitert die Pix2Pix-Architektur durch die Einführung einer Cycle Consistency Loss-Funktion, die sicherstellt, dass das Originalbild nach einem Übersetzungs- und Rückübersetzungszyklus erhalten bleibt. Der Generator $G$ transformiert Bilder aus der Domäne $X$ in die Domäne $Y$, während der Generator $F$ den umgekehrten Prozess durchführt. Diese Transformationen werden ohne gepaarte Trainingsdaten durchgeführt.
 
 \subsection{CycleGAN - Kernkonzepte}
 \input{chapters/cycleGan_chapter.tex}
 
-\subsection{Anwendungen von CycleGAN}
-CycleGAN hat sich als äußerst vielseitiges Modell erwiesen und findet in verschiedenen Anwendungsbereichen Anwendung. Die Fähigkeit, Bildübersetzungen zwischen unpaaren Domänen durchzuführen, hat zu zahlreichen innovativen Anwendungen geführt.
-\\
-Eine der prominentesten Anwendungen von CycleGAN ist die Bild-zu-Bild-Übersetzung. Dies umfasst die Transformation von Bildern zwischen verschiedenen Stilen, Szenarien oder Kunstwerken. Zum Beispiel kann CycleGAN dazu verwendet werden, Fotos in den Stil berühmter Kunstwerke zu überführen, was einen einzigartigen und kreativen Ansatz zur Bildbearbeitung ermöglicht.
-Der Stiltransfer ist ein weiteres aufregendes Anwendungsgebiet von CycleGAN. Hierbei können Stile von einem Bild auf ein anderes übertragen werden, ohne dass gepaarte Trainingsdaten benötigt werden. Dies ermöglicht es, den Stil eines Gemäldes auf ein Fotografiebild anzuwenden oder umgekehrt. CycleGAN kann auch für die Übersetzung zwischen verschiedenen Farbdomänen verwendet werden. Zum Beispiel könnte es genutzt werden, um Schwarz-Weiß-Bilder in farbige Versionen zu übersetzen oder den Farbton von Bildern anzupassen, ohne dass dazu paare Trainingsdaten notwendig sind.
+\section{Layers}
+// TODO
+
+\section{Bibliotheken}
+// TODO
+\subsection{Tensorflow}
+\subsection{Keras}

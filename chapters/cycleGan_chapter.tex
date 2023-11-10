@@ -1,31 +1,34 @@
 \subsubsection{Architektur der Generatoren}
-Die Architektur der Generatoren in CycleGAN spielt eine entscheidende Rolle bei der erfolgreichen Durchführung von Bildübersetzungen zwischen unterschiedlichen Domänen. Typischerweise basieren die Generatoren auf dem Residual-Netzwerk (ResNet)-Ansatz, der für seine Fähigkeit, tiefe neuronale Netzwerke zu trainieren, bekannt ist.
+Die Architektur der Generatoren in CycleGAN spielt eine entscheidende Rolle bei der erfolgreichen Durchführung von Bildübersetzungen zwischen verschiedenen Domänen. Typischerweise basieren die Generatoren auf dem ResNet-Ansatz, der für seine Fähigkeit bekannt ist, tiefe neuronale Netze zu trainieren.
 \\
-ResNet-Blöcke, bestehend aus Convolutional-Schichten, Normalisierungsschichten und Aktivierungsfunktionen, ermöglichen den Generatoren, komplexe Transformationen durchzuführen. Die Nutzung von ResNet-Blöcken erleichtert auch das Training tiefer Netzwerke, was wichtig ist, um hochwertige Übersetzungen zu erreichen.
+ResNet-Blöcke bestehen aus Faltungsschichten, Normalisierungsschichten und Aktivierungsfunktionen. Sie ermöglichen Generatoren, komplexe Transformationen durchzuführen. Die Verwendung von ResNet-Blöcken erleichtert auch das Training tiefer Netze, was für qualitativ hochwertige Übersetzungen wichtig ist.
 
 \subsubsection{Architektur der Diskriminatoren}
-Ebenso wie beim Pix2Pix ist die gängige Architektur für die Diskriminatoren in CycleGAN der PatchGAN. 
-%Die Architektur der Diskriminatoren in CycleGAN spielt eine entscheidende Rolle bei der Unterscheidung zwischen echten und generierten Bildern. Die Struktur beeinflusst direkt die Fähigkeit des Modells, realistische Übersetzungen zu erzeugen.
-\\
-%Eine gängige Architektur für die Diskriminatoren in CycleGAN ist der PatchGAN. Hierbei handelt es sich um eine Netzwerkstruktur, die das Bild in kleine Patches aufteilt und jeden Patch separat klassifiziert. Diese Methode ermöglicht eine feine Unterscheidung zwischen echten und generierten Bildern auf lokaler Ebene.
-\\
-Die Diskriminatoren bestehen in der Regel aus Convolutional-Schichten, gefolgt von Normalisierungsschichten und Aktivierungsfunktionen. In einigen Implementierungen von CycleGAN wird statt der üblichen Batch-Normalisierung die Instance Normalisierung bevorzugt.
-\\
-Die Instance Normalisierung ist eine Variante der Normalisierung, die auf Instanzebene durchgeführt wird. Im Gegensatz zur Batch-Normalisierung, bei der die Normalisierung über die gesamte Batch-Dimension erfolgt, betrachtet die Instance Normalisierung jede Instanz oder jedes Bild einzeln. Dies kann besonders vorteilhaft sein, wenn die statistischen Eigenschaften der einzelnen Instanzen variieren.
+Wie bei Pix2Pix ist die übliche Architektur für Diskriminatoren in CycleGAN PatchGAN, wobei das Bild in kleine Patches aufgeteilt wird und jeder Patch separat klassifiziert wird. Diese Methode ermöglicht eine feine Unterscheidung zwischen echten und generierten Bildern auf lokaler Ebene \cite{Zhu.2017}.
 
-Die Verwendung von Instance Normalisierung in den Diskriminatoren von CycleGAN kann dazu beitragen, eine stabilere und konsistentere Konvergenz während des Trainings zu erreichen. 
+Die Diskriminatoren bestehen in der Regel aus Convolutional Layer, gefolgt von Normalization Layer und Activation Function. In einigen Implementierungen von CycleGAN wird die instanzielle Normalisierung der üblichen Batch-Normalisierung vorgezogen \cite{}.
+\\
+Die instanzielle Normalisierung ist eine Variante der Normalisierung, die auf Instanzebene durchgeführt wird. Im Gegensatz zur Batch-Normalisierung, bei der die Normalisierung über die gesamte Batch-Dimension durchgeführt wird, wird bei der Instanz-Normalisierung jede Instanz bzw. jedes Bild einzeln betrachtet. Dies kann besonders vorteilhaft sein, wenn die statistischen Eigenschaften der einzelnen Instanzen variieren.
+
+Die Verwendung der Instanznormalisierung in den Diskriminatoren von CycleGAN kann helfen, eine stabilere und konsistentere Konvergenz während des Trainings zu erreichen.
 
 \subsubsection{Training}
-Das Training von CycleGAN erfolgt durch einen kompetitiven Prozess. Die Generatoren $G$ und $F$ konkurrieren mit den zugehörigen Diskriminatoren $D_X$ und $D_Y$. $D_X$ versucht, zwischen den von $F$ generierten und den echten Bildern aus $X$ zu unterscheiden, während $D_Y$ die von $G$ generierten Bilder von den echten aus der Domäne $Y$ unterscheidet. Die adversarialen Verluste werden dabei optimiert, um sicherzustellen, dass die generierten Bilder für die Diskriminatoren kaum von den echten zu unterscheiden sind.
+Das Training von CycleGAN erfolgt nach einem kompetitiven Verfahren. Die Generatoren $G:X->Y$ und $F:Y->X$ konkurrieren mit den entsprechenden Diskriminatoren $D_X$ und $D_Y$. $D_X$ versucht, die von $F$ erzeugten Bilder von den echten Bildern aus $X$ zu unterscheiden, während $D_Y$ versucht, die von $G$ erzeugten Bilder von den echten Bildern aus der Domäne $Y$ zu unterscheiden. Die adversen Verluste sind so optimiert, dass die erzeugten Bilder für die Diskriminatoren kaum von den echten Bildern zu unterscheiden sind. \cite{Zhu.2017}.
 
 \subsubsection{Cycle - Konsistenz}
-Der CycleGAN führt zusätzlich einen Cycle-Konsistenz ein. Diese gewährleistet, dass die Übersetzungen zwischen den Domänen sowohl vorwärts ($X$ nach $Y$) als auch rückwärts ($Y$ nach $X$) konsistent sind. Die Cycle-Konsistenz fördert die Generierung qualitativ hochwertiger und konsistenter Übersetzungen.
+CycleGAN führt zusätzlich eine Cycle-Konsistenz ein. Diese stellt sicher, dass die Übersetzungen zwischen den Domänen sowohl vorwärts ($X$ nach $Y$) als auch rückwärts ($Y$ nach $X$) konsistent sind.
 \\
-Die Kernidee besteht darin, dass nach der Übersetzung von $X$ nach $Y$ und zurück nach $X$ das resultierende Bild dem ursprünglichen $X$ entsprechen sollte. Dabei wird die Differenz zwischen dem ursprünglichen Bild $x$ mit dem zyklisch übersetzten Bild $F(G(x))$ mittels dem L1-Verlustfunktion minimiert. 
+Die Kernidee besteht darin, dass nach der Übersetzung von $X$ nach $Y$ und zurück nach $X$ das resultierende Bild dem ursprünglichen $X$ entsprechen sollte. Um dies zu erreichen, wird die Differenz zwischen dem Originalbild $x$ und dem zyklisch übersetzten Bild $F(G(x))$ mit Hilfe der L1-Verlust minimiert. 
 \\
-Diese zyklische Konsistenz stellt sicher, dass die Generatoren konsistente und realitätsnahe Übersetzungen zwischen den Domänen erzeugen.
+Durch die Einführung dieser zyklischen Konsistenz wird das Problem des Modekollapses gelöst. Die weitere Verlustfunktion stellt sicher, dass die generierten Bilder mehr Strukturen enthalten und somit konsistentere Übersetzungen zwischen den Domänen liefern \cite{Zhu.2017}.
 
 \subsubsection{Identity - Loss}
-Zusätzlich zu adversarialen und zyklischen Verlusten spielt der Identitätsverlust eine bedeutende Rolle im Training von CycleGAN. Der Identitätsverlust zielt darauf ab, sicherzustellen, dass die Transformationen nicht zu stark sind und wichtige Merkmale der Ausgangsbilder bewahrt bleiben. Dieser Verlust wird durch die Verwendung von Bildern der jeweiligen Ausgangsdomäne als Eingabe für den Generator und die Berechnung des Verlusts zwischen den generierten und den Eingangsbildern erreicht.
+Zusätzlich zu den adversariellen und zyklischen Verlusten kann ein Identitätsverlust in die Gesamtverlustfunktion integriert werden, um sicherzustellen, dass die Farbkomposition des Eingabebildes beibehalten wird, während es ins Ausgabebild übersetzt wird. Insbesondere bei der Erstellung von Fotografien aus Gemälden hat sich diese Methode bewährt.  
+Wenn der Generator $G$ ein Bild aus dem Bereich $Y$ erhält, darf es sich aufgrund seiner bereits vorhandenen Zugehörigkeit zu diesem Bereich nicht mehr verändern. 
+Der Verlust wird dabei mittels des L1-Verlust ermittelt, bei dem die Differenz zwischen den Pixeln des generierten Bildes $G(y)$ und dem Referenzbild $y\in Y$ erfasst wird. Das gleiche Verfahren wird für den anderen Generator $F$ angewendet \cite{Zhu.2017}
 
-Die Identitätsverluste für $G$ und $F$ werden als zusätzliche Terme in die Gesamtverlustfunktion integriert. Dieser Mechanismus stellt sicher, dass der Generator nicht unerwünschte Veränderungen vornimmt und hilft, feine Details und Strukturen in den generierten Bildern zu erhalten.
+\subsection{Anwendungen von CycleGAN}
+CycleGAN hat sich als äußerst vielseitiges Modell erwiesen und wird in verschiedenen Anwendungsbereichen eingesetzt. Die Fähigkeit, Bildübersetzungen zwischen unpaaren Domänen durchzuführen, hat zu zahlreichen innovativen Anwendungen geführt.
+\\
+Eine der prominentesten Anwendungen von CycleGAN ist die Bild-zu-Bild-Übersetzung. Dies beinhaltet die Transformation von Bildern zwischen verschiedenen Stilen, Szenarien oder Kunstwerken. Beispielsweise kann CycleGAN verwendet werden, um Fotos in den Stil berühmter Kunstwerke zu transformieren, was einen einzigartigen und kreativen Ansatz für die Bildbearbeitung bietet.
+Ein weiteres Anwendungsgebiet von CycleGAN ist die Stilübertragung. Hier können Stile von einem Bild auf ein anderes übertragen werden, ohne dass gepaarte Trainingsdaten benötigt werden. So ist es möglich, den Stil eines Gemäldes auf ein fotografisches Bild zu übertragen oder umgekehrt. CycleGAN kann auch für die Übersetzung zwischen verschiedenen Farbbereichen verwendet werden. Zum Beispiel kann es verwendet werden, um Schwarz-Weiß-Bilder in Farbversionen zu übersetzen oder den Farbton von Bildern anzupassen, ohne dass gepaarte Trainingsdaten benötigt werden.
