@@ -9,19 +9,19 @@ Für das effektive Training von GANs ist der Zugriff auf qualitativ hochwertige 
 Die Transformation und Vorverarbeitung der Bilddaten erfolgt durch die TensorFlow-Datensatz-API. Diese API bietet eine effiziente Datenpipeline für das Laden und Verarbeiten von Daten, insbesondere für den Einsatz in Machine-Learning-Modellen. In den folgenden Implementierungen wird ein Dataset durch eine Liste von Dateipfaden als Zeichenketten erzeugt.
 
 \begin{lstlisting}[language=pyhaff, caption={Erzeugung eines Tensorflow-Dataset aus CycleGAN Implementierung}, label={cod:createDataset}]
-    train_horses =  tf.data.Dataset.list_files(str(PATH / 'trainA/*.jpg'))
+train_horses =  tf.data.Dataset.list_files(str(PATH / 'trainA/*.jpg')) 
 \end{lstlisting}
 
 \subsection{Vorverarbeitung des Datensatzes}
-Um die Leistung der GAN-Modelle zu verbessern, werden vor dem Training Variationen in den Trainingsdaten eingeführt. Dieser Prozess, der Datenjittering und Normalisierung umfasst, trägt dazu bei, das Modell robuster zu machen und eine bessere Konvergenz während des Trainings zu erreichen.\\
-
+Um die Leistung der GAN-Modelle zu verbessern, werden vor dem Training Variationen in den Trainingsdaten eingeführt. Dieser Prozess, der Datenjittering und Normalisierung umfasst, trägt dazu bei, das Modell robuster zu machen und eine bessere Konvergenz während des Trainings zu erreichen.
+\newpage
 \begin{lstlisting}[language=pyhaff, caption={Vorverarbeitung des Datensatzes: Normalisierung}, label={cod:normalizing}]
 def normalize(image):
     image = (image / 127.5) - 1
     return image
 \end{lstlisting}
 
-Datenjittering wird durchgeführt, indem die heruntergeladenen Bilder (256x256) auf eine größere Größe (286x286) mit der Nearest-Neighbor-Methode skaliert. Bei dieser Methode wird für jedes Pixel im skalierten Bild der Farbwert des nächstgelegenen Pixels im Originalbild übernommen, um eine einfache und effiziente Skalierung zu ermöglichen. Das Bilder werden daraufhin zufällig zugeschnitten. Darüber hinaus wird eine zufällige Spiegelung angewendet.\\
+Datenjittering wird durchgeführt, indem die heruntergeladenen Bilder (256x256) auf eine größere Größe (286x286) mit der Nearest-Neighbor-Methode skaliert. Bei dieser Methode wird für jedes Pixel im skalierten Bild der Farbwert des nächstgelegenen Pixels im Originalbild übernommen, um eine einfache und effiziente Skalierung zu ermöglichen. Das Bilder werden daraufhin zufällig zugeschnitten. Darüber hinaus wird eine zufällige Spiegelung angewendet.
 
 \begin{lstlisting}[language=pyhaff, caption={Vorverarbeitung des Datensatzes: Jittering}, label={cod:jittering}]
 def random_crop(image):
@@ -36,7 +36,7 @@ def random_jitter(image):
 \end{lstlisting}
 
 Zusätzlich dazu werden die Bildpfade geladen und in das resultierende JPEG-Format decodiert.
-\\
+
 \begin{lstlisting}[language=pyhaff, caption={Vorverarbeitung des Datensatzes: Jittering}, label={cod:jittering}]
 def load_image(image_path):
     image = tf.io.read_file(image_path)
@@ -45,7 +45,8 @@ def load_image(image_path):
     return image
 \end{lstlisting}
 
-Die vorverarbeiteten Bilder werden daraufhin in TensorFlow-Datasets integriert. \\
+Die vorverarbeiteten Bilder werden dann in TensorFlow-Datasets integriert. Nachfolgend wird der Trainingsdatensatz zufällig gemischt und in Batches gruppiert, wodurch sichergestellt wird, dass das Modell nicht von der Reihenfolge der Datenpunkte beeinflusst wird.
+\newpage 
 \lstinputlisting[language=pyhaff, caption=Integration der vorverarbeiteten Bilder in Tensorflow-Datasets]{code/LadenBild.txt}
-\\
+
 Diese umfassende Vorverarbeitung stellt sicher, dass das GAN-Modell auf optimal vorbereiteten Daten trainiert wird, um eine maximale Leistung und Generalisierungsfähigkeit zu erreichen.
