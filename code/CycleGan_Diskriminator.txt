@@ -1,0 +1,29 @@
+def Discriminator():
+    model = tf.keras.Sequential()
+
+    # Layer 1
+    model.add(layers.Conv2D(64, 4, strides=2, padding='same', input_shape=(256,256,3)))
+    model.add(layers.BatchNormalization())
+    model.add(layers.Activation('relu'))
+
+    # Layer 2
+    model.add(layers.Conv2D(128, 4, strides=2, padding='same'))
+    model.add(layers.BatchNormalization())
+    model.add(layers.Activation('relu'))
+
+    # Layer 3
+    model.add(layers.Conv2D(256, 4, strides=2, padding='same'))
+    model.add(layers.BatchNormalization())
+    model.add(layers.Activation('relu'))
+
+    # Layer 4
+    model.add(layers.Conv2D(512, 4, strides=2, padding='same'))
+    model.add(layers.BatchNormalization())
+    model.add(layers.Activation('relu'))
+
+    # Layer 5
+    model.add(layers.Conv2D(1, 4, strides=1, padding='same'))
+    model.add(layers.BatchNormalization())
+    model.add(layers.Activation('sigmoid'))
+
+    return model

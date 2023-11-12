@@ -50,3 +50,20 @@ Die vorverarbeiteten Bilder werden dann in TensorFlow-Datasets integriert. Nachf
 \lstinputlisting[language=pyhaff, caption=Integration der vorverarbeiteten Bilder in Tensorflow-Datasets]{code/LadenBild.txt}
 
 Diese umfassende Vorverarbeitung stellt sicher, dass das GAN-Modell auf optimal vorbereiteten Daten trainiert wird, um eine maximale Leistung und Generalisierungsfähigkeit zu erreichen.
+
+
+\section{Implementierung der CycleGAN-Architektur}
+Nach den theoretischen Grundlagen der CycleGAN-Architektur und der Datenvorverarbeitung in den vorherigen Abschnitten, wird nun die konkrete Implementierung der Architekturen unter Verwendung von TensorFlow und Keras vorgestellt \\
+\newline
+Die Generator- und Diskriminatorarchitekturen wurden entsprechend der im Grundlagenkapitel erklärten theoretischen Grundlagen umgesetzt, insbesondere den Empfehlungen von Zhu et al. (2017)\cite{Zhu.2017} folgend. Der Generator setzt sich aus einem Enkoder-Block, mehreren Residualblöcken und einem Dekoder-Block zusammen. Der Diskriminator wurde als sequentielles Modell implementiert und umfasst mehrere Convolutional-Schichten, konzipiert als PatchGAN.
+
+\lstinputlisting[language=pyhaff, caption=CycleGAN Generator in Tensorflow]{code/CycleGan_Generator.txt}
+\lstinputlisting[language=pyhaff, caption=CycleGAN Diskriminator in Tensorflow]{code/CycleGan_Diskriminator.txt}
+
+Die spezifischen Implementierungsdetails sind im beigefügten Code zu finden.
+
+\subsubsection{Training und Hyperparameter}
+Das Training wurde über 300 Epochen durchgeführt, wobei die Modelle durch spezifische Optimierer optimiert wurden. In jedem Durchlauf wurde ein Bild aus den Trainingsdaten ausgewählt, und der Generator wurde auf dieses angewendet, um inkrementell die Verbesserung zu verfolgen. Die generierten Bilder wurden mittels plt.savefig() aus der Matplotlib-Bibliothek gespeichert, um auch nach dem Training darauf zugreifen zu können.\\
+Diese Vorgehensweise ermöglicht eine systematische Überprüfung der Modellleistung und eine visuelle Darstellung der Fortschritte während des Trainingsprozesses.
+\\
+Die Wahl der Hyperparameter, einschließlich Lernraten und des Lambda-Werts für den Cycle Consistency Loss, wurde durch abgestimmte Experimente ermittelt. Die Optimierer wurden sorgfältig ausgewählt, um eine effiziente Konvergenz während des Trainings zu gewährleisten.

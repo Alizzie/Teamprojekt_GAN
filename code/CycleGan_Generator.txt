@@ -1,0 +1,24 @@
+def Generator():
+    inputs = tf.keras.layers.Input(shape=[None,None,3])
+
+    # Layer 1
+    x = layers.Conv2D(64, 7, strides=1, padding='same')(inputs)
+    x = layers.BatchNormalization()(x)
+    x = layers.Activation('relu')(x)
+
+    # Layer 2+ 3
+    x = convolutional_layer(x, 128, 3,2)
+    x = convolutional_layer(x, 256, 3, 2)
+
+    # Residual Blocks
+    for _ in range(6):
+        x = residual_block(x, 256)
+
+    # Layer 10 + 11
+    x = t_convolutional_layer(x, 128, 3, 2)
+    x = t_convolutional_layer(x, 64, 3, 2)
+
+    # Layer 12
+    outputs = layers.Conv2D(3, 7, strides=1, padding='same', activation='tanh')(x)
+
+    return tf.keras.Model(inputs=inputs, outputs=outputs)

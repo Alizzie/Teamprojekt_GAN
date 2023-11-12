@@ -13,7 +13,7 @@ Die instanzielle Normalisierung ist eine Variante der Normalisierung, die auf In
 Die Verwendung der Instanznormalisierung in den Diskriminatoren von CycleGAN kann helfen, eine stabilere und konsistentere Konvergenz während des Trainings zu erreichen.
 
 \subsubsection{Training}
-Das Training von CycleGAN erfolgt nach einem kompetitiven Verfahren. Die Generatoren $G:X->Y$ und $F:Y->X$ konkurrieren mit den entsprechenden Diskriminatoren $D_X$ und $D_Y$. $D_X$ versucht, die von $F$ erzeugten Bilder von den echten Bildern aus $X$ zu unterscheiden, während $D_Y$ versucht, die von $G$ erzeugten Bilder von den echten Bildern aus der Domäne $Y$ zu unterscheiden. Die adversen Verluste sind so optimiert, dass die erzeugten Bilder für die Diskriminatoren kaum von den echten Bildern zu unterscheiden sind. \cite{Zhu.2017}.
+Das Training von CycleGAN erfolgt nach einem kompetitiven Verfahren. Die Generatoren $G:X\rightarrow Y$ und $F:Y\rightarrow X$ konkurrieren mit den entsprechenden Diskriminatoren $D_X$ und $D_Y$. $D_X$ versucht, die von $F$ erzeugten Bilder von den echten Bildern aus $X$ zu unterscheiden, während $D_Y$ versucht, die von $G$ erzeugten Bilder von den echten Bildern aus der Domäne $Y$ zu unterscheiden. Die adversen Verluste sind so optimiert, dass die erzeugten Bilder für die Diskriminatoren kaum von den echten Bildern zu unterscheiden sind. \cite{Zhu.2017}.
 
 \subsubsection{Cycle - Konsistenz}
 CycleGAN führt zusätzlich eine Cycle-Konsistenz ein. Diese stellt sicher, dass die Übersetzungen zwischen den Domänen sowohl vorwärts ($X$ nach $Y$) als auch rückwärts ($Y$ nach $X$) konsistent sind.
@@ -22,10 +22,27 @@ Die Kernidee besteht darin, dass nach der Übersetzung von $X$ nach $Y$ und zur�
 \\
 Durch die Einführung dieser zyklischen Konsistenz wird das Problem des Modekollapses gelöst. Die weitere Verlustfunktion stellt sicher, dass die generierten Bilder mehr Strukturen enthalten und somit konsistentere Übersetzungen zwischen den Domänen liefern \cite{Zhu.2017}.
 
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=1\linewidth]{./images/cycle_consistency_loss.png}
+	\caption{(a) Modell des CycleGANs, bestehend aus zwei Generatoren $F:Y\rightarrow X$ und $G:X \rightarrow Y$ und zugehörige adversarielle Diskriminatoren $D_X$ und $D_Y$,
+     (b) Cycle-Konsistenz $F(G(x))\approx x$,
+     (c) Cycle-Konsistenz $G(F(y))\approx y$\cite{Zhu.2017}}
+	\label{fig:cycleConsistency}
+\end{figure}
+
 \subsubsection{Identity - Loss}
 Zusätzlich zu den adversariellen und zyklischen Verlusten kann ein Identitätsverlust in die Gesamtverlustfunktion integriert werden, um sicherzustellen, dass die Farbkomposition des Eingabebildes beibehalten wird, während es ins Ausgabebild übersetzt wird. Insbesondere bei der Erstellung von Fotografien aus Gemälden hat sich diese Methode bewährt.  
 Wenn der Generator $G$ ein Bild aus dem Bereich $Y$ erhält, darf es sich aufgrund seiner bereits vorhandenen Zugehörigkeit zu diesem Bereich nicht mehr verändern. 
 Der Verlust wird dabei mittels des L1-Verlust ermittelt, bei dem die Differenz zwischen den Pixeln des generierten Bildes $G(y)$ und dem Referenzbild $y\in Y$ erfasst wird. Das gleiche Verfahren wird für den anderen Generator $F$ angewendet \cite{Zhu.2017}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.7\linewidth]{./images/identity_loss.png}
+	\caption{Identity-Mapping für (d) Generator $G$ und (e) Generator $F$}
+	\label{fig:IdentityMapping}
+\end{figure}
+
 
 \subsection{Anwendungen von CycleGAN}
 CycleGAN hat sich als äußerst vielseitiges Modell erwiesen und wird in verschiedenen Anwendungsbereichen eingesetzt. Die Fähigkeit, Bildübersetzungen zwischen unpaaren Domänen durchzuführen, hat zu zahlreichen innovativen Anwendungen geführt.
