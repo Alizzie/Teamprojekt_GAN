@@ -1,0 +1,109 @@
+\section{Implementierung der Pix2PixGAN-Architektur}
+\subsection{Generator}
+
+Die Struktur des Generator in der Pix2Pix-Implementierung ist ein wesentlicher Aspekt, der die Leistungsfähigkeit des Modells bestimmt. Der Generator ist als U-Net-Architektur aufgebaut, die aus dem Encoder und Decoder bestehen die wiederum  aufeinanderfolgende Downsampling- und Upsampling-Schritten beinhalten.
+\newline
+Im Encoder-Teil des Generators wird das Downsampling durch eine Reihe von Convolutional Neuronal Network (CNN) Schichten realisiert, die durch die downsample-Funktion innerhalb des downstack definiert sind. 
+
+\begin{lstlisting}[language=pyhaff, caption={Downsampling-Schritt}, label={cod:Pix2PixGAN Generator}]
+	down_stack = [
+	downsample(64, 4, apply_batchnorm=False),  # (batch_size, 128, 128, 64)
+	downsample(128, 4),  # (batch_size, 64, 64, 128)
+	downsample(256, 4),  # (batch_size, 32, 32, 256)
+	downsample(512, 4),  # (batch_size, 16, 16, 512)
+	downsample(512, 4),  # (batch_size, 8, 8, 512)
+	downsample(512, 4),  # (batch_size, 4, 4, 512)
+	downsample(512, 4),  # (batch_size, 2, 2, 512)
+	downsample(512, 4),  # (batch_size, 1, 1, 512)
+	]
+\end{lstlisting}
+
+Die downsample-Funktion erstellt eine Downsampling-Schicht, die mittels einer Conv2D-Schicht mit spezifischen Filtern und Kernel-Größen die räumlichen Dimensionen der Eingabebilder reduziert. Zur Verbesserung der Stabilität und Leistungsfähigkeit des Modells integriert die Funktion optional eine Batch-Normalisierung. Diese Normalisierung reguliert und standardisiert die Ausgabe der Conv2D-Schicht, was dazu beiträgt, das Training effizienter zu gestalten.
+Darüber hinaus beinhaltet die Funktion eine LeakyReLU-Aktivierung, eine Variation der herkömmlichen ReLU-Aktivierungsfunktion. LeakyReLU ermöglicht es, dass auch für negative Eingabewerte ein kleiner Gradient erhalten bleibt, wodurch das Problem der inaktiven Neuronen, bekannt als "sterbende ReLUs", vermieden wird.
+
+\begin{lstlisting}[language=pyhaff, caption={Downsampling-Schicht}, label={cod:Pix2PixGAN Generator}]
+	def downsample(filters, size, apply_batchnorm=True):
+	initializer = tf.random_normal_initializer(0., 0.02)
+	
+	result = tf.keras.Sequential()
+	result.add(
+	tf.keras.layers.Conv2D(filters, size, strides=2, padding='same',
+	kernel_initializer=initializer, use_bias=False))
+	
+	if apply_batchnorm:
+		result.add(tf.keras.layers.BatchNormalization())
+	
+	result.add(tf.keras.layers.LeakyReLU())
+	
+	return result
+\end{lstlisting}
+
+Im Anschluss daran erfolgt das Upsampling im Decoder-Teil des Generators, das durch die upsample-Funktion innerhalb des upstack repräsentiert wird. Diese Schichten arbeiten daran, die Merkmale auf ein höher ausgelöstes Format zu projizieren und die Bildgröße wiederherzustellen.
+
+\begin{lstlisting}[language=pyhaff, caption={Upsampling-Schritt}, label={cod:Pix2PixGAN Generator}]
+	up_stack = [
+	upsample(512, 4, apply_dropout=True),  # (batch_size, 2, 2, 1024)
+	upsample(512, 4, apply_dropout=True),  # (batch_size, 4, 4, 1024)
+	upsample(512, 4, apply_dropout=True),  # (batch_size, 8, 8, 1024)
+	upsample(512, 4),  # (batch_size, 16, 16, 1024)
+	upsample(256, 4),  # (batch_size, 32, 32, 512)
+	upsample(128, 4),  # (batch_size, 64, 64, 256)
+	upsample(64, 4),  # (batch_size, 128, 128, 128)
+	]
+\end{lstlisting}
+
+Die upsampling-Funktion verwendet eine spezielle Art von  konvolutioneller Schicht, die Conv2DTranspose-Schicht, um die Bildgröße zu erhöhen. Diese Schicht kehrt den Prozess einer konvolutionellen Schicht um, indem sie die Eingabedaten expandiert, was für das Wiederherstellen einer größerem Bildgröße im Generator unerlässlich ist. Zusätzlich zur Conv2DTranspose-Schicht integriert die upsample-Funktion eine Batch-Normalisierung, die zur Stabilisierung des Lernprozesses beiträgt, indem sie die Ausgaben der Conv2DTranspose-Schicht normalisiert. Dies ist ein wichtiger Schritt, um die interne Kovariantenverschiebung zu reduzieren und die Leistung des Modells zu verbessern. Ein weiteres wichtiges Merkmal der Funktion ist die optional Anwendung von Dropout. Wenn diese aktiviert ist, hilft Dropout, Überanpassungen(Overfitting) zu vermeiden, indem zufällig eine bestimmte Anzahl von Neuronen während des Trainingsprozesses ausgeschaltet werden. Dies trägt dazu bei dass das Modell robustere und generalisierbare Merkmale lernt. Schließlich wird eine ReLU-Aktivierungsfunktion angewendet, die dafür sorgt, dass das Modell nicht-lineare Zusammenhänge lernt. 
+
+\begin{lstlisting}[language=pyhaff, caption={Upsampling-Schritt}, label={cod:Pix2PixGAN Generator}]
+	def upsample(filters, size, apply_dropout=True):
+	initializer = tf.random_normal_initializer(0., 0.02)
+	
+	result = tf.keras.Sequential()
+	result.add(
+	tf.keras.layers.Conv2DTranspose(filters, size, strides=2,
+	padding='same',
+	kernel_initializer=initializer,
+	use_bias=False))
+	
+	result.add(tf.keras.layers.BatchNormalization())
+	
+	if apply_dropout:
+		result.add(tf.keras.layers.Dropout(0.5))
+	
+	result.add(tf.keras.layers.ReLU())
+	
+	return result
+	]
+\end{lstlisting} 
+Die Skip-Verbindungen werden im Generator durch die Speicherung und spätere Verwendung der Ausgaben der Downsampling-Schichten in der skips-Liste realisiert. Nach dem Downsampling-Prozess werden diese gespeicherten Ausgaben in umgekehrter Reihenfolge durchlaufen und mit den Ausgaben der Upsampling-Schichten mittels einer Concatenate-Operation verbunden. Diese Kombination von hoch- und niedrigstufigen Merkmalen führt zu einer detaillierteren und genaueren Bildrekonstruktion.
+\newline
+Schließlich wird das endgültige Bild durch die letzte Schicht des Generators erzeugt, eine Conv2DTranspose-Schicht, die die Ausgabe des Generators darstellt. Diese letzte Schicht spielt eine entscheidende Rolle bei der Erzeugung des endgültigen Bildes, das die kombinierten Merkmale aus dem gesamten Netzwerk nutzt.
+
+\begin{lstlisting}[language=pyhaff, caption={Skip Verbindungen}, label={cod:Pix2PixGAN Generator}]
+	initializer = tf.random_normal_initializer(0., 0.02)
+	last = tf.keras.layers.Conv2DTranspose(OUTPUT_CHANNELS, 4,
+	strides=2,
+	padding='same',
+	kernel_initializer=initializer,
+	activation='tanh')  # (batch_size, 256, 256, 3)
+	
+	x = inputs
+	
+	# Downsampling through the model
+	skips = []
+	for down in down_stack:
+		x = down(x)
+		skips.append(x)
+	
+	skips = reversed(skips[:-1])
+	
+	# Upsampling and establishing the skip connections
+	for up, skip in zip(up_stack, skips):
+		x = up(x)
+		x = tf.keras.layers.Concatenate()([x, skip])
+	
+	x = last(x)
+	
+	return tf.keras.Model(inputs=inputs, outputs=x)
+	]
+\end{lstlisting} 
