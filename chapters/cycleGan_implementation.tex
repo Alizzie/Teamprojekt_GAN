@@ -14,6 +14,9 @@ train_horses =  tf.data.Dataset.list_files(str(PATH / 'trainA/*.jpg'))
 
 \subsection{Vorverarbeitung des Datensatzes}
 Um die Leistung der GAN-Modelle zu verbessern, werden vor dem Training Variationen in den Trainingsdaten eingeführt. Dieser Prozess, der Datenjittering und Normalisierung umfasst, trägt dazu bei, das Modell robuster zu machen und eine bessere Konvergenz während des Trainings zu erreichen.
+
+//TODO Normalisierung auf [-1:1], begründung
+
 \newpage
 \begin{lstlisting}[language=pyhaff, caption={Vorverarbeitung des Datensatzes: Normalisierung}, label={cod:normalizing}]
 def normalize(image):
@@ -37,7 +40,7 @@ def random_jitter(image):
 
 Zusätzlich dazu werden die Bildpfade geladen und in das resultierende JPEG-Format decodiert.
 
-\begin{lstlisting}[language=pyhaff, caption={Vorverarbeitung des Datensatzes: Jittering}, label={cod:jittering}]
+\begin{lstlisting}[language=pyhaff, caption={Lesen eines Bildes}, label={cod:imageLoading}]
 def load_image(image_path):
     image = tf.io.read_file(image_path)
     image = tf.io.decode_jpeg(image, channels=3)
@@ -55,23 +58,23 @@ Diese umfassende Vorverarbeitung stellt sicher, dass das GAN-Modell auf optimal 
 \section{Implementierung der CycleGAN-Architektur}
 Nach den theoretischen Grundlagen der CycleGAN-Architektur und der Datenvorverarbeitung in den vorherigen Abschnitten, wird nun die konkrete Implementierung der Architekturen unter Verwendung von TensorFlow und Keras vorgestellt 
 \\
-Die Generator- und Diskriminatorarchitekturen wurden entsprechend der im Grundlagenkapitel erklärten theoretischen Grundlagen umgesetzt, insbesondere den Empfehlungen von Zhu et al. (2017)\cite{Zhu.2017} folgend. Der Generator setzt sich aus einem Enkoder-Block, mehreren Residualblöcken und einem Dekoder-Block zusammen. Der Diskriminator wurde als sequentielles Modell implementiert und umfasst mehrere Convolutional-Schichten, konzipiert als PatchGAN.
+Die Generator- und Diskriminatorarchitekturen wurden entsprechend der im Grundlagenkapitel erklärten theoretischen Grundlagen umgesetzt, insbesondere den Empfehlungen von Zhu et al. (2017)\cite{Zhu.2017} folgend. Der Generator setzt sich aus einem Enkoder-Block, mehreren Residualblöcken und einem Dekoder-Block zusammen. Der Diskriminator wurde als sequentielles Modell implementiert und umfasst mehrere Convolutional-Schichten, konzipiert als PatchGAN. //TODO: Gefolgt mit Normalisierung und Aktivierungsfunktionen
 
 Die spezifischen Implementierungsdetails sind im beigefügten Code zu finden.
 
 \subsection{Verlustfunktion}
 Während des Trainings werden verschiedene Verlustfunktionen verwendet, um sicherzustellen, dass der Generator qualitativ hochwertige Bilder generiert und dass die Transformationen zwischen den Domänen konsistent sind. Die zentralen Verlustfunktionen, insbesondere die Gesamtverlustfunktionen für den Generator und den Diskriminator, werden im Folgenden erläutert. 
 \\
-Für die Klassifizierung, ob es sich um echte oder generierte Bilder handelt, wird in der Implementierung der \textit{BinaryCrossentropy}-Verlustfunktion aus TensorFlow/Keras verwendet. Dieser  berechnet den binären Kreuzentropieverlust zwischen den Zielwerten und den Vorhersagen \footnote{\url{https://www.tensorflow.org/api_docs/python/tf/keras/losses/BinaryCrossentropy}}.
+Für die Klassifizierung, ob es sich um echte oder generierte Bilder handelt, wird in der Implementierung der \textit{BinaryCrossentropy}-Verlustfunktion aus TensorFlow/Keras verwendet. Dieser  berechnet den binären Kreuzentropieverlust zwischen den Zielwerten und den Vorhersagen \footnote{https://www.tensorflow.org/api_docs/python/tf/keras/losses/BinaryCrossentropy}.
 
-\begin{lstlisting}[language=pyhaff, caption={Vorverarbeitung des Datensatzes: Jittering}, label={cod:jittering}]
+\begin{lstlisting}[language=pyhaff, caption={Initialisierung des BinaryCrossentropy-Verlustfunktion}, label={cod:binaryCrossentropy}]
 loss_obj = tf.keras.losses.BinaryCrossentropy(from_logits=True)
 \end{lstlisting}
 
 
 \subsubsection{Gesamtverlust des Generators}
 Der Gesamtverlust des Generators setzt sich aus dem adversariellen Verlust und dem Zykluskonsistenz-Verlust zusammen. Optional kann der Identitätsverlust berücksichtigt werden, was in der Implementierung erfolgte. Die Integration des Identitätsverlusts stellt sicher, dass das Modell die Struktur des Originalbildes beibehält, was zu einem konsistenteren Transformationsprozess führt. Die spezifischen Implementierungen der adversariellen Verlustfunktion des Generators, des Cycle Consistency Loss und des Identitätsverlusts sind im Code-Anhang zu finden.
-\begin{lstlisting}[language=pyhaff, caption={Vorverarbeitung des Datensatzes: Jittering}, label={cod:jittering}]
+\begin{lstlisting}[language=pyhaff, caption={Vorverarbeitung des Datensatzes: Jittering}, label={cod:cycleGanGeneratorVerlust}]
 def generator_loss(real_x, cycled_x, real_y, cycled_y, identity, discriminator_generated, step):
     gan_loss = generator_adversarial_loss(discriminator_generated)
     cycle_loss = cycle_consistency_loss(real_x, cycled_x) + cycle_consistency_loss(real_y, cycled_y)
@@ -82,8 +85,8 @@ def generator_loss(real_x, cycled_x, real_y, cycled_y, identity, discriminator_g
 
 \subsubsection{Gesamtverlust des Diskriminators}
 Die Gesamtverlustfunktion des Diskriminators setzt sich aus dem adversariellen Verlust für echte und generierte Bilder zusammen. Der Diskriminator wird entsprechend trainiert, echte Bilder als "1" und generierte Beispiele als "0" zu klassifizieren. Die Multiplikation des Gesamtverlustes mit dem Wert 0.5 bildet den Durchschnitt des Gesamtverlustes und stellt sicher, dass die Gradientenaktualisierung während des Prozesses angemessen skaliert wird.
-
-\begin{lstlisting}[language=pyhaff, caption={Vorverarbeitung des Datensatzes: Jittering}, label={cod:cycleGanDiscriminator}]
+\newpage
+\begin{lstlisting}[language=pyhaff, caption={Vorverarbeitung des Datensatzes: Jittering}, label={cod:cycleGanDiscriminatorVerlust}]
 def discriminator_adversarial_loss(real, generated):
     real_loss = loss_obj(tf.ones_like(real), real)
     generated_loss = loss_obj(tf.zeros_like(generated), generated)
