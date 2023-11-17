@@ -7,7 +7,7 @@ Daraus ergeben sich zahlreiche neue Ansätze zur Generierung realistischer Inhal
 Die Anwendungen reichen von der Bildgenerierung bis hin zur Superauflösung und Textgenerierung \cite{Aggarwal.2021}.
 
 \subsection*{Funktionsweise}
-Der Generator und der Diskriminator sind die Hauptkomponenten eines GAN. Die beiden neuronalen Netze werden gleichzeitig trainiert und konkurrieren miteinander, wobei der Generator versucht, den Diskriminator zu täuschen, indem er synthetische Inhalte erzeugt. Um die Glaubwürdigkeit des Generators zu erhöhen, so dass der Diskriminator nicht mehr zwischen den Eingaben unterscheiden kann, wird das gesamte Netz trainiert. Die Netze werden in der Regel als mehrschichtige Netzwerke implementiert, die aus Convolutional und Fully-Connected Layers bestehen\cite{Creswell.2018}.
+Der Generator und der Diskriminator sind die Hauptkomponenten eines GAN. Die beiden neuronalen Netze werden gleichzeitig trainiert und konkurrieren miteinander, wobei der Generator versucht, den Diskriminator zu täuschen, indem er synthetische Inhalte erzeugt. Um die Glaubwürdigkeit des Generators zu erhöhen, so dass der Diskriminator nicht mehr zwischen den Eingaben unterscheiden kann, wird das gesamte Netz trainiert. Die Netze werden in der Regel als mehrschichtige Netzwerke implementiert, die aus Convolutional und Fully-Connected Schichten bestehen\cite{Creswell.2018}.
 
 \subsubsection*{Generator}
 Der Generator dient zur Erzeugung künstlicher Daten wie Bilder und Texte. 
@@ -57,7 +57,8 @@ CycleGAN, das 2017 von Jun-Yan Zhu et al. vorgestellt wurde, stellt eine neue En
 // TODO
 
 \section{Bibliotheken}
-// TODO
 \subsection{Tensorflow}
-Tensorflow ist ein Open-Source-Framework, 
+TensorFlow ist ein weit verbreitetes Open-Source-Framework, das für maschinelles Lernen und tiefe neuronale Netzwerke eingesetzt wird\footnote{\url{https://www.tensorflow.org/}}. Es bietet eine umfangreiche Plattform zur Entwicklung und Umsetzung von Modellen in verschiedenen Anwendungsbereichen, darunter Bilderkennung und natürliche Sprachverarbeitung. Die Architektur von TensorFlow ermöglicht das Erstellen komplexer maschineller Lernanwendungen und stellt umfassende Tools und Bibliotheken zur Verfügung, um den gesamten Entwicklungsprozess zu unterstützen. Darüber hinaus profitiert TensorFlow von einer aktiven und engagierten Community, die kontinuierlich zur Weiterentwicklung des Frameworks beiträgt\footnote{\url{https://github.com/tensorflow/tensorflow}}.
+
 \subsection{Keras}
+Ursprünglich als eigenständiges Framework konzipiert und seit TensorFlow 2.0 in die TensorFlow Core API integriert, fungiert Keras als Open-Source-API zur Modellierung von Strukturen im Bereich des Deep Learning\footnote{\url{https://www.tensorflow.org/guide/keras}}. Diese Bibliothek, die in der Programmiersprache Python implementiert ist, umfasst sämtliche Phasen des maschinellen Lern-Workflows. Beginnend mit der Datenverarbeitung ermöglicht sie eine nahtlose Fortführung bis zur präzisen Abstimmung der Hyperparameter während des Trainingsprozesses. Die Grundsätze von Keras sind durch ihre Einfachheit, Flexibilität und Leistungsfähigkeit charakterisiert, wodurch Nutzer die Skalierbarkeit und plattformübergreifenden Fähigkeiten der TensorFlow-Plattform in vollem Umfang nutzen können\footnote{\url{https://keras.io/about/}}.
