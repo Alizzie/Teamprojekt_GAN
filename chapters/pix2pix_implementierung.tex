@@ -4,7 +4,7 @@
 Die Struktur des Generator in der Pix2Pix-Implementierung ist ein wesentlicher Aspekt, der die Leistungsfähigkeit des Modells bestimmt. Der Generator ist als U-Net-Architektur aufgebaut, die aus dem Encoder und Decoder bestehen die wiederum  aufeinanderfolgende Downsampling- und Upsampling-Schritten beinhalten.
 \newline
 Im Encoder-Teil des Generators wird das Downsampling durch eine Reihe von Convolutional Neuronal Network (CNN) Schichten realisiert, die durch die downsample-Funktion innerhalb des downstack definiert sind. 
-
+\newpage
 \begin{lstlisting}[language=pyhaff, caption={Downsampling-Schritt}, label={cod:Pix2PixGAN Generator}]
 	down_stack = [
 	downsample(64, 4, apply_batchnorm=False),  # (batch_size, 128, 128, 64)
@@ -73,7 +73,6 @@ Die upsampling-Funktion verwendet eine spezielle Art von  konvolutioneller Schic
 	result.add(tf.keras.layers.ReLU())
 	
 	return result
-	]
 \end{lstlisting} 
 Die Skip-Verbindungen werden im Generator durch die Speicherung und spätere Verwendung der Ausgaben der Downsampling-Schichten in der skips-Liste realisiert. Nach dem Downsampling-Prozess werden diese gespeicherten Ausgaben in umgekehrter Reihenfolge durchlaufen und mit den Ausgaben der Upsampling-Schichten mittels einer Concatenate-Operation verbunden. Diese Kombination von hoch- und niedrigstufigen Merkmalen führt zu einer detaillierteren und genaueren Bildrekonstruktion.
 \newline
