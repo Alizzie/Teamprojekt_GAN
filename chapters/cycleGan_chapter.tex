@@ -1,9 +1,31 @@
 \subsubsection{Architektur der Generatoren}
-Die Architektur der Generatoren in CycleGAN spielt eine entscheidende Rolle bei der erfolgreichen Durchführung von Bildübersetzungen zwischen verschiedenen Domänen. Typischerweise basieren die Generatoren auf dem ResNet-Ansatz, der für seine Fähigkeit bekannt ist, tiefe neuronale Netze zu trainieren.
+Die Architektur der Generatoren in CycleGAN spielt eine entscheidende Rolle bei der erfolgreichen Durchführung von Bildübersetzungen zwischen verschiedenen Domänen. Typischerweise basieren die Generatoren auf dem ResNet-Ansatz, der für seine Fähigkeit bekannt ist, tiefe neuronale Netze zu trainieren\cite{He.2015}.
 \\
-ResNet-Blöcke bestehen aus Faltungsschichten, Normalisierungsschichten und Aktivierungsfunktionen. Sie ermöglichen Generatoren, komplexe Transformationen durchzuführen. Die Verwendung von ResNet-Blöcken erleichtert auch das Training tiefer Netze, was für qualitativ hochwertige Übersetzungen wichtig ist.
+\footnote[1]{https://towardsdatascience.com/cyclegan-learning-to-translate-images-without-paired-training-data-5b4e93862c8d}
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.8\linewidth]{./images/cycleGanGeneratorArchitecture.png}
+	\caption{CycleGAN Generator Achitektur. Instanznormalisierung und ReLU Aktivierung erfolgt nach jeder Schicht
+	\protect\footnotemark[1]}
+	\label{fig:cycleGanGeneratorArchitecture}
+\end{figure}
+
+Im Rahmen der Architektur von Zhu et al. manifestiert sich der Generator im CycleGAN in drei zentralen Abschnitten, wie graphisch in Abbildung \ref{fig:cycleGanGeneratorArchitecture} illustriert. Der Encoder besteht aus drei Convolutional-Schichten, welche unmittelbar auf das Eingabebild einwirken und dabei die Repräsentationsgröße reduzieren sowie die Kanalanzahl erhöhen. Das resultierende Bild unterzieht sich einem Transformer, zusammengesetzt aus mehreren Residualblöcken. Die aus dieser Transformation hervorgehende Repräsentation durchläuft den Decoder, welcher aus zwei Transpose Convolutional-Schichten besteht und somit das Bild erneut vergrößert. Die finale RGB-Ausgabe wird durch eine Ausgabeschicht generiert. Jede dieser Schichten ist mit Instanznormalisierung und ReLU-Aktivierung versehen, was sowohl die Trainingsstabilität fördert, als auch die Qualität der generierten Bilder optimiert\cite{Ulyanov.2016, 10.5555/3104322.3104425}. 
+\\
+\newline
+Die ResNet-Methode, von Kaiming He et al. im Jahr 2015 eingeführt, bietet eine Lösung für das Degradationsproblem. Dieses Phänomen tritt auf, wenn tiefe neuronale Netze bei Zugabe zusätzlicher Schichten schlechtere Leistungen erbringen als flachere Netze, da die Rückwärtspropagierung von Fehlern in tieferen Netzwerken erschwert wird. Die Integration von Residualblöcken ermöglicht die Überwindung dieses Problems durch die Hinzufügung einer Identitätsabbildung. Das Netzwerk lernt diese Abbildung, indem es das Residuum auf Null setzt. Residualblöcke dienen dazu, Änderungen und Fehler zu erlernen, die notwendig sind, um von der Eingabe zur gewünschten Ausgabe zu gelangen. Dies wird durch Shortcut-Verbindungen realisiert, die eine oder mehrere Ebenen überspringen und am Ende einer gestapelten Schicht hinzugefügt werden. Solche Verbindungen fügen keine zusätzlichen Parameter oder Rechenleistung hinzu, und das gesamte Netzwerk kann weiterhin mittels stochastischem Gradientenabstieg (SDG) trainiert werden\cite{He.2015}.
+Der Generator des CycleGANs besteht aus sechs Residualblöcken, wobei jeder Block aus zwei Convolutional-Schichten besteht, gefolgt von Instanznormalisierung und ReLU-Aktivierung, wie in Abbildung \ref{fig:residualBlock} dargestellt.
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.5\linewidth]{./images/residualBlock.png}
+	\caption{Aufbau Residualblock}
+	\label{fig:residualBlock}
+\end{figure}
 
 \subsubsection{Architektur der Diskriminatoren}
+// TODO: VERGLEICH MIT PIX2PIX
 Wie bei Pix2Pix ist die übliche Architektur für Diskriminatoren in CycleGAN PatchGAN, wobei das Bild in kleine Patches aufgeteilt wird und jeder Patch separat klassifiziert wird. Diese Methode ermöglicht eine feine Unterscheidung zwischen echten und generierten Bildern auf lokaler Ebene \cite{Zhu.2017}.
 
 Die Diskriminatoren bestehen in der Regel aus Convolutional Layer, gefolgt von Normalization Layer und Activation Function. In einigen Implementierungen von CycleGAN wird die instanzielle Normalisierung der üblichen Batch-Normalisierung vorgezogen \cite{}.
@@ -47,5 +69,5 @@ Der Verlust wird dabei mittels des L1-Verlust ermittelt, bei dem die Differenz z
 \subsection{Anwendungen von CycleGAN}
 CycleGAN hat sich als äußerst vielseitiges Modell erwiesen und wird in verschiedenen Anwendungsbereichen eingesetzt. Die Fähigkeit, Bildübersetzungen zwischen unpaaren Domänen durchzuführen, hat zu zahlreichen innovativen Anwendungen geführt.
 \\
-Eine der prominentesten Anwendungen von CycleGAN ist die Bild-zu-Bild-Übersetzung. Dies beinhaltet die Transformation von Bildern zwischen verschiedenen Stilen, Szenarien oder Kunstwerken. Beispielsweise kann CycleGAN verwendet werden, um Fotos in den Stil berühmter Kunstwerke zu transformieren, was einen einzigartigen und kreativen Ansatz für die Bildbearbeitung bietet.
+Eine der prominentesten Anwendungen von CycleGAN ist die Bild-zu-Bild-\\Übersetzung. Dies beinhaltet die Transformation von Bildern zwischen verschiedenen Stilen, Szenarien oder Kunstwerken. Beispielsweise kann CycleGAN verwendet werden, um Fotos in den Stil berühmter Kunstwerke zu transformieren, was einen einzigartigen und kreativen Ansatz für die Bildbearbeitung bietet.
 Ein weiteres Anwendungsgebiet von CycleGAN ist die Stilübertragung. Hier können Stile von einem Bild auf ein anderes übertragen werden, ohne dass gepaarte Trainingsdaten benötigt werden. So ist es möglich, den Stil eines Gemäldes auf ein fotografisches Bild zu übertragen oder umgekehrt. CycleGAN kann auch für die Übersetzung zwischen verschiedenen Farbbereichen verwendet werden. Zum Beispiel kann es verwendet werden, um Schwarz-Weiß-Bilder in Farbversionen zu übersetzen oder den Farbton von Bildern anzupassen, ohne dass gepaarte Trainingsdaten benötigt werden.

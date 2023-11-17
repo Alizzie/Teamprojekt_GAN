@@ -1,71 +1,14 @@
-\section{Training- und Testdaten}
-Das Training und die Evaluierung von Generative Adversarial Networks (GANs) erfordern die klare Definition von Trainings- und Testdatensätzen. Der entscheidende Unterschied zwischen diesen Datensätzen besteht darin, dass das Modell während des Trainings auf den Trainingsdaten optimiert wird, während die Testdaten verwendet werden, um die Leistung und die Generalisierungsfähigkeiten des Modells zu bewerten.
-
-\subsection{Datenladung für GAN-Training}
-Für das effektive Training von GANs ist der Zugriff auf qualitativ hochwertige Datensätze von entscheidender Bedeutung. In diesem Kontext bietet TensorFlow eine umfassende Sammlung öffentlich verfügbarer Datensätze. Die verwendeten Datensätze werden von der Quelle \url{https://efrosgans.eecs.berkeley.edu} heruntergeladen und lokal extrahiert.
-
-\lstinputlisting[language=pyhaff, caption=Laden eines Datensatzes von einer URL]{code/LadenDatensatz.txt}
-
-Die Transformation und Vorverarbeitung der Bilddaten erfolgt durch die TensorFlow-Datensatz-API. Diese API bietet eine effiziente Datenpipeline für das Laden und Verarbeiten von Daten, insbesondere für den Einsatz in Machine-Learning-Modellen. In den folgenden Implementierungen wird ein Dataset durch eine Liste von Dateipfaden als Zeichenketten erzeugt.
-
-\begin{lstlisting}[language=pyhaff, caption={Erzeugung eines Tensorflow-Dataset aus CycleGAN Implementierung}, label={cod:createDataset}]
-train_horses =  tf.data.Dataset.list_files(str(PATH / 'trainA/*.jpg')) 
-\end{lstlisting}
-
-\subsection{Vorverarbeitung des Datensatzes}
-Um die Leistung der GAN-Modelle zu verbessern, werden vor dem Training Variationen in den Trainingsdaten eingeführt. Dieser Prozess, der Datenjittering und Normalisierung umfasst, trägt dazu bei, das Modell robuster zu machen und eine bessere Konvergenz während des Trainings zu erreichen.
-
-//TODO Normalisierung auf [-1:1], begründung
-
-\newpage
-\begin{lstlisting}[language=pyhaff, caption={Vorverarbeitung des Datensatzes: Normalisierung}, label={cod:normalizing}]
-def normalize(image):
-    image = (image / 127.5) - 1
-    return image
-\end{lstlisting}
-
-Datenjittering wird durchgeführt, indem die heruntergeladenen Bilder (256x256) auf eine größere Größe (286x286) mit der Nearest-Neighbor-Methode skaliert. Bei dieser Methode wird für jedes Pixel im skalierten Bild der Farbwert des nächstgelegenen Pixels im Originalbild übernommen, um eine einfache und effiziente Skalierung zu ermöglichen. Das Bilder werden daraufhin zufällig zugeschnitten. Darüber hinaus wird eine zufällige Spiegelung angewendet.
-
-\begin{lstlisting}[language=pyhaff, caption={Vorverarbeitung des Datensatzes: Jittering}, label={cod:jittering}]
-def random_crop(image):
-    cropped_image = tf.image.random_crop(image, size=(IMG_HEIGHT, IMG_WIDTH, 3))
-    return cropped_image
-
-def random_jitter(image):
-    image = tf.image.resize(image, [286, 286], method=tf.image.ResizeMethod.NEAREST_NEIGHBOR)
-    image = random_crop(image)
-    image = tf.image.random_flip_left_right(image)
-    return image
-\end{lstlisting}
-
-Zusätzlich dazu werden die Bildpfade geladen und in das resultierende JPEG-Format decodiert.
-
-\begin{lstlisting}[language=pyhaff, caption={Lesen eines Bildes}, label={cod:imageLoading}]
-def load_image(image_path):
-    image = tf.io.read_file(image_path)
-    image = tf.io.decode_jpeg(image, channels=3)
-    image = tf.cast(image, tf.float32)
-    return image
-\end{lstlisting}
-
-Die vorverarbeiteten Bilder werden dann in TensorFlow-Datasets integriert. Nachfolgend wird der Trainingsdatensatz zufällig gemischt und in Batches gruppiert, wodurch sichergestellt wird, dass das Modell nicht von der Reihenfolge der Datenpunkte beeinflusst wird.
-\newpage 
-\lstinputlisting[language=pyhaff, caption=Integration der vorverarbeiteten Bilder in Tensorflow-Datasets]{code/LadenBild.txt}
-
-Diese umfassende Vorverarbeitung stellt sicher, dass das GAN-Modell auf optimal vorbereiteten Daten trainiert wird, um eine maximale Leistung und Generalisierungsfähigkeit zu erreichen.
-
-
 \section{Implementierung der CycleGAN-Architektur}
 Nach den theoretischen Grundlagen der CycleGAN-Architektur und der Datenvorverarbeitung in den vorherigen Abschnitten, wird nun die konkrete Implementierung der Architekturen unter Verwendung von TensorFlow und Keras vorgestellt 
 \\
-Die Generator- und Diskriminatorarchitekturen wurden entsprechend der im Grundlagenkapitel erklärten theoretischen Grundlagen umgesetzt, insbesondere den Empfehlungen von Zhu et al. (2017)\cite{Zhu.2017} folgend. Der Generator setzt sich aus einem Enkoder-Block, mehreren Residualblöcken und einem Dekoder-Block zusammen. Der Diskriminator wurde als sequentielles Modell implementiert und umfasst mehrere Convolutional-Schichten, konzipiert als PatchGAN. //TODO: Gefolgt mit Normalisierung und Aktivierungsfunktionen
-
-Die spezifischen Implementierungsdetails sind im beigefügten Code zu finden.
+Die Generator- und Diskriminatorarchitekturen wurden entsprechend der im Grundlagenkapitel erklärten theoretischen Grundlagen umgesetzt, insbesondere den Empfehlungen von Zhu et al. (2017)\cite{Zhu.2017} folgend. Der Generator setzt sich aus einem Enkoder-Block, mehreren Residualblöcken und einem Dekoder-Block zusammen\ref{fig:cycleGanGeneratorArchitecture}. Der Diskriminator wurde als sequentielles Modell implementiert und umfasst mehrere Convolutional-Schichten, konzipiert als PatchGAN.
+Die spezifischen Implementierungsdetails, inklusive der Helferfunktionen, sind im beigefügten Code zu finden.
 
 \subsection{Verlustfunktion}
 Während des Trainings werden verschiedene Verlustfunktionen verwendet, um sicherzustellen, dass der Generator qualitativ hochwertige Bilder generiert und dass die Transformationen zwischen den Domänen konsistent sind. Die zentralen Verlustfunktionen, insbesondere die Gesamtverlustfunktionen für den Generator und den Diskriminator, werden im Folgenden erläutert. 
 \\
-Für die Klassifizierung, ob es sich um echte oder generierte Bilder handelt, wird in der Implementierung der \textit{BinaryCrossentropy}-Verlustfunktion aus TensorFlow/Keras verwendet. Dieser  berechnet den binären Kreuzentropieverlust zwischen den Zielwerten und den Vorhersagen \footnote{https://www.tensorflow.org/api_docs/python/tf/keras/losses/BinaryCrossentropy}.
+Für die Klassifizierung, ob es sich um echte oder generierte Bilder handelt, wird in der Implementierung der \textit{BinaryCrossentropy}-Verlustfunktion aus TensorFlow/Keras verwendet. 
+Dieser berechnet den binären Kreuzentropieverlust zwischen den Zielwerten und den Vorhersagen \footnote{\url{https://www.tensorflow.org/api_docs/python/tf/keras/losses/BinaryCrossentropy}}.
 
 \begin{lstlisting}[language=pyhaff, caption={Initialisierung des BinaryCrossentropy-Verlustfunktion}, label={cod:binaryCrossentropy}]
 loss_obj = tf.keras.losses.BinaryCrossentropy(from_logits=True)
