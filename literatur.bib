@@ -4,6 +4,16 @@
 }
 
 
+@proceedings{.2010,
+ year = {2010},
+ title = {Proceedings of the 27th International Conference on International Conference on Machine Learning},
+ address = {Madison, WI, USA},
+ publisher = {Omnipress},
+ isbn = {9781605589077},
+ series = {ICML'10}
+}
+
+
 @proceedings{.2019,
  year = {2019},
  title = {Proceedings of The 7th International Conference on Intelligent Systems and Image Processing 2019},
@@ -60,12 +70,62 @@ Tech report},
 }
 
 
+@misc{Huang.2017,
+ abstract = {Gatys et al. recently introduced a neural algorithm that renders a content image in the style of another image, achieving so-called style transfer. However, their framework requires a slow iterative optimization process, which limits its practical application. Fast approximations with feed-forward neural networks have been proposed to speed up neural style transfer. Unfortunately, the speed improvement comes at a cost: the network is usually tied to a fixed set of styles and cannot adapt to arbitrary new styles. In this paper, we present a simple yet effective approach that for the first time enables arbitrary style transfer in real-time. At the heart of our method is a novel adaptive instance normalization (AdaIN) layer that aligns the mean and variance of the content features with those of the style features. Our method achieves speed comparable to the fastest existing approach, without the restriction to a pre-defined set of styles. In addition, our approach allows flexible user controls such as content-style trade-off, style interpolation, color {\&} spatial controls, all using a single feed-forward neural network.
+
+ICCV 2017. Code is available: https://github.com/xunhuang1995/AdaIN-style},
+ author = {Huang, Xun and Belongie, Serge},
+ date = {2017},
+ title = {Arbitrary Style Transfer in Real-time with Adaptive Instance Normalization},
+ publisher = {arXiv},
+ doi = {10.48550/arXiv.1703.06868}
+}
+
+
+@misc{Liu.2022,
+ abstract = {Generative Adversarial Networks (GANs) have shown compelling results in various tasks and applications in recent years. However, mode collapse remains a critical problem in GANs. In this paper, we propose a novel training pipeline to address the mode collapse issue of GANs. Different from existing methods, we propose to generalize the discriminator as feature embedding and maximize the entropy of distributions in the embedding space learned by the discriminator. Specifically, two regularization terms, i.e., Deep Local Linear Embedding (DLLE) and Deep Isometric feature Mapping (DIsoMap), are designed to encourage the discriminator to learn the structural information embedded in the data, such that the embedding space learned by the discriminator can be well-formed. Based on the well-learned embedding space supported by the discriminator, a non-parametric entropy estimator is designed to efficiently maximize the entropy of embedding vectors, playing as an approximation of maximizing the entropy of the generated distribution. By improving the discriminator and maximizing the distance of the most similar samples in the embedding space, our pipeline effectively reduces the mode collapse without sacrificing the quality of generated samples. Extensive experimental results show the effectiveness of our method, which outperforms the GAN baseline, MaF-GAN on CelebA (9.13 vs. 12.43 in FID) and surpasses the recent state-of-the-art energy-based model on the ANIME-FACE dataset (2.80 vs. 2.26 in Inception score). The code is available at https://github.com/HaozheLiu-ST/MEE
+
+Accepted by AAAI'2023 (Oral); Code is released at https://github.com/HaozheLiu-ST/MEE},
+ author = {Liu, Haozhe and Li, Bing and Wu, Haoqian and Liang, Hanbang and Huang, Yawen and Li, Yuexiang and Ghanem, Bernard and Zheng, Yefeng},
+ date = {2022},
+ title = {Combating Mode Collapse in GANs via Manifold Entropy Estimation},
+ publisher = {arXiv},
+ doi = {10.48550/arXiv.2208.12055}
+}
+
+
+@inproceedings{Nair.2010,
+ abstract = {Restricted Boltzmann machines were developed using binary stochastic hidden units. These can be generalized by replacing each binary unit by an infinite number of copies that all have the same weights but have progressively more negative biases. The learning and inference rules for these {\textquotedbl}Stepped Sigmoid Units{\textquotedbl} are unchanged. They can be approximated efficiently by noisy, rectified linear units. Compared with binary units, these units learn features that are better for object recognition on the NORB dataset and face verification on the Labeled Faces in the Wild dataset. Unlike binary units, rectified linear units preserve information about relative intensities as information travels through multiple layers of feature detectors.},
+ author = {Nair, Vinod and Hinton, Geoffrey E.},
+ title = {Rectified Linear Units Improve Restricted Boltzmann Machines},
+ pages = {807--814},
+ publisher = {Omnipress},
+ isbn = {9781605589077},
+ series = {ICML'10},
+ booktitle = {Proceedings of the 27th International Conference on International Conference on Machine Learning},
+ year = {2010},
+ address = {Madison, WI, USA}
+}
+
+
 @incollection{PhillipIsola.,
  abstract = {1. Introduction
 
 Many problems in image processing, computer graphics,},
  author = {{Phillip Isola} and {Jun-Yan Zhu} and {Tinghui Zhou} and {Alexei A. Efros}},
  title = {Image-to-Image Translation with Conditional Adversarial Networks}
+}
+
+
+@misc{Srivastava.2017,
+ abstract = {Deep generative models provide powerful tools for distributions over complicated manifolds, such as those of natural images. But many of these methods, including generative adversarial networks (GANs), can be difficult to train, in part because they are prone to mode collapse, which means that they characterize only a few modes of the true distribution. To address this, we introduce VEEGAN, which features a reconstructor network, reversing the action of the generator by mapping from data to noise. Our training objective retains the original asymptotic consistency guarantee of GANs, and can be interpreted as a novel autoencoder loss over the noise. In sharp contrast to a traditional autoencoder over data points, VEEGAN does not require specifying a loss function over the data, but rather only over the representations, which are standard normal by assumption. On an extensive set of synthetic and real world image datasets, VEEGAN indeed resists mode collapsing to a far greater extent than other recent GAN variants, and produces more realistic samples.
+
+Published as a conference paper at NIPS, 2017},
+ author = {Srivastava, Akash and Valkov, Lazar and Russell, Chris and Gutmann, Michael U. and Sutton, Charles},
+ date = {2017},
+ title = {VEEGAN: Reducing Mode Collapse in GANs using Implicit Variational Learning},
+ publisher = {arXiv},
+ doi = {10.48550/arXiv.1705.07761}
 }
 
 
@@ -103,17 +163,3 @@ An extended version of our ICCV 2017 paper, v7 fixed the typos and updated the i
 }
 
 
-@inproceedings{10.5555/3104322.3104425,
-author = {Nair, Vinod and Hinton, Geoffrey E.},
-title = {Rectified Linear Units Improve Restricted Boltzmann Machines},
-year = {2010},
-isbn = {9781605589077},
-publisher = {Omnipress},
-address = {Madison, WI, USA},
-abstract = {Restricted Boltzmann machines were developed using binary stochastic hidden units. These can be generalized by replacing each binary unit by an infinite number of copies that all have the same weights but have progressively more negative biases. The learning and inference rules for these "Stepped Sigmoid Units" are unchanged. They can be approximated efficiently by noisy, rectified linear units. Compared with binary units, these units learn features that are better for object recognition on the NORB dataset and face verification on the Labeled Faces in the Wild dataset. Unlike binary units, rectified linear units preserve information about relative intensities as information travels through multiple layers of feature detectors.},
-booktitle = {Proceedings of the 27th International Conference on International Conference on Machine Learning},
-pages = {807–814},
-numpages = {8},
-location = {Haifa, Israel},
-series = {ICML'10}
-}

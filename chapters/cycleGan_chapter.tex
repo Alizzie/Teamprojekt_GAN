@@ -6,33 +6,27 @@ Die Architektur der Generatoren in CycleGAN spielt eine entscheidende Rolle bei 
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.8\linewidth]{./images/cycleGanGeneratorArchitecture.png}
-	\caption{CycleGAN Generator Achitektur. Instanznormalisierung und ReLU Aktivierung erfolgt nach jeder Schicht
+	\caption{Eine Architektur eines CycleGAN Generator. Instanznormalisierung und ReLU Aktivierung erfolgt nach jeder Schicht
 	\protect\footnotemark[1]}
 	\label{fig:cycleGanGeneratorArchitecture}
 \end{figure}
 
-Im Rahmen der Architektur von Zhu et al. manifestiert sich der Generator im CycleGAN in drei zentralen Abschnitten, wie graphisch in Abbildung \ref{fig:cycleGanGeneratorArchitecture} illustriert. Der Encoder besteht aus drei Convolutional-Schichten, welche unmittelbar auf das Eingabebild einwirken und dabei die Repräsentationsgröße reduzieren sowie die Kanalanzahl erhöhen. Das resultierende Bild unterzieht sich einem Transformer, zusammengesetzt aus mehreren Residualblöcken. Die aus dieser Transformation hervorgehende Repräsentation durchläuft den Decoder, welcher aus zwei Transpose Convolutional-Schichten besteht und somit das Bild erneut vergrößert. Die finale RGB-Ausgabe wird durch eine Ausgabeschicht generiert. Jede dieser Schichten ist mit Instanznormalisierung und ReLU-Aktivierung versehen, was sowohl die Trainingsstabilität fördert, als auch die Qualität der generierten Bilder optimiert\cite{Ulyanov.2016, 10.5555/3104322.3104425}. 
+Im Rahmen der Architektur von Zhu et al. manifestiert sich der Generator im CycleGAN in drei zentralen Abschnitten, wie graphisch in Abbildung \ref{fig:cycleGanGeneratorArchitecture} illustriert. Der Encoder besteht aus drei Convolutional-Schichten, welche unmittelbar auf das Eingabebild einwirken und dabei die Repräsentationsgröße reduzieren sowie die Kanalanzahl erhöhen. Das resultierende Bild unterzieht sich einem Transformer, zusammengesetzt aus mehreren Residualblöcken. Die aus dieser Transformation hervorgehende Repräsentation durchläuft den Decoder, welcher aus zwei Transpose Convolutional-Schichten besteht und somit das Bild erneut vergrößert. Die finale RGB-Ausgabe wird durch eine Ausgabeschicht generiert. Jede dieser Schichten ist mit Instanznormalisierung und ReLU-Aktivierung versehen, was sowohl die Trainingsstabilität fördert, als auch die Qualität der generierten Bilder optimiert\cite{Ulyanov.2016,Nair.2010}. 
 \\
 \newline
 Die ResNet-Methode, von Kaiming He et al. im Jahr 2015 eingeführt, bietet eine Lösung für das Degradationsproblem. Dieses Phänomen tritt auf, wenn tiefe neuronale Netze bei Zugabe zusätzlicher Schichten schlechtere Leistungen erbringen als flachere Netze, da die Rückwärtspropagierung von Fehlern in tieferen Netzwerken erschwert wird. Die Integration von Residualblöcken ermöglicht die Überwindung dieses Problems durch die Hinzufügung einer Identitätsabbildung. Das Netzwerk lernt diese Abbildung, indem es das Residuum auf Null setzt. Residualblöcke dienen dazu, Änderungen und Fehler zu erlernen, die notwendig sind, um von der Eingabe zur gewünschten Ausgabe zu gelangen. Dies wird durch Shortcut-Verbindungen realisiert, die eine oder mehrere Ebenen überspringen und am Ende einer gestapelten Schicht hinzugefügt werden. Solche Verbindungen fügen keine zusätzlichen Parameter oder Rechenleistung hinzu, und das gesamte Netzwerk kann weiterhin mittels stochastischem Gradientenabstieg (SDG) trainiert werden\cite{He.2015}.
-Der Generator des CycleGANs besteht aus sechs Residualblöcken, wobei jeder Block aus zwei Convolutional-Schichten besteht, gefolgt von Instanznormalisierung und ReLU-Aktivierung, wie in Abbildung \ref{fig:residualBlock} dargestellt.
 
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.5\linewidth]{./images/residualBlock.png}
-	\caption{Aufbau Residualblock}
+	\caption{Ein Aufbau eines Residualblocks}
 	\label{fig:residualBlock}
 \end{figure}
 
 \subsubsection{Architektur der Diskriminatoren}
-// TODO: VERGLEICH MIT PIX2PIX
-Wie bei Pix2Pix ist die übliche Architektur für Diskriminatoren in CycleGAN PatchGAN, wobei das Bild in kleine Patches aufgeteilt wird und jeder Patch separat klassifiziert wird. Diese Methode ermöglicht eine feine Unterscheidung zwischen echten und generierten Bildern auf lokaler Ebene \cite{Zhu.2017}.
-
-Die Diskriminatoren bestehen in der Regel aus Convolutional Layer, gefolgt von Normalization Layer und Activation Function. In einigen Implementierungen von CycleGAN wird die instanzielle Normalisierung der üblichen Batch-Normalisierung vorgezogen \cite{}.
-\\
-Die instanzielle Normalisierung ist eine Variante der Normalisierung, die auf Instanzebene durchgeführt wird. Im Gegensatz zur Batch-Normalisierung, bei der die Normalisierung über die gesamte Batch-Dimension durchgeführt wird, wird bei der Instanz-Normalisierung jede Instanz bzw. jedes Bild einzeln betrachtet. Dies kann besonders vorteilhaft sein, wenn die statistischen Eigenschaften der einzelnen Instanzen variieren.
-
-Die Verwendung der Instanznormalisierung in den Diskriminatoren von CycleGAN kann helfen, eine stabilere und konsistentere Konvergenz während des Trainings zu erreichen.
+In Pix2Pix ist die gängige Architektur für Diskriminatoren ein PatchGAN, bei dem das Bild in kleine Patches unterteilt wird und jeder Patch separat klassifiziert wird (vgl. Abschnitt \ref{sec:PatchGAN}). Diese Vorgehensweise ermöglicht eine präzise Unterscheidung zwischen echten und generierten Bildern auf lokaler Ebene, was besonders in Bezug auf die feinstrukturierte Bewertung von Bildabschnitten von Vorteil ist \cite{Zhu.2017}.
+\newline
+In den Implementierungen von CycleGAN wird im Unterschied zu Pix2Pix auf die Verwendung von Batch Normalisierung verzichtet, und stattdessen wird Instanznormalisierung bevorzugt. Bei der Instanznormalisierung wird jedes Bild individuell betrachtet, ohne Berücksichtigung über die gesamte Batch-Dimension hinweg. Dieser Ansatz bietet eine effektivere Stilübertragung im Feed-Forward-Modus und weist eine schnellere Konvergenz auf im Vergleich zur Batch Normalisierung \cite{Huang.2017}. Eine mögliche Architektur ist in Abbildung \ref{fig:PatchGANDiskriminator} veranschaulicht.
 
 \subsubsection{Training}
 Das Training von CycleGAN erfolgt nach einem kompetitiven Verfahren. Die Generatoren $G:X\rightarrow Y$ und $F:Y\rightarrow X$ konkurrieren mit den entsprechenden Diskriminatoren $D_X$ und $D_Y$. $D_X$ versucht, die von $F$ erzeugten Bilder von den echten Bildern aus $X$ zu unterscheiden, während $D_Y$ versucht, die von $G$ erzeugten Bilder von den echten Bildern aus der Domäne $Y$ zu unterscheiden. Die adversen Verluste sind so optimiert, dass die erzeugten Bilder für die Diskriminatoren kaum von den echten Bildern zu unterscheiden sind. \cite{Zhu.2017}.

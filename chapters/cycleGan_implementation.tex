@@ -1,7 +1,9 @@
 \section{Implementierung der CycleGAN-Architektur}
 Nach den theoretischen Grundlagen der CycleGAN-Architektur und der Datenvorverarbeitung in den vorherigen Abschnitten, wird nun die konkrete Implementierung der Architekturen unter Verwendung von TensorFlow und Keras vorgestellt 
 \\
-Die Generator- und Diskriminatorarchitekturen wurden entsprechend der im Grundlagenkapitel erklärten theoretischen Grundlagen umgesetzt, insbesondere den Empfehlungen von Zhu et al. (2017)\cite{Zhu.2017} folgend. Der Generator setzt sich aus einem Enkoder-Block, mehreren Residualblöcken und einem Dekoder-Block zusammen\ref{fig:cycleGanGeneratorArchitecture}. Der Diskriminator wurde als sequentielles Modell implementiert und umfasst mehrere Convolutional-Schichten, konzipiert als PatchGAN.
+Die Generator- und Diskriminatorarchitekturen wurden entsprechend der im Grundlagenkapitel erklärten theoretischen Grundlagen umgesetzt, insbesondere den Empfehlungen von Zhu et al. (2017)\cite{Zhu.2017} folgend. Der Generator setzt sich aus einem Enkoder-Block, sechs Residualblöcken und einem Dekoder-Block zusammen\ref{fig:cycleGanGeneratorArchitecture}.
+Der Diskriminator wurde als sequentielles Modell implementiert und umfasst mehrere Convolutional-Schichten, konzipiert als PatchGAN. 
+Nach jeder Convolutional Schicht beim Generator und Diskriminator, außer bei der letzten, folgt dabei eine Instanznormalisierung und ReLU-Aktivierung.
 Die spezifischen Implementierungsdetails, inklusive der Helferfunktionen, sind im beigefügten Code zu finden.
 
 \subsection{Verlustfunktion}
