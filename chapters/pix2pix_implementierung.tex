@@ -53,7 +53,7 @@ Im Anschluss daran erfolgt das Upsampling im Decoder-Teil des Generators, das du
 \end{lstlisting}
 
 Die upsampling-Funktion verwendet eine spezielle Art von  konvolutioneller Schicht, die Conv2DTranspose-Schicht, um die Bildgröße zu erhöhen. Diese Schicht kehrt den Prozess einer konvolutionellen Schicht um, indem sie die Eingabedaten expandiert, was für das Wiederherstellen einer größerem Bildgröße im Generator unerlässlich ist. Zusätzlich zur Conv2DTranspose-Schicht integriert die upsample-Funktion eine Batch-Normalisierung, die zur Stabilisierung des Lernprozesses beiträgt, indem sie die Ausgaben der Conv2DTranspose-Schicht normalisiert. Dies ist ein wichtiger Schritt, um die interne Kovariantenverschiebung zu reduzieren und die Leistung des Modells zu verbessern. Ein weiteres wichtiges Merkmal der Funktion ist die optional Anwendung von Dropout. Wenn diese aktiviert ist, hilft Dropout, Überanpassungen(Overfitting) zu vermeiden, indem zufällig eine bestimmte Anzahl von Neuronen während des Trainingsprozesses ausgeschaltet werden. Dies trägt dazu bei dass das Modell robustere und generalisierbare Merkmale lernt. Schließlich wird eine ReLU-Aktivierungsfunktion angewendet, die dafür sorgt, dass das Modell nicht-lineare Zusammenhänge lernt. 
-
+\newpage
 \begin{lstlisting}[language=pyhaff, caption={Upsampling-Schritt}, label={cod:Pix2PixGAN Generator}]
 	def upsample(filters, size, apply_dropout=True):
 	initializer = tf.random_normal_initializer(0., 0.02)
@@ -77,7 +77,7 @@ Die upsampling-Funktion verwendet eine spezielle Art von  konvolutioneller Schic
 Die Skip-Verbindungen werden im Generator durch die Speicherung und spätere Verwendung der Ausgaben der Downsampling-Schichten in der skips-Liste realisiert. Nach dem Downsampling-Prozess werden diese gespeicherten Ausgaben in umgekehrter Reihenfolge durchlaufen und mit den Ausgaben der Upsampling-Schichten mittels einer Concatenate-Operation verbunden. Diese Kombination von hoch- und niedrigstufigen Merkmalen führt zu einer detaillierteren und genaueren Bildrekonstruktion.
 \newline
 Schließlich wird das endgültige Bild durch die letzte Schicht des Generators erzeugt, eine Conv2DTranspose-Schicht, die die Ausgabe des Generators darstellt. Diese letzte Schicht spielt eine entscheidende Rolle bei der Erzeugung des endgültigen Bildes, das die kombinierten Merkmale aus dem gesamten Netzwerk nutzt.
-
+\newpage
 \begin{lstlisting}[language=pyhaff, caption={Skip Verbindungen}, label={cod:Pix2PixGAN Generator}]
 	initializer = tf.random_normal_initializer(0., 0.02)
 	last = tf.keras.layers.Conv2DTranspose(OUTPUT_CHANNELS, 4,
@@ -105,4 +105,65 @@ Schließlich wird das endgültige Bild durch die letzte Schicht des Generators e
 	
 	return tf.keras.Model(inputs=inputs, outputs=x)
 	]
-\end{lstlisting} 
+\end{lstlisting}
+
+\subsection{Diskriminator}
+Der Diskriminator startet mit der Initialisierung seiner Eingabeschichten. Er empfängt zwei seperate Bilder - ein Eingabebild ($inp$) und ein Zielbild ($tar$). Diese Bilder werden dann entlang ihrer Farbkanäle zu einem einzigen Bild zusammengefügt.\newline
+Im Kern des Diskriminators des Pix2Pix-Modells finden sich mehrere Downsampling- oder Konvolutionsschichten, die eine Schlüsselrolle bei der Bewertung des Eingabebildes spielen. jede dieser Schichten führt Konvolutionen durch, um die Merkmale und Texturen aus den Bildern zu extrahieren. Dabei arbeitet jede Konvolutionsschicht mit einem kleinen Bereich des Eingabebildes. Dieser Bereich gleitet über das gesamte Bild und bewertet bei jedem Schritt einen kleinen Teil, bekannt als $"Patch"$. Die Größe dieses Bereiches und damit die Größe des bewerteten Patches, wird durch die Größe des Konvolutionskerns bestimmt. Diese konsequente Analyse von Patches ermöglicht es dem Diskriminator, die räumliche Auflösung des Bildes schrittweise zu reduzieren, was wiederum die Komplexität des Problems verringert und eine effektive Bewertung der lokalen Bildmerkmale ermöglicht. \newline
+Nach den Downsampling-Schritten folgen Zero Padding und zusätzliche Konvolutionsschichten. Diese Schritte sind entscheidend, um den Diskriminator zu ermöglichen, feinere Details aus den Bildern herauszuarbeiten. \newline
+Die letzte Schicht im Diskriminator ist eine Konvolutionsschicht, die eine Karte von Werten erzeugt. Jeder dieser Werte repräsentiert das Urteil des Diskriminators über einen bestimmten Patch des Bildes.\newline
+Der Schlüssel des Diskriminators liegt im PatchGAN-Konzept. Dieses Konzept geschieht implizit durch die Art und Weise, wie die Konvolutionsschichten im Netzwerk strukturiert sind.
+\newpage
+\begin{lstlisting}[language=pyhaff, caption={Diskriminator}, label={cod:Pix2PixGAN Diskriminator}]
+	def Discriminator():
+		initializer = tf.random_normal_initializer(0., 0.02)
+	
+		inp = tf.keras.layers.Input(shape=[256, 256, 3], name='input_image')
+		tar = tf.keras.layers.Input(shape=[256, 256, 3], name='target_image')
+	
+		x = tf.keras.layers.concatenate([inp, tar])  # (batch_size, 256, 256, channels*2)
+	
+		down1 = downsample(64, 4, False)(x)  # (batch_size, 128, 128, 64)
+		down2 = downsample(128, 4)(down1)  # (batch_size, 64, 64, 128)
+		down3 = downsample(256, 4)(down2)  # (batch_size, 32, 32, 256)
+	
+		zero_pad1 = tf.keras.layers.ZeroPadding2D()(down3)  # (batch_size, 34, 34, 256)
+		conv = tf.keras.layers.Conv2D(512, 4, strides=1,
+		kernel_initializer=initializer,
+		use_bias=False)(zero_pad1)  # (batch_size, 31, 31, 512)
+	
+		batchnorm1 = tf.keras.layers.BatchNormalization()(conv)
+	
+		leaky_relu = tf.keras.layers.LeakyReLU()(batchnorm1)
+	
+		zero_pad2 = tf.keras.layers.ZeroPadding2D()(leaky_relu)  # (batch_size, 33, 33, 512)
+	
+		last = tf.keras.layers.Conv2D(1, 4, strides=1,
+		kernel_initializer=initializer)(zero_pad2)  # (batch_size, 30, 30, 1)
+	
+		return tf.keras.Model(inputs=[inp, tar], outputs=last)
+	]
+\end{lstlisting}
+
+\subsection{Verlustfunktion}
+\subsubsection{Generatorverlust}
+Der Generatorverlust im Pix2Pix-Modell besteht aus zwei wesentlichen Komponenten: dem adversariellen Verlust ($gan\_loss$) und dem L1-Verlust ($l1\_loss$). Der adversarielle Verlust wird durch Anwendung der $BinaryCrossentropy$-Funktion von TensorFlow ermittelt. Hierbei wird die Ausgabe des Diskriminators für generierte Bilder ($disc\_generated\_output$) mit einem Tensor, der ausschließlich aus Einsen besteht, verglichen. Dies dient dazu, die Effektivität des Generators bei der Erzeugung von Bildern zu bewerten, die für den Diskriminator von echten Bildern nicht unterscheidbar sind. Der L1-Verlust hingegen berechnet den mittleren absoluten Fehler zwischen dem vom Generator erzeugten Bild ($gen\_output$) und dem tatsächlichen Zielbild ($target$). Dieser Verlust trägt maßgeblich dazu bei, die inhaltliche Übereinstimmung und Ähnlichkeit des generierten Bildes mit dem Zielbild zu fördern. \newline
+Der Gesamtverlust des Generators ($total\_gen\_loss$) ist die Summe des adversariellen Verlust und des L1-Verlusts, wobei der L1-Verlust mit einem Faktor $LAMBDA$ gewichtet wird. Die Gewichtung des L1-Verlusts hilft dabei, die strukturelle Integrität und die Genauigkeit des generierten Bildes zu verbessern,indem sie darauf abzielt, die Pixeldifferenzen zwischen dem generierten Bild und dem Zielbild zu minimieren.\newline
+Nach der Berechnung des Gesamtverlusts werden Gradienten bezüglich der Generatorparameter berechnet ($gen\_tape.gradient$) und diese Gradienten werden dann verwendet, um den Generator mittels des Adam-Optimierers ($generator\_optimizer.apply\_gradients$) zu aktualisieren. Dieser Prozess ist ein integraler Bestandteil des Trainings, da er dem Generator hilft, sich schrittweise zu verbessern und immer realistischere Bilder zu erzeugen.
+
+\subsubsection{Diskriminatorverlust}
+Der Diskriminatorverlust wird durch die $discriminator\_loss$-Funktion im Coe bestimmt. Diese Funktion enthält zwei Eingaben: $disc\_real\_output$, die Diskriminatorausgabe für das echte Bild und $disc\_generated\_output$, die Diskriminatorausgabe für das vom Generator erzeugte Bild. Der Verlust für echte Bilder ($real_loss$) wird berechnet, indem die $BinaryCrossentropy$-Funktion zwischen $disc_real_output$ und einem Tensor aus Einsen angewendet wird. Dieser Schritt bewertet, wie gut der Diskriminator eichte Bilder als solche erkennen kann.
+Der Verlust für generierte Bilder ($generated\_loss$) wird berechnet, indem die $BinaryCrossentropy$-Funktion zwischen $disc\_generated\_output$ und einem Tensor aus Nullen angewendet wird. Dies bewertet, wie gut der Diskriminator generierte Bilder als flasch erkennen kann.
+\newline
+Der Gesamtverlust des Diskriminators ($total\_disc\_loss$) ist die Summe von $real\_loss$ und $generated\_loss$. Diese Kombination zwingt den Diskriminator, zwischen echten und generierten Bildern besser zu unterscheiden.
+\newline
+Für die Optimierung des Diskriminator werden die Gradienten des Diskriminatorverlusts in Bezug auf die Diskriminatorparameter berechnet ($disc\_tape.gradient$). Diese Gradienten werden dann verwendet, um den Diskriminator mittels des Adam-Optimierers ($discriminator\_optimizer.apply\_gradients$) zu aktualisieren.
+
+\subsection{Training und Hyperparameter}
+Der Trainingsprozess des Pix2Pix-Modells ist iterativ und umfasst die abwechselnde Anpassung des Generators und des Diskriminators. Während des Trainings werden Paare von Eingabe- und Zielbildern verwendet, die aus dem Datensatz geladen, vorverarbeitet und dem Modell zugeführt werden. Für jeden Trainingschritt wird der Generator verwendet, um aus den Eingabebildern Bilder zu erzeugen, die dann vom Diskriminator bewertet werden. Der Diskriminator wird ebenfalls mit den echten Zielbildern traininert, um die Unterscheidungsfähigkeit zwischen echte und generierten Bildern zu verbessern. Der Trainingschritt beinhaltet die Berechnung und Anwendung von Gradienten sowohl für den Generator als auch für den Diskriminator, basierend auf ihre jeweiligen Verlustfunktionen.
+\newline
+Für den Generator und den Diskriminator, wird der Adam-Optimierer mit einer Lernrate von 0.0002 und den Momentum-Parametern $\beta$1 = 0.5 und $\beta$2 = 0.999 verwendet. Diese Einstellungen einen guten Kompromiss zwischen der Lerngeschwindigkeit und der Stabilität des Trainingsprozesses zu finden. Die Batchgröße ist im Code auf 1 gesetzt. Eine kleine Batchgröße kann zu einer höheren Stabilität im Trainingsprozess beitragen. Der Hyperparameter $LAMBDA$ wird verwendet, um das Gewicht des L1-Verlustes im Generatorverlust zu steuern. Ein hoher Wert von $LAMBDA$ betont die Bedeutung der Inhaltsähnlichkeit zwischen den generierten und den Zielbildern. Die Anzahl der Trainingsepochen ist auf 450 gesetzt, was darauf hindeutet, dass das Modell eine umfangreiche Trainingsdauer durchläuft, um eine optimale Leistung zu erreichen.
+
+
+
+
