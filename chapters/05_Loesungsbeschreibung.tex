@@ -58,3 +58,10 @@ Diese umfassende Vorverarbeitung stellt sicher, dass das GAN-Modell auf optimal 
 
 \input{chapters/pix2pix_implementierung.tex}
 \input{chapters/cycleGan_implementation.tex}
+
+
+\section{Training und Hyperparameter}
+Das Training wird über mehrere Epochen durchgeführt, wobei die Modelle durch spezifische Optimierer optimiert wurden. In jedem Durchlauf wurde ein Bild aus den Trainingsdaten ausgewählt, und der Generator wurde auf dieses angewendet, um inkrementell die Verbesserung zu verfolgen. Die generierten Bilder wurden mittels \textit{plt.savefig()} aus der Matplotlib-Bibliothek gespeichert, um auch nach dem Training darauf zugreifen zu können.\\
+Diese Vorgehensweise ermöglicht eine systematische Überprüfung der Modellleistung und eine visuelle Darstellung der Fortschritte während des Trainingsprozesses.
+\\
+Die Wahl der Hyperparameter, einschließlich Lernraten und des Lambda-Werts für den Cycle Consistency Loss, wurde durch abgestimmte Experimente ermittelt. Die Optimierer wurden sorgfältig ausgewählt, um eine effiziente Konvergenz während des Trainings zu gewährleisten.
