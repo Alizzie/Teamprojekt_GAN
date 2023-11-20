@@ -15,8 +15,8 @@ train_horses =  tf.data.Dataset.list_files(str(PATH / 'trainA/*.jpg'))
 
 \subsection{Vorverarbeitung des Datensatzes}
 Um die Leistung der GAN-Modelle zu verbessern, werden vor dem Training Variationen in den Trainingsdaten eingeführt. Dieser Prozess, der Datenjittering und Normalisierung umfasst, trägt dazu bei, das Modell robuster zu machen und eine bessere Konvergenz während des Trainings zu erreichen.
-
-//TODO Normalisierung auf [-1:1], begründung
+\newline
+Im Rahmen des Trainingsprozesses von Pix2Pix wird eine iterative Methode verwendet, bei der der Generator und der Diskriminator abwechselnd trainiert werden. Zunächst werden die Trainingsdaten vorbereitet, die aus Paaren von Eingabe- und Zielbildern besteht. Diese Bilder werden auf einen Wertebereich von -1 bis +1 skaliert. Diese Normalisierung ist wichtig, da sie zur Stabilisierung des Trainingsprozesses beiträgt. Sie ermöglicht es dem Modell, mit einem standardisierten Datensatz zu arbeiten, was die Lernrate und die Konvergenzgeschwindigkeit verbessert.\newline
 
 \newpage
 \begin{lstlisting}[language=pyhaff, caption={Vorverarbeitung des Datensatzes: Normalisierung}, label={cod:normalizing}]
