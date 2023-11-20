@@ -1,8 +1,9 @@
 \section{Implementierung der CycleGAN-Architektur}
-Nach den theoretischen Grundlagen der CycleGAN-Architektur und der Datenvorverarbeitung in den vorherigen Abschnitten, wird nun die konkrete Implementierung der Architekturen unter Verwendung von TensorFlow und Keras vorgestellt 
-\\
-Die Generator- und Diskriminatorarchitekturen wurden entsprechend der im Grundlagenkapitel erklärten theoretischen Grundlagen umgesetzt, insbesondere den Empfehlungen von Zhu et al. (2017)\cite{Zhu.2017} folgend. Der Generator setzt sich aus einem Enkoder-Block, sechs Residualblöcken und einem Dekoder-Block zusammen\ref{fig:cycleGanGeneratorArchitecture}.
-Der Diskriminator wurde als sequentielles Modell implementiert und umfasst mehrere Convolutional-Schichten, konzipiert als PatchGAN. 
+Nach den theoretischen Grundlagen der CycleGAN-Architektur und der Datenvorverarbeitung in den vorherigen Abschnitten, wird nun die konkrete Implementierung der Architekturen unter Verwendung von TensorFlow und Keras vorgestellt.
+
+\subsection{Generator und Diskriminator}
+Die Generator- und Diskriminatorarchitekturen wurden entsprechend der im Grundlagenkapitel erklärten theoretischen Grundlagen umgesetzt, insbesondere den Empfehlungen von Zhu et al. (2017)\cite{Zhu.2017} folgend. Der Generator setzt sich aus einem Enkoder-Block, sechs Residualblöcken und einem Dekoder-Block zusammen \ref{fig:cycleGanGeneratorArchitecture}.
+Der Diskriminator wurde als sequentielles Modell implementiert und umfasst mehrere Convolutional Schichten, konzipiert als PatchGAN. 
 Nach jeder Convolutional Schicht beim Generator und Diskriminator, außer bei der letzten, folgt dabei eine Instanznormalisierung und ReLU-Aktivierung.
 Die spezifischen Implementierungsdetails, inklusive der Helferfunktionen, sind im beigefügten Code zu finden.
 
@@ -10,7 +11,7 @@ Die spezifischen Implementierungsdetails, inklusive der Helferfunktionen, sind i
 Während des Trainings werden verschiedene Verlustfunktionen verwendet, um sicherzustellen, dass der Generator qualitativ hochwertige Bilder generiert und dass die Transformationen zwischen den Domänen konsistent sind. Die zentralen Verlustfunktionen, insbesondere die Gesamtverlustfunktionen für den Generator und den Diskriminator, werden im Folgenden erläutert. 
 \\
 Für die Klassifizierung, ob es sich um echte oder generierte Bilder handelt, wird in der Implementierung der \textit{BinaryCrossentropy}-Verlustfunktion aus TensorFlow/Keras verwendet. 
-Dieser berechnet den binären Kreuzentropieverlust zwischen den Zielwerten und den Vorhersagen \footnote{\url{https://www.tensorflow.org/api_docs/python/tf/keras/losses/BinaryCrossentropy}}.
+Dieser berechnet den binären Kreuzentropieverlust zwischen den Zielwerten und den Vorhersagen\footnote{\url{https://www.tensorflow.org/api_docs/python/tf/keras/losses/BinaryCrossentropy}}.
 
 \begin{lstlisting}[language=pyhaff, caption={Initialisierung des BinaryCrossentropy-Verlustfunktion}, label={cod:binaryCrossentropy}]
 loss_obj = tf.keras.losses.BinaryCrossentropy(from_logits=True)
@@ -29,8 +30,8 @@ def generator_loss(real_x, cycled_x, real_y, cycled_y, identity, discriminator_g
 \end{lstlisting}
 
 \subsubsection{Gesamtverlust des Diskriminators}
-Die Gesamtverlustfunktion des Diskriminators setzt sich aus dem adversariellen Verlust für echte und generierte Bilder zusammen. Der Diskriminator wird entsprechend trainiert, echte Bilder als "1" und generierte Beispiele als "0" zu klassifizieren. Die Multiplikation des Gesamtverlustes mit dem Wert 0.5 bildet den Durchschnitt des Gesamtverlustes und stellt sicher, dass die Gradientenaktualisierung während des Prozesses angemessen skaliert wird.
-\newpage
+Die Gesamtverlustfunktion des Diskriminators setzt sich aus dem adversariellen Verlust für echte und generierte Bilder zusammen. Der Diskriminator wird entsprechend trainiert, echte Bilder als \"1\" und generierte Beispiele als \"0\" zu klassifizieren. Die Multiplikation des Gesamtverlustes mit dem Wert 0.5 bildet den Durchschnitt des Gesamtverlustes und stellt sicher, dass die Gradientenaktualisierung während des Prozesses angemessen skaliert wird.
+
 \begin{lstlisting}[language=pyhaff, caption={Vorverarbeitung des Datensatzes: Jittering}, label={cod:cycleGanDiscriminatorVerlust}]
 def discriminator_adversarial_loss(real, generated):
     real_loss = loss_obj(tf.ones_like(real), real)
@@ -38,12 +39,6 @@ def discriminator_adversarial_loss(real, generated):
     total_disc_loss = real_loss + generated_loss
     return total_disc_loss * 0.5
 \end{lstlisting}
-
-\subsection{Training und Hyperparameter}
-Das Training wurde über 300 Epochen durchgeführt, wobei die Modelle durch spezifische Optimierer optimiert wurden. In jedem Durchlauf wurde ein Bild aus den Trainingsdaten ausgewählt, und der Generator wurde auf dieses angewendet, um inkrementell die Verbesserung zu verfolgen. Die generierten Bilder wurden mittels \textit{plt.savefig()} aus der Matplotlib-Bibliothek gespeichert, um auch nach dem Training darauf zugreifen zu können.\\
-Diese Vorgehensweise ermöglicht eine systematische Überprüfung der Modellleistung und eine visuelle Darstellung der Fortschritte während des Trainingsprozesses.
-\\
-Die Wahl der Hyperparameter, einschließlich Lernraten und des Lambda-Werts für den Cycle Consistency Loss, wurde durch abgestimmte Experimente ermittelt. Die Optimierer wurden sorgfältig ausgewählt, um eine effiziente Konvergenz während des Trainings zu gewährleisten.
 
 
 \lstinputlisting[language=pyhaff, caption=CycleGAN Generator in Tensorflow]{code/CycleGan_Generator.txt}
