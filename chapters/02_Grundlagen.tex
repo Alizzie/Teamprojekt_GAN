@@ -53,7 +53,17 @@ Pix2Pix fungiert hier als Generative Adversarial Network (GAN), spezialisiert au
 \input{chapters/pix2pix_kernkonzepte.tex}
 
 \subsection{Anwendungen von Pix2Pix}
-Dieser umfassende Ansatz ermöglicht es Pix2Pix, sich flexibel an eine Vielzahl von Problemen anzupassen, die in der Vergangenheit unterschiedliche und spezialisierte Ansätze für die Verlustfunktion erforderten. Dadurch wird die breite Anwendbarkeit und Effektivität des Pix2Pix-Modells in verschiedenen Bildübersetzungsaufgaben deutlich.
+Pix2Pix ist eine fortschrittliche Methode für Bild-zu-Bild-Übersetzungsaufgaben und hat eine breite Palette von Anwendungen in der Bildverarbeitung.\newline
+Ein markantes Anwendungsbeispiel ist die Umwandlung von architektonische Entwürfe oder Zeichnungen in realistische Gebäudefotos. Besonders eindrucksvoll ist diese Anwendung beim CMP Facades-Datensatz, wo aus simplen Fassadenzeichnungen detailreiche Gebäudebilder generiert werden. \cite{PhillipIsola.}
+\newline
+Im Bereich der Fotografie wird Pix2Pix verwendet, um Schwarz-Weiß-Fotos in farbige Bilder zu konvertieren, was besonders bei der Restaurierung alter Fotografien von Bedeutung sein kann.
+\newline
+Die Transformation von Tagesaufnahmen in Nachtbilder ist eine weitere beeindruckende Leistung von Pix2Pix sowie die Umwandlung von Thermalaufnahmen in Farbfotos.
+\newline
+Schließlich wird Pix2Pix auch zur Vervollständigung von Fotos mit fehlenden Pixeln verwendet, beispielsweise um unvollständige Bilder, die aus Paris StreetView stammen, zu reparieren und zu vervollständigen.
+\newline
+Diese vielfältigen Anwendungen zeigen die enorme Flexibilität und die breite Einsatzmöglichkeit von Pix2Pix in der modernen Bildbearbeitung und Computergrafik.
+ 
 
 \section{CycleGAN}
 CycleGAN, das 2017 von Jun-Yan Zhu et al. vorgestellt wurde, stellt eine neue Entwicklung im Bereich des maschinellen Lernens und insbesondere der Bildübersetzung zwischen unpaaren Domänen dar. Es erweitert die Pix2Pix-Architektur durch die Einführung einer Zykluskonsistenz-Verlustfunktion (Cycle Consistency Loss), die sicherstellt, dass das Originalbild nach einem Übersetzungs- und Rückübersetzungszyklus erhalten bleibt. Der Generator $G$ transformiert Bilder aus der Domäne $X$ in die Domäne $Y$, während der Generator $F$ den umgekehrten Prozess durchführt. Diese Transformationen werden ohne gepaarte Trainingsdaten durchgeführt.
