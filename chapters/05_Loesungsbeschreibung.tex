@@ -50,24 +50,25 @@ Diese umfassende Vorverarbeitung stellt sicher, dass das GAN-Modell auf optimal 
 
 \section{Training und Hyperparameter}
 
-Im Rahmen des Trainingsprozesses wird eine iterative Methode angewendet, bei der der Generator und der Diskriminator abwechselnd trainiert werden. Dieser Trainingszyklus erstreckt sich über mehrere Epochen. In jeder Epoche werden Bilder durch einen Feed-Forward-Prozess vom Generator generiert und anschließend vom Diskriminator bewertet. Gleichzeitig wird der Diskriminator mit den echten Zielbildern trainiert, um seine Fähigkeit zu verbessern, zwischen echten und generierten Bildern zu unterscheiden. Der Trainingsschritt beinhaltet die Berechnung und Anwendung von Gradienten für sowohl den Generator als auch den Diskriminator, basierend auf ihren jeweiligen Verlustfunktionen.
-Als Optimierungstechnik wird der Gradientenabstiegsverfahren angewendet, bei der die Parameter in Richtung des negativen Gradienten der Verlustfunktion aktualisiert werden, um den Verlust zu minimieren. Die Parameter beider Modelle werden jeweils mittels korrespondierenden Optimizers aktualisiert.
+Während des Trainings von Generative Adversarial Networks (GANs) wird eine iterative Methode angewendet, bei der der Generator und der Diskriminator abwechselnd trainiert werden. Dieser Trainingszyklus erstreckt sich über mehrere Epochen, wobei in jeder Epoche Bilder durch einen Feed-Forward-Prozess vom Generator generiert und vom Diskriminator bewertet werden. Gleichzeitig wird der Diskriminator mit den echten Zielbildern trainiert, um seine Fähigkeit zu verbessern, zwischen echten und generierten Bildern zu unterscheiden. Der Trainingsschritt beinhaltet die Berechnung und Anwendung von Gradienten für sowohl den Generator als auch den Diskriminator, basierend auf ihren jeweiligen Verlustfunktionen.
 \\\newline
-Die Wahl der Hyperparameter, einschließlich Anzahl der Epochen, Lernraten der Optimziers und die $LAMBDA$-Werte der jeweiligen Architekturen, wurde durch abgestimmte Experimente ermittelt. Dabei wurde darauf geachtet, dass die gewählten Werte zu einer stabilen und konvergenten Schulung führen.
+Die Wahl der Hyperparameter, einschließlich der Anzahl der Epochen, Lernraten der Optimizer und der $LAMBDA$-Werte der jeweiligen Architekturen, wurde durch abgestimmte Experimente ermittelt. Dabei wurde darauf geachtet, dass die gewählten Werte zu einer stabilen und konvergenten Schulung führen.
+\\\newline
+Um Überanpassung zu vermeiden, werden große Datensätze verwendet. Zusätzliche Regularisierung wird durch das Hinzufügen von Dropout erreicht, bei dem während des Trainingsprozesses zufällig bestimmte Neuronen ausgeschaltet werden. Dies trägt dazu bei, dass das Modell robuster wird und generalisierbare Merkmale lernt \cite{Yamashita.2018}. 
 
-\subsection{Optimizers}
-Der Einsatz von Optimizers dienen zur Aktualisierung der Modelle basierend auf den Ergebnissen der Verlustfunktionen. Sie kontrollieren den Lernprozess von Neuronalen Netzwerken, in dem sie die Werte für die Parameter finden, so dass der Verlust am geringsten ist. Die Lernrate bestimmt dabei die Geschwindigkeit, wie schnell das Modell lernt und skaliert den Gradienten. 
+\subsection{Optimierungstechnik und Optimizers}
+Als Optimierungstechnik wird das Gradientenabstiegsverfahren angewendet, bei dem die Parameter in Richtung des negativen Gradienten der Verlustfunktion aktualisiert werden, um den Verlust zu minimieren. Die Parameter beider Modelle werden mittels korrespondierenden Optimizern aktualisiert. Die Lernrate der Optimizer bestimmt die Geschwindigkeit, mit der das Modell lernt, und sie wird sorgfältig abgestimmt, um eine stabile und konvergente Schulung sicherzustellen.
 
-In der Implementierung wird der Adam-Optimizer verwendet, welcher einer der gängisten Auswahl bei GAN Literaturen ist. Diese sind eine verbesserte Variante des stochastiscen Gradientenabstiegsverfahren, um die Lernraten für jede Variable dynamisch anzupassen. Dies trägt dazu bei, die Konvergenz des Trainingsprozesses zu beschleunigen und ihn robuster gegenüber unterschiedlichen Lernraten zu machen \cite{Kingma.2014}. 
+In der Implementierung wird der Adam-Optimizer verwendet, eine gängige Wahl in der GAN-Literatur. Dieser Optimizer ist eine verbesserte Variante des stochastischen Gradientenabstiegsverfahrens und passt die Lernraten für jede Variable dynamisch an. Dadurch wird die Konvergenz des Trainingsprozesses beschleunigt und das Modell wird robuster gegenüber unterschiedlichen Lernraten \cite{Kingma.2014}.
 
 \begin{lstlisting}[language=pyhaff, caption={Initialisierung der Adam-Optimizers aus Pix2Pix Implementierung}, label={cod:optimizer}]
 generator_optimizer = tf.keras.optimizers.Adam(learning_rate=0.0002, beta_1=0.5)
 discriminator_optimizer= tf.keras.optimizers.Adam(learning_rate=0.0002, beta_1=0.5)
 \end{lstlisting}
 
-\subsection{Fortschrittsüberwachung}
-Um die inkrementellen Verbesserungen nach jeder Iteration zu visualisieren, wird während des Trainings ein Bild aus dem Trainingsdatensatz ausgewählt, auf das der Generator angewendet wird. Die Eingabebilder und die generierten Bilder werden mithilfe der Matplotlib- und Tensorflow-Bibliotheken gespeichert, um sie nach dem Training zugänglich und vergleichbar zu machen.
+\subsection{Fortschrittsüberwachung und Visualisierung}
+Um inkrementelle Verbesserungen nach jeder Iteration zu visualisieren, wird während des Trainings ein Bild aus dem Trainingsdatensatz ausgewählt, auf das der Generator angewendet wird. Die Eingabebilder und die generierten Bilder werden mithilfe der Matplotlib- und Tensorflow-Bibliotheken gespeichert, um sie nach dem Training zugänglich und vergleichbar zu machen. 
 
-Zusätzlich werden der Verlust des Generators und des Diskriminators nach jeder Epoche in einer CSV-Datei festgehalten. Dies ermöglicht die Erstellung einer Verlustkurve mithilfe der Matplotlib-Bibliothek, um den Verlauf visuell zu überprüfen.
+Zusätzlich werden die Verluste des Generators und des Diskriminators, sowwie die Genauigkeit des Diskriminators nach jeder Epoche in einer CSV-Datei festgehalten. Dies ermöglicht die Erstellung einer Verlustkurve, um den Verlauf visuell zu überprüfen.
 
 Diese systematischen Vorgehensweisen ermöglichen eine umfassende Überprüfung der Modellleistung und bieten visuelle Einblicke in den Fortschritt während des Trainingsprozesses.
