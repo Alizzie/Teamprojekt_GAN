@@ -4,12 +4,7 @@ def preprocess_image_train(image_path):
     image = normalize(image) if not tf.reduce_all(tf.math.logical_and(image >= 0.0, image <= 1.0)) else image
     return image
 
-def preprocess_image_test(image_path):
-    image = load_image(image_path)
-    image = normalize(image) if not tf.reduce_all(tf.math.logical_and(image >= 0.0, image <= 1.0)) else image
-    return image
-
-train_dataset = tf.data.Dataset.list_files(str(PATH / 'train/*.jpg'))
+train_dataset = tf.data.Dataset.list_files(str(PATH / 'trainA/*.jpg'))
 train_dataset = train_dataset.map(preprocess_image_train, num_parallel_calls=tf.data.AUTOTUNE)
 train_dataset = train_dataset.shuffle(BUFFER_SIZE)
 train_dataset = train_dataset.batch(BATCH_SIZE)

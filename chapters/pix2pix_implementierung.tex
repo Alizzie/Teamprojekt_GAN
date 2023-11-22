@@ -159,11 +159,5 @@ Der Gesamtverlust des Diskriminators ($total\_disc\_loss$) ist die Summe von $re
 \newline
 Für die Optimierung des Diskriminator werden die Gradienten des Diskriminatorverlusts in Bezug auf die Diskriminatorparameter berechnet ($disc\_tape.gradient$). Diese Gradienten werden dann verwendet, um den Diskriminator mittels des Adam-Optimierers ($discriminator\_optimizer.apply\_gradients$) zu aktualisieren.
 
-\subsection{Training und Hyperparameter}
-Der Trainingsprozess des Pix2Pix-Modells ist iterativ und umfasst die abwechselnde Anpassung des Generators und des Diskriminators. Während des Trainings werden Paare von Eingabe- und Zielbildern verwendet, die aus dem Datensatz geladen, vorverarbeitet und dem Modell zugeführt werden. Für jeden Trainingschritt wird der Generator verwendet, um aus den Eingabebildern Bilder zu erzeugen, die dann vom Diskriminator bewertet werden. Der Diskriminator wird ebenfalls mit den echten Zielbildern trainiert, um die Unterscheidungsfähigkeit zwischen echte und generierten Bildern zu verbessern. Der Trainingschritt beinhaltet die Berechnung und Anwendung von Gradienten sowohl für den Generator als auch für den Diskriminator, basierend auf ihre jeweiligen Verlustfunktionen.
-\newline
-
-
-
 
 
