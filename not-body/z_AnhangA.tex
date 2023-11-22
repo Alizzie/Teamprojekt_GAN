@@ -1,2 +1,10 @@
 \chapter{Anhang - Code}
 Hier sehen Sie den gesamten Quellcode!
+
+\begin{lstlisting}[language=pyhaff, caption={Lesen eines Bildes (CycleGAN Implementierung)}, label={cod:imageLoading}]
+def load_image(image_path):
+    image = tf.io.read_file(image_path)
+    image = tf.io.decode_jpeg(image, channels=3)
+    image = tf.cast(image, tf.float32)
+    return image
+\end{lstlisting}

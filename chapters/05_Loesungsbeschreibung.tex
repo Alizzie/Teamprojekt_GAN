@@ -7,61 +7,67 @@ Für das effektive Training von GANs ist der Zugriff auf qualitativ hochwertige 
 
 \lstinputlisting[language=pyhaff, caption=Laden eines Datensatzes von einer URL]{code/LadenDatensatz.txt}
 
-Die Transformation und Vorverarbeitung der Bilddaten erfolgt durch die TensorFlow-Datensatz-API. Diese API bietet eine effiziente Datenpipeline für das Laden und Verarbeiten von Daten, insbesondere für den Einsatz in Machine-Learning-Modellen. In den folgenden Implementierungen wird ein Dataset durch eine Liste von Dateipfaden als Zeichenketten erzeugt.
+Die Transformation und Vorverarbeitung der Bilddaten erfolgt durch die TensorFlow-Datensatz-API. Diese API bietet eine effiziente Datenpipeline für das Laden und Verarbeiten von Daten, insbesondere für den Einsatz in Machine-Learning-Modellen. In den folgenden Implementierungen werden die Datensätze durch eine Liste von Dateipfaden als Zeichenketten erzeugt.
 
-\begin{lstlisting}[language=pyhaff, caption={Erzeugung eines Tensorflow-Dataset aus CycleGAN Implementierung}, label={cod:createDataset}]
+\begin{lstlisting}[language=pyhaff, caption={Erzeugung eines Tensorflow-Dataset aus der CycleGAN Implementierung}, label={cod:createDataset}]
 train_horses =  tf.data.Dataset.list_files(str(PATH / 'trainA/*.jpg')) 
 \end{lstlisting}
 
 \subsection{Vorverarbeitung des Datensatzes}
-Um die Leistung der GAN-Modelle zu verbessern, werden vor dem Training Variationen in den Trainingsdaten eingeführt. Dieser Prozess, der Datenjittering und Normalisierung umfasst, trägt dazu bei, das Modell robuster zu machen und eine bessere Konvergenz während des Trainings zu erreichen.
-\newline
-Im Rahmen des Trainingsprozesses von Pix2Pix wird eine iterative Methode verwendet, bei der der Generator und der Diskriminator abwechselnd trainiert werden. Zunächst werden die Trainingsdaten vorbereitet, die aus Paaren von Eingabe- und Zielbildern besteht. Diese Bilder werden auf einen Wertebereich von -1 bis +1 skaliert. Diese Normalisierung ist wichtig, da sie zur Stabilisierung des Trainingsprozesses beiträgt. Sie ermöglicht es dem Modell, mit einem standardisierten Datensatz zu arbeiten, was die Lernrate und die Konvergenzgeschwindigkeit verbessert.\newline
 
-\newpage
+Um die Leistung von GAN-Modellen zu optimieren, werden vor dem Training Variationen in den Trainingsdaten eingeführt. Dieser Prozess umfasst Datenjittering und Normalisierung. Durch die Integration von Variationen wird das Modell robuster, da es eine erhöhte Invarianz gegenüber unterschiedlichen Eingabedaten entwickelt. Dies trägt wesentlich dazu bei, eine verbesserte Konvergenz während des Trainings zu erreichen.
+\\\newline
+Bei Pix2Pix bestehen die Trainingsdaten aus einem Paar von Eingabe- und Zielbildern, während bei CycleGAN unpaare Daten berücksichtigt werden. Um eine konsistente Skalierung mit der Tanh-Aktivierungsfunktion sicherzustellen, werden diese Bilder im Bereich von -1 bis +1 skaliert. Diese Normalisierung ist von entscheidender Bedeutung für die Stabilisierung des Trainingsprozesses. Durch die Bereitstellung eines standardisierten Datensatzes kann das Modell effektiver mit einer verbesserten Lernrate und Konvergenzgeschwindigkeit arbeiten \cite{Radford.2015}.
+
 \begin{lstlisting}[language=pyhaff, caption={Vorverarbeitung des Datensatzes: Normalisierung}, label={cod:normalizing}]
 def normalize(image):
     image = (image / 127.5) - 1
     return image
 \end{lstlisting}
 
-Datenjittering wird durchgeführt, indem die heruntergeladenen Bilder (256x256) auf eine größere Größe (286x286) mit der Nearest-Neighbor-Methode skaliert. Bei dieser Methode wird für jedes Pixel im skalierten Bild der Farbwert des nächstgelegenen Pixels im Originalbild übernommen, um eine einfache und effiziente Skalierung zu ermöglichen. Das Bilder werden daraufhin zufällig zugeschnitten. Darüber hinaus wird eine zufällige Spiegelung angewendet.
+Datenjittering bezieht sich auf die Einführung von zufälligen Variationen oder Veränderungen in den Trainingsdaten, was in der Implementierung durch zufälliges Zuschneiden und eine zufällige Spiegelung erreicht wird. Die heruntergeladenen Bilder mit einer Auflösung von 256x256 werden zuerst auf eine größere Größe von 286x286 skaliert, wobei die Nearest-Neighbor-Methode verwendet wird. 
 
 \begin{lstlisting}[language=pyhaff, caption={Vorverarbeitung des Datensatzes: Jittering}, label={cod:jittering}]
-def random_crop(image):
-    cropped_image = tf.image.random_crop(image, size=(IMG_HEIGHT, IMG_WIDTH, 3))
-    return cropped_image
-
 def random_jitter(image):
     image = tf.image.resize(image, [286, 286], method=tf.image.ResizeMethod.NEAREST_NEIGHBOR)
-    image = random_crop(image)
+    image = tf.image.random_crop(image, size=(286, 286, 3))
     image = tf.image.random_flip_left_right(image)
     return image
 \end{lstlisting}
 
-Zusätzlich dazu werden die Bildpfade geladen und in das resultierende JPEG-Format decodiert.
-
-\begin{lstlisting}[language=pyhaff, caption={Lesen eines Bildes}, label={cod:imageLoading}]
-def load_image(image_path):
-    image = tf.io.read_file(image_path)
-    image = tf.io.decode_jpeg(image, channels=3)
-    image = tf.cast(image, tf.float32)
-    return image
-\end{lstlisting}
-
-Die vorverarbeiteten Bilder werden dann in TensorFlow-Datasets integriert. Nachfolgend wird der Trainingsdatensatz zufällig gemischt und in Batches gruppiert, wodurch sichergestellt wird, dass das Modell nicht von der Reihenfolge der Datenpunkte beeinflusst wird.
-\newpage 
-\lstinputlisting[language=pyhaff, caption=Integration der vorverarbeiteten Bilder in Tensorflow-Datasets]{code/LadenBild.txt}
+Diese Methode skaliert Bilder einfach und effizient, indem sie für jedes Pixel im skalierten Bild den Farbwert des nächstgelegenen Pixels im Originalbild übernimmt\footnote{\url{https://en.wikipedia.org/wiki/Nearest-neighbor_interpolation} \label{note:nearestNeighbor}}.
+Nach dem Skalieren wird das Bild zufällig auf die Originalgröße reduziert und gleichzeitig mit einer Wahrscheinlichkeit von 50\% gespiegelt.
+Anschließend werden die Bildpfade mittels der $load\_image$-Funktion geladen und in das resultierende JPEG-Format decodiert (Code \ref{cod:imageLoading}).
+\\\newline
+Die vorverarbeiteten Trainings- und Testbilder werden darauf in TensorFlow-Datasets integriert. Nachfolgend wird der Trainingsdatensatz zufällig gemischt und in Batches gruppiert, wodurch sichergestellt wird, dass das Modell nicht von der Reihenfolge der Datenpunkte beeinflusst wird.
+\lstinputlisting[language=pyhaff, caption=Integration der vorverarbeiteten Trainingsbilder in Tensorflow-Datasets (CycleGAN Implementierung)]{code/LadenBild.txt}
 
 Diese umfassende Vorverarbeitung stellt sicher, dass das GAN-Modell auf optimal vorbereiteten Daten trainiert wird, um eine maximale Leistung und Generalisierungsfähigkeit zu erreichen.
-
 
 \input{chapters/pix2pix_implementierung.tex}
 \input{chapters/cycleGan_implementation.tex}
 
 
 \section{Training und Hyperparameter}
-Das Training wird über mehrere Epochen durchgeführt, wobei die Modelle durch spezifische Optimierer optimiert wurden. In jedem Durchlauf wurde ein Bild aus den Trainingsdaten ausgewählt, und der Generator wurde auf dieses angewendet, um inkrementell die Verbesserung zu verfolgen. Die generierten Bilder wurden mittels \textit{plt.savefig()} aus der Matplotlib-Bibliothek gespeichert, um auch nach dem Training darauf zugreifen zu können.\\
-Diese Vorgehensweise ermöglicht eine systematische Überprüfung der Modellleistung und eine visuelle Darstellung der Fortschritte während des Trainingsprozesses.
-\\
-Die Wahl der Hyperparameter, einschließlich Lernraten und des Lambda-Werts für den Cycle Consistency Loss, wurde durch abgestimmte Experimente ermittelt. Die Optimierer wurden sorgfältig ausgewählt, um eine effiziente Konvergenz während des Trainings zu gewährleisten.
+
+Im Rahmen des Trainingsprozesses wird eine iterative Methode angewendet, bei der der Generator und der Diskriminator abwechselnd trainiert werden. Dieser Trainingszyklus erstreckt sich über mehrere Epochen. In jeder Epoche werden Bilder durch einen Feed-Forward-Prozess vom Generator generiert und anschließend vom Diskriminator bewertet. Gleichzeitig wird der Diskriminator mit den echten Zielbildern trainiert, um seine Fähigkeit zu verbessern, zwischen echten und generierten Bildern zu unterscheiden. Der Trainingsschritt beinhaltet die Berechnung und Anwendung von Gradienten für sowohl den Generator als auch den Diskriminator, basierend auf ihren jeweiligen Verlustfunktionen.
+Als Optimierungstechnik wird der Gradientenabstiegsverfahren angewendet, bei der die Parameter in Richtung des negativen Gradienten der Verlustfunktion aktualisiert werden, um den Verlust zu minimieren. Die Parameter beider Modelle werden jeweils mittels korrespondierenden Optimizers aktualisiert.
+\\\newline
+Die Wahl der Hyperparameter, einschließlich Anzahl der Epochen, Lernraten der Optimziers und die $LAMBDA$-Werte der jeweiligen Architekturen, wurde durch abgestimmte Experimente ermittelt. Dabei wurde darauf geachtet, dass die gewählten Werte zu einer stabilen und konvergenten Schulung führen.
+
+\subsection{Optimizers}
+Der Einsatz von Optimizers dienen zur Aktualisierung der Modelle basierend auf den Ergebnissen der Verlustfunktionen. Sie kontrollieren den Lernprozess von Neuronalen Netzwerken, in dem sie die Werte für die Parameter finden, so dass der Verlust am geringsten ist. Die Lernrate bestimmt dabei die Geschwindigkeit, wie schnell das Modell lernt und skaliert den Gradienten. 
+
+In der Implementierung wird der Adam-Optimizer verwendet, welcher einer der gängisten Auswahl bei GAN Literaturen ist. Diese sind eine verbesserte Variante des stochastiscen Gradientenabstiegsverfahren, um die Lernraten für jede Variable dynamisch anzupassen. Dies trägt dazu bei, die Konvergenz des Trainingsprozesses zu beschleunigen und ihn robuster gegenüber unterschiedlichen Lernraten zu machen \cite{Kingma.2014}. 
+
+\begin{lstlisting}[language=pyhaff, caption={Initialisierung der Adam-Optimizers aus Pix2Pix Implementierung}, label={cod:optimizer}]
+generator_optimizer = tf.keras.optimizers.Adam(learning_rate=0.0002, beta_1=0.5)
+discriminator_optimizer= tf.keras.optimizers.Adam(learning_rate=0.0002, beta_1=0.5)
+\end{lstlisting}
+
+\subsection{Fortschrittsüberwachung}
+Um die inkrementellen Verbesserungen nach jeder Iteration zu visualisieren, wird während des Trainings ein Bild aus dem Trainingsdatensatz ausgewählt, auf das der Generator angewendet wird. Die Eingabebilder und die generierten Bilder werden mithilfe der Matplotlib- und Tensorflow-Bibliotheken gespeichert, um sie nach dem Training zugänglich und vergleichbar zu machen.
+
+Zusätzlich werden der Verlust des Generators und des Diskriminators nach jeder Epoche in einer CSV-Datei festgehalten. Dies ermöglicht die Erstellung einer Verlustkurve mithilfe der Matplotlib-Bibliothek, um den Verlauf visuell zu überprüfen.
+
+Diese systematischen Vorgehensweisen ermöglichen eine umfassende Überprüfung der Modellleistung und bieten visuelle Einblicke in den Fortschritt während des Trainingsprozesses.
