@@ -1,10 +1,113 @@
 \chapter{Anhang - Code}
-Hier sehen Sie den gesamten Quellcode!
 
+Dieser Abschnitt enthält die wichtigsten Funktionen, die in der Implementierung verwendet werden. 
+Hier finden sich auch die fehlenden Funktionen aus dem Kapitel 'Lösungsbeschreibung'.
+
+\section*{Datenvorverarbeitung}
 \begin{lstlisting}[language=pyhaff, caption={Lesen eines Bildes (CycleGAN Implementierung)}, label={cod:imageLoading}]
 def load_image(image_path):
     image = tf.io.read_file(image_path)
     image = tf.io.decode_jpeg(image, channels=3)
     image = tf.cast(image, tf.float32)
     return image
+\end{lstlisting}
+
+\newpage
+%% MARCEL
+\section*{Pix2Pix}
+\lstinputlisting[language=pyhaff, caption=Pix2Pix Trainingsfunktion, label={cod:pix2pixTrain}]{code/Pix2Pix_Trainingfunktion.txt}
+
+\newpage
+\section*{CycleGAN}
+\begin{lstlisting}[language=pyhaff, caption={Residualblock Implementierung}, label={cod:residual}]
+def residual_block(x, filters):
+    shortcut = x
+    x = tf.keras.layers.Conv2D(filters, kernel_size=3, strides=1, padding='same')(x)
+    x = InstanceNormalization(axis=-1)(x)
+    x = tf.keras.layers.LeakyReLU()(x)
+    x = tf.keras.layers.Conv2D(filters, kernel_size=3, strides=1, padding='same')(x)
+    x = InstanceNormalization(axis=-1)(x)
+    x = tf.keras.layers.Concatenate()([x, shortcut])
+    return x
+\end{lstlisting}
+
+\begin{lstlisting}[language=pyhaff, caption={Convolutional Block in CycleGAN}, label={cod:cycleGANConvolutional}]
+def convolutional_layer(x, filters, kernel_size=3, strides=2):
+    x = tf.keras.layers.Conv2D(filters, kernel_size=kernel_size, strides=strides, padding='same')(x)
+    InstanceNormalization(axis=-1)(x)
+    x = tf.keras.layers.LeakyReLU()(x)
+    return x
+\end{lstlisting}
+
+\newpage
+\begin{lstlisting}[language=pyhaff, caption={Transpose Convolutional Block in CycleGAN}, label={cod:cycleGANTransposeConv}]
+def t_convolutional_layer(x, filters, kernel_size=3, strides=2):
+    x = tf.keras.layers.Conv2DTranspose(filters, kernel_size=kernel_size, strides=strides, padding='same')(x)
+    InstanceNormalization(axis=-1)(x)
+    x = tf.keras.layers.LeakyReLU()(x)
+    return x
+\end{lstlisting}
+
+\begin{lstlisting}[language=pyhaff, caption={Adversarieller Verlust des Generators in CycleGAN}, label={cod:cycleGANadversarialLoss}]
+def generator_adversarial_loss(generated):
+    return loss_obj(tf.ones_like(generated), generated)
+\end{lstlisting}
+
+\begin{lstlisting}[language=pyhaff, caption={Zykluskonsistenz Verlust in CycleGAN}, label={cod:cycleLoss}]
+def cycle_loss(real_image, cycled_image):
+  loss1 = tf.reduce_mean(tf.abs(real_image - cycled_image))
+  return LAMBDA * loss1
+\end{lstlisting}
+
+\begin{lstlisting}[language=pyhaff, caption={Identitätsverlust in CycleGAN}, label={cod:identityLoss}]
+def identity_loss(real_image, same_image):
+  loss = tf.reduce_mean(tf.abs(real_image - same_image))
+  return LAMBDA * 0.5 * loss
+\end{lstlisting}
+
+\newpage
+\lstinputlisting[language=pyhaff, caption={CycleGAN Trainingsfunktion, Teil 1}, label={cod:cycleTrain1}]{code/CycleGan_Training1.txt}
+\newpage
+\lstinputlisting[language=pyhaff, caption={CycleGAN Trainingsfunktion, Teil 2}, label={cod:cycleTrain2}]{code/CycleGan_Training2.txt}
+
+\newpage
+\section*{Training und Hyperparameter}
+\begin{lstlisting}[language=pyhaff, caption={Speicherung der Metriken in CSV-Datei}, label={cod:csvSave}]
+def save_losses(epoch, gen_loss, disc_loss, disc_accuracy, ssim):
+  with open(losses_path, 'a') as f:
+    writer = csv.writer(f)
+    writer.writerow([epoch, gen_loss.result().numpy(), disc_loss.result().numpy(), disc_accuracy, ssim])
+\end{lstlisting}
+
+\begin{lstlisting}[language=pyhaff, caption={Berechnung des SSIM-Score}, label={cod:ssim}]
+def calculate_ssim(generator, dataset, num_samples=10):
+    ssim_values = []
+    for input_image, target_image in dataset.take(num_samples):
+        prediction = generator(input_image, training=False)
+        ssim_value = tf.image.ssim(prediction, target_image, max_val=2.0)
+        ssim_values.append(ssim_value)
+    return tf.reduce_mean(ssim_values)
+\end{lstlisting}
+
+\newpage
+
+\begin{lstlisting}[language=pyhaff, caption={Ausschnitt zur Erstellung einer Verlaufskurve (CycleGAN Implementierung)}, label={cod:curve}]
+def plot_curve(name, epoch, col2, col_name, num_curves=1):
+    path = f"./satelite/try1/Curves/{name}.jpg"
+    if not os.path.exists("./satelite/try1/Curves/"):
+        os.makedirs("./satelite/try1/Curves/")
+    for i in range(num_curves):
+        plt.plot(epoch, col2.iloc[:, i], label=col_name[i])
+    plt.xlabel('Epoche')
+    plt.ylabel(name)
+    plt.title(f'Epoche vs {name}')
+    plt.legend()
+    plt.savefig(path)
+    plt.show()
+
+def save_curves():
+    df = pd.read_csv('./satelite/try1/losses.csv')
+    epoche = df.iloc[:, 0]
+    gen_loss = df.iloc[:, [1, 2]]
+    plot_curve("Generator_Verlust", epoche, gen_loss, ["Generator_F_Verlust", "Generator_G_Verlust"], 2)
 \end{lstlisting}

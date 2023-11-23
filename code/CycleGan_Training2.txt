@@ -1,0 +1,20 @@
+  # Calculate the gradients for generator and discriminator
+  generator_g_gradients = tape.gradient(total_gen_g_loss,
+                                        generator_g.trainable_variables)
+  generator_f_gradients = tape.gradient(total_gen_f_loss,
+                                        generator_f.trainable_variables)
+  discriminator_x_gradients = tape.gradient(disc_x_loss,
+                                            discriminator_x.trainable_variables)
+  discriminator_y_gradients = tape.gradient(disc_y_loss,
+                                            discriminator_y.trainable_variables)
+
+  # Apply the gradients to the optimizer
+  generator_g_optimizer.apply_gradients(zip(generator_g_gradients,
+                                            generator_g.trainable_variables))
+  generator_f_optimizer.apply_gradients(zip(generator_f_gradients,
+                                            generator_f.trainable_variables))
+  discriminator_optimizer_x.apply_gradients(zip(discriminator_x_gradients,
+                                                discriminator_x.trainable_variables))
+  discriminator_optimizer_y.apply_gradients(zip(discriminator_y_gradients,
+                                                discriminator_y.trainable_variables))
+  return total_gen_f_loss, total_gen_g_loss, disc_y_loss, disc_x_loss, fake_x, fake_y, disc_real_x, disc_real_y, disc_fake_x, disc_fake_y

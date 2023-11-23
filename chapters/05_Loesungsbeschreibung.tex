@@ -47,28 +47,64 @@ Diese umfassende Vorverarbeitung stellt sicher, dass das GAN-Modell auf optimal 
 \input{chapters/pix2pix_implementierung.tex}
 \input{chapters/cycleGan_implementation.tex}
 
-
+\newpage
 \section{Training und Hyperparameter}
 
-Während des Trainings von Generative Adversarial Networks (GANs) wird eine iterative Methode angewendet, bei der der Generator und der Diskriminator abwechselnd trainiert werden. Dieser Trainingszyklus erstreckt sich über mehrere Epochen, wobei in jeder Epoche Bilder durch einen Feed-Forward-Prozess vom Generator generiert und vom Diskriminator bewertet werden. Gleichzeitig wird der Diskriminator mit den echten Zielbildern trainiert, um seine Fähigkeit zu verbessern, zwischen echten und generierten Bildern zu unterscheiden. Der Trainingsschritt beinhaltet die Berechnung und Anwendung von Gradienten für sowohl den Generator als auch den Diskriminator, basierend auf ihren jeweiligen Verlustfunktionen.
+Während des Trainings von Generative Adversarial Networks (GANs) wird eine iterative Methode angewendet, bei der der Generator und der Diskriminator abwechselnd trainiert werden. Dieser Trainingszyklus erstreckt sich über mehrere Epochen, wobei in jeder Epoche Bilder durch einen Feed-Forward-Prozess vom Generator generiert und vom Diskriminator bewertet werden. Gleichzeitig wird der Diskriminator mit den echten Zielbildern trainiert, um seine Fähigkeit zu verbessern, zwischen echten und generierten Bildern zu unterscheiden. Der Trainingsschritt beinhaltet die Berechnung und Anwendung von Gradienten für sowohl den Generator als auch den Diskriminator, basierend auf ihren jeweiligen Verlustfunktionen (Code \ref{cod:pix2pixTrain}, \ref{cod:cycleTrain1}, \ref{cod:cycleTrain2}).
 \\\newline
 Die Wahl der Hyperparameter, einschließlich der Anzahl der Epochen, Lernraten der Optimizer und der $LAMBDA$-Werte der jeweiligen Architekturen, wurde durch abgestimmte Experimente ermittelt. Dabei wurde darauf geachtet, dass die gewählten Werte zu einer stabilen und konvergenten Schulung führen.
 \\\newline
-Um Überanpassung zu vermeiden, werden große Datensätze verwendet. Zusätzliche Regularisierung wird durch das Hinzufügen von Dropout erreicht, bei dem während des Trainingsprozesses zufällig bestimmte Neuronen ausgeschaltet werden. Dies trägt dazu bei, dass das Modell robuster wird und generalisierbare Merkmale lernt \cite{Yamashita.2018}. 
+Um Überanpassung entgegenzuwirken, wird auf das Training mit umfangreichen Datensätzen zurückgegriffen. Die Integration zusätzlicher Regularisierung in Form von Dropout trägt dazu bei, die Generalisierungsfähigkeit des Modells zu steigern und seine Robustheit zu verbessern. Beim Dropout-Mechanismus werden während des Trainingsprozesses zufällig bestimmte Neuronen deaktiviert, was dazu führt, dass das Netzwerk nicht übermäßig abhängig von spezifischen neuronalen Pfaden wird. Diese Strategie fördert die Robustheit des Modells, indem sie es dazu zwingt, mit dem Fehlen bestimmter Neuronen umzugehen und alternative Pfade zu nutzen. Durch die erzwungene Redundanz werden verschiedene Teile des Netzwerks aktiviert, was zu einer breiteren Erfassung von Merkmalen und einer vielfältigeren Repräsentation führt. Dies ist entscheidend, um sicherzustellen, dass das Modell nicht zu stark auf spezifische Trainingsdaten reagiert, sondern stattdessen Merkmale erlernt, die auf einer breiteren Palette von Eingaben generalisiert werden können \cite{Yamashita.2018}. 
 
 \subsection{Optimierungstechnik und Optimizers}
 Als Optimierungstechnik wird das Gradientenabstiegsverfahren angewendet, bei dem die Parameter in Richtung des negativen Gradienten der Verlustfunktion aktualisiert werden, um den Verlust zu minimieren. Die Parameter beider Modelle werden mittels korrespondierenden Optimizern aktualisiert. Die Lernrate der Optimizer bestimmt die Geschwindigkeit, mit der das Modell lernt, und sie wird sorgfältig abgestimmt, um eine stabile und konvergente Schulung sicherzustellen.
 
 In der Implementierung wird der Adam-Optimizer verwendet, eine gängige Wahl in der GAN-Literatur. Dieser Optimizer ist eine verbesserte Variante des stochastischen Gradientenabstiegsverfahrens und passt die Lernraten für jede Variable dynamisch an. Dadurch wird die Konvergenz des Trainingsprozesses beschleunigt und das Modell wird robuster gegenüber unterschiedlichen Lernraten \cite{Kingma.2014}.
 
-\begin{lstlisting}[language=pyhaff, caption={Initialisierung der Adam-Optimizers aus Pix2Pix Implementierung}, label={cod:optimizer}]
+\begin{lstlisting}[language=pyhaff, caption={Initialisierung der Adam-Optimizers aus der Pix2Pix Implementierung}, label={cod:optimizer}]
 generator_optimizer = tf.keras.optimizers.Adam(learning_rate=0.0002, beta_1=0.5)
 discriminator_optimizer= tf.keras.optimizers.Adam(learning_rate=0.0002, beta_1=0.5)
 \end{lstlisting}
 
 \subsection{Fortschrittsüberwachung und Visualisierung}
-Um inkrementelle Verbesserungen nach jeder Iteration zu visualisieren, wird während des Trainings ein Bild aus dem Trainingsdatensatz ausgewählt, auf das der Generator angewendet wird. Die Eingabebilder und die generierten Bilder werden mithilfe der Matplotlib- und Tensorflow-Bibliotheken gespeichert, um sie nach dem Training zugänglich und vergleichbar zu machen. 
+Um inkrementelle Verbesserungen nach jeder Iteration zu visualisieren, wird während des Trainings ein Bild aus dem Trainingsdatensatz ausgewählt, auf das der Generator angewendet wird. Die Eingabebilder und die generierten Bilder werden mithilfe der Matplotlib- und TensorFlow-Bibliotheken gespeichert, um sie nach dem Training zugänglich und vergleichbar zu machen. 
 
-Zusätzlich werden die Verluste des Generators und des Diskriminators, sowwie die Genauigkeit des Diskriminators nach jeder Epoche in einer CSV-Datei festgehalten. Dies ermöglicht die Erstellung einer Verlustkurve, um den Verlauf visuell zu überprüfen.
+\begin{lstlisting}[language=pyhaff, caption={Speicherung der generierten Bilder}, label={cod:optimizer}]
+def generate_images(model, test_input, tar, epoch):
+  prediction = model(test_input, training=True)
+  tf.keras.preprocessing.image.save_img(os.path.join(save_path, 'input_image.png'), test_input[0] * 0.5 + 0.5)
+  tf.keras.preprocessing.image.save_img(os.path.join(save_path, 'ground_truth.png'), tar[0] * 0.5 + 0.5)
+  tf.keras.preprocessing.image.save_img(os.path.join(save_path, 'predicted_image.png'), prediction[0] * 0.5 + 0.5)
+\end{lstlisting}
 
+Zusätzlich werden die Metriken zur Evaluation der Modelle, wie der Verluste des Generators und des Diskriminators, sowie die Genauigkeit des Diskriminators und der SSIM-Score nach jeder Epoche in einer CSV-Datei festgehalten (Code \ref{cod:csvSave}). Dieser Ansatz ermöglicht eine visuelle Überprüfung des Trainingsverlaufs und erleichtert die Identifikation von möglichen Verbesserungsbereichen.
+Darüber hinaus ermöglicht die Datei die spätere Erstellung von Verlaufskurven für eine eingehendere Analyse (Code \ref{cod:curve}).
+\newpage
+Zur Initialisierung der Metriken kommen TensorFlow-Keras-Metriken zum Einsatz:
+\begin{lstlisting}[language=pyhaff, caption={Initialisierung der Metriken}, label={cod:initMetrics}]
+gen_loss_metric = tf.keras.metrics.Mean()
+disc_loss_metric = tf.keras.metrics.Mean()
+disc_accuracy_metric = tf.keras.metrics.BinaryAccuracy(threshold=0.5)
+\end{lstlisting}
+
+Diese Metriken werden verwendet, um den durchschnittlichen Verlust des Generators, den durchschnittlichen Verlust des Diskriminators und die Genauigkeit des Diskriminators zu erfassen.
+
+Während des Trainingsprozesses wird für jeden Batch von Trainingsbildern der Verlust und die Genauigkeit berechnet. Die Verluste werden durch die oben genannten Metriken erfasst und nach jeder Epoche in die CSV-Datei aufgezeichnet. Die Genauigkeit des Diskriminators wird durch die BinaryAccuracy-Metrik überwacht, wobei ein Schwellenwert von 0,5 festgelegt ist, was in binären Klassifikationsaufgaben typisch ist.
+\\\newline
+Die Berechnung und Aktualisierung der Metriken erfolgen wie folgt:
+
+\begin{lstlisting}[language=pyhaff, caption={Aktualisierung der Metriken}, label={cod:updateMetrics}]
+gen_loss, disc_loss, disc_real_output, disc_generated_output = train_step(input_image, target, epoch, train_discriminator=True)
+gen_loss_metric(gen_loss)
+disc_loss_metric(disc_loss)
+
+# Echte Bilder : Label 1, generierte Bilder :Label 0
+real_labels = tf.ones_like(disc_real_output)
+generated_labels = tf.zeros_like(disc_generated_output)
+disc_accuracy_metric.update_state(real_labels, disc_real_output)
+disc_accuracy_metric.update_state(generated_labels, disc_generated_output)
+\end{lstlisting}
+
+Der SSIM-Score kann mithilfe der TensorFlow-Funktion $tf.image.ssim()$ berechnet werden (Code \ref{cod:ssim}).
+\\\newline
 Diese systematischen Vorgehensweisen ermöglichen eine umfassende Überprüfung der Modellleistung und bieten visuelle Einblicke in den Fortschritt während des Trainingsprozesses.

@@ -26,4 +26,6 @@ def Discriminator():
     model.add(layers.BatchNormalization())
     model.add(layers.Activation('sigmoid'))
 
+    # Dropout
+    model.add(tf.keras.layers.Dropout(0.5))
     return model

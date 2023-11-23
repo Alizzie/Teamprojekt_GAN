@@ -17,8 +17,12 @@ def Generator():
     # Layer 10 + 11
     x = t_convolutional_layer(x, 128, 3, 2)
     x = t_convolutional_layer(x, 64, 3, 2)
+    
+    # Dropout
+    x = tf.keras.layers.Dropout(0.5)(x)
 
     # Layer 12
-    outputs = layers.Conv2D(3, 7, strides=1, padding='same', activation='tanh')(x)
+    outputs = layers.Conv2D(3, 7, strides=1, padding='same', 
+        activation='tanh')(x)
 
     return tf.keras.Model(inputs=inputs, outputs=outputs)

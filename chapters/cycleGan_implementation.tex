@@ -4,28 +4,30 @@ Nach den theoretischen Grundlagen der CycleGAN-Architektur und der Datenvorverar
 \subsection{Generator und Diskriminator}
 Die Architekturen des Generators und Diskriminators wurden gemäß den theoretischen Grundlagen umgesetzt, insbesondere den Richtlinien von Zhu et al. (2017) \cite{Zhu.2017}. 
 
-Der Generator besteht aus einem Encoder-Block, gefolgt von sechs Residual-Blöcken und einem Decoder-Block, welche in Abbildung \ref{fig:cycleGanGeneratorArchitecture} dargestellt ist.
+Der Generator besteht aus einem Encoder-Block, gefolgt von sechs Residual-\\Blöcken und einem Decoder-Block, welche in Abbildung \ref{fig:cycleGanGeneratorArchitecture} dargestellt ist.
 Der Diskriminator wurde als sequentielles Modell implementiert und umfasst mehrere Convolutional Schichten, konzipiert als PatchGAN.
 
-Nach jeder Convolutional-Schicht im Generator und Diskriminator, abgesehen von der letzten, wird eine Instanznormalisierung und eine ReLU-Aktivierung angewendet. 
+Nach jeder Convolutional Schicht im Generator und Diskriminator, abgesehen von der letzten, wird eine Instanznormalisierung und eine ReLU-Aktivierung angewendet. 
 Die Instanznormalisierung dient dazu, die Aktivierungen zu normalisieren und das Training zu stabilisieren, indem sie die Eingaben jedes Minibatches normalisiert. Die ReLU-Aktivierung fördert die Einführung von Nichtlinearitäten in das Modell und ermöglicht es, komplexere Merkmale zu erfassen.
 
 Für die Output-Schicht wird die tanh-Aktivierungsfuntkion angewendet. Diese Schicht begrenzt die Ausgabewerte auf den Bereich zwischen -1 und +1. Diese Begrenzung ist nicht nur wichtig, um eine konsistente Skalierung mit den Trainingsdaten sicherzustellen, sondern trägt auch zur Stabilisierung des Trainingsprozesses bei \cite{Radford.2015}.
 
 Die spezifischen Implementierungsdetails, inklusive der Helferfunktionen, sind im beigefügten Code zu finden.
 
-
+\newpage
 \lstinputlisting[language=pyhaff, caption=CycleGAN Generator in Tensorflow]{code/CycleGan_Generator.txt}
+\newpage
 \lstinputlisting[language=pyhaff, caption=CycleGAN Diskriminator in Tensorflow]{code/CycleGan_Diskriminator.txt}
 
 
+\newpage
 \subsection{Verlustfunktion}
 Während des Trainings werden verschiedene Verlustfunktionen verwendet, um sicherzustellen, dass der Generator qualitativ hochwertige Bilder generiert und dass die Transformationen zwischen den Domänen konsistent sind. Die zentralen Verlustfunktionen, insbesondere die Gesamtverlustfunktionen für den Generator und den Diskriminator, werden im Folgenden erläutert. 
 \\
 Für die Klassifizierung, ob es sich um echte oder generierte Bilder handelt, wird in der Implementierung der \textit{BinaryCrossentropy}-Verlustfunktion aus TensorFlow/Keras verwendet. 
 Dieser berechnet den binären Kreuzentropieverlust zwischen den Zielwerten und den Vorhersagen\footnote{\url{https://www.tensorflow.org/api_docs/python/tf/keras/losses/BinaryCrossentropy}}.
 
-\begin{lstlisting}[language=pyhaff, caption={Initialisierung des BinaryCrossentropy-Verlustfunktion}, label={cod:binaryCrossentropy}]
+\begin{lstlisting}[language=pyhaff, caption={Initialisierung des BinaryCrossentropy-\\Verlustfunktion}, label={cod:binaryCrossentropy}]
 loss_obj = tf.keras.losses.BinaryCrossentropy(from_logits=True)
 \end{lstlisting}
 
@@ -42,8 +44,8 @@ Die Funktion $identity\_loss$ ermittelt den Identitätsverlust, wobei der L1-Ver
 Zur Berücksichtigung ihrer Bedeutung für den Gesamtverlust wird der Verlust an Zykluskonsistenz und Identität jeweils mit einem gewichteten Faktor multipliziert.
 
 Der Code-Anhang enthält detaillierte Implementierungen der genannten Verlustfunktionen.
-
-\begin{lstlisting}[language=pyhaff, caption={Vorverarbeitung des Datensatzes: Jittering}, label={cod:cycleGanGeneratorVerlust}]
+\newpage
+\begin{lstlisting}[language=pyhaff, caption={Gesamtverlust des Generators in CycleGAN}, label={cod:cycleGanGeneratorVerlust}]
 def generator_loss(real_x, real_y, cycled_x, cycled_y, disc_fake, identity):
     gen_loss = generator_adversarial_loss(disc_fake)
     total_cycle_loss = cycle_loss(real_x, cycled_x) + cycle_loss(real_y, cycled_y)
@@ -59,7 +61,7 @@ Zu Beginn wird der Verlust berechnet, wenn der Diskriminator echte Bilder betrac
 
 Der Gesamtverlust ergibt sich als Summe der beiden Teilverluste. Um sicherzustellen, dass die Gradientenaktualisierung während des Trainings angemessen skaliert wird, erfolgt eine Multiplikation des Gesamtverlustes mit dem Wert 0.5, was einer Bildung des Durchschnitts des Gesamtverlustes entspricht.
 
-\begin{lstlisting}[language=pyhaff, caption={Vorverarbeitung des Datensatzes: Jittering}, label={cod:cycleGanDiscriminatorVerlust}]
+\begin{lstlisting}[language=pyhaff, caption={Gesamtverlust des Diskriminators in CycleGAN}, label={cod:cycleGanDiscriminatorVerlust}]
 def discriminator_adversarial_loss(real, generated):
     real_loss = loss_obj(tf.ones_like(real), real)
     generated_loss = loss_obj(tf.zeros_like(generated), generated)
