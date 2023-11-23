@@ -93,6 +93,27 @@ Published as a conference paper at NIPS, 2017},
 }
 
 
+@article{Saxena.2021,
+ author = {Saxena, Divya and Cao, Jiannong},
+ year = {2021},
+ title = {Generative adversarial networks (GANs) challenges, solutions, and future directions},
+ pages = {1--42},
+ volume = {54},
+ number = {3},
+ journal = {ACM Computing Surveys (CSUR)}
+}
+
+
+@misc{Salimans.2016,
+ abstract = {We present a variety of new architectural features and training procedures that we apply to the generative adversarial networks (GANs) framework. We focus on two applications of GANs: semi-supervised learning, and the generation of images that humans find visually realistic. Unlike most work on generative models, our primary goal is not to train a model that assigns high likelihood to test data, nor do we require the model to be able to learn well without using any labels. Using our new techniques, we achieve state-of-the-art results in semi-supervised classification on MNIST, CIFAR-10 and SVHN. The generated images are of high quality as confirmed by a visual Turing test: our model generates MNIST samples that humans cannot distinguish from real data, and CIFAR-10 samples that yield a human error rate of 21.3{\%}. We also present ImageNet samples with unprecedented resolution and show that our methods enable the model to learn recognizable features of ImageNet classes.},
+ author = {Salimans, Tim and Goodfellow, Ian and Zaremba, Wojciech and Cheung, Vicki and Radford, Alec and Chen, Xi},
+ date = {2016},
+ title = {Improved Techniques for Training GANs},
+ publisher = {arXiv},
+ doi = {10.48550/arXiv.1606.03498}
+}
+
+
 @misc{Radford.2015,
  abstract = {In recent years, supervised learning with convolutional networks (CNNs) has seen huge adoption in computer vision applications. Comparatively, unsupervised learning with CNNs has received less attention. In this work we hope to help bridge the gap between the success of CNNs for supervised learning and unsupervised learning. We introduce a class of CNNs called deep convolutional generative adversarial networks (DCGANs), that have certain architectural constraints, and demonstrate that they are a strong candidate for unsupervised learning. Training on various image datasets, we show convincing evidence that our deep convolutional adversarial pair learns a hierarchy of representations from object parts to scenes in both the generator and discriminator. Additionally, we use the learned features for novel tasks - demonstrating their applicability as general image representations.
 
@@ -111,6 +132,17 @@ Under review as a conference paper at ICLR 2016},
 Many problems in image processing, computer graphics,},
  author = {{Phillip Isola} and {Jun-Yan Zhu} and {Tinghui Zhou} and {Alexei A. Efros}},
  title = {Image-to-Image Translation with Conditional Adversarial Networks}
+}
+
+
+@article{Pan.2019,
+ author = {Pan, Zhaoqing and Yu, Weijie and Yi, Xiaokai and Khan, Asifullah and Yuan, Feng and Zheng, Yuhui},
+ year = {2019},
+ title = {Recent Progress on Generative Adversarial Networks (GANs): A Survey},
+ pages = {36322--36333},
+ volume = {7},
+ journal = {IEEE Access},
+ doi = {10.1109/ACCESS.2019.2905015}
 }
 
 
@@ -142,18 +174,6 @@ This document provides a brief introduction to CNNs, discussing recently publish
 }
 
 
-@misc{Zhu.2017,
- abstract = {Image-to-image translation is a class of vision and graphics problems where the goal is to learn the mapping between an input image and an output image using a training set of aligned image pairs. However, for many tasks, paired training data will not be available. We present an approach for learning to translate an image from a source domain $X$ to a target domain $Y$ in the absence of paired examples. Our goal is to learn a mapping {\$}G: X $\backslash$rightarrow Y{\$} such that the distribution of images from {\$}G(X){\$} is indistinguishable from the distribution $Y$ using an adversarial loss. Because this mapping is highly under-constrained, we couple it with an inverse mapping {\$}F: Y $\backslash$rightarrow X{\$} and introduce a cycle consistency loss to push {\$}F(G(X)) $\backslash$approx X{\$} (and vice versa). Qualitative results are presented on several tasks where paired training data does not exist, including collection style transfer, object transfiguration, season transfer, photo enhancement, etc. Quantitative comparisons against several prior methods demonstrate the superiority of our approach.
-
-An extended version of our ICCV 2017 paper, v7 fixed the typos and updated the implementation details. Code and data: https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix},
- author = {Zhu, Jun-Yan and Park, Taesung and Isola, Phillip and Efros, Alexei A.},
- date = {2017},
- title = {Unpaired Image-to-Image Translation using Cycle-Consistent Adversarial Networks},
- publisher = {arXiv},
- doi = {10.48550/arXiv.1703.10593}
-}
-
-
 @article{Liu.2021,
  abstract = {Magnetic Resonance Imaging (MRI) guided Radiation Therapy is a hot topic in the current studies of radiotherapy planning, which requires using MRI to generate synthetic Computed Tomography (sCT). Despite recent progress in image-to-image translation, it remains challenging to apply such techniques to generate high-quality medical images. This paper proposes a novel framework named Multi-Cycle GAN, which uses the Pseudo-Cycle Consistent module to control the consistency of generation and the domain control module to provide additional identical constraints. Besides, we design a new generator named Z-Net to improve the accuracy of anatomy details. Extensive experiments show that Multi-Cycle GAN outperforms state-of-the-art CT synthesis methods such as Cycle GAN, which improves MAE to 0.0416, ME to 0.0340, PSNR to 39.1053.},
  author = {Liu, Yanxia and Chen, Anni and Shi, Hongyu and Huang, Sijuan and Zheng, Wanjia and Liu, Zhiqiang and Zhang, Qin and Yang, Xin},
@@ -163,6 +183,18 @@ An extended version of our ICCV 2017 paper, v7 fixed the typos and updated the i
  volume = {91},
  journal = {Computerized medical imaging and graphics : the official journal of the Computerized Medical Imaging Society},
  doi = {10.1016/j.compmedimag.2021.101953}
+}
+
+
+@misc{Liu.2022,
+ abstract = {Generative Adversarial Networks (GANs) have shown compelling results in various tasks and applications in recent years. However, mode collapse remains a critical problem in GANs. In this paper, we propose a novel training pipeline to address the mode collapse issue of GANs. Different from existing methods, we propose to generalize the discriminator as feature embedding and maximize the entropy of distributions in the embedding space learned by the discriminator. Specifically, two regularization terms, i.e., Deep Local Linear Embedding (DLLE) and Deep Isometric feature Mapping (DIsoMap), are designed to encourage the discriminator to learn the structural information embedded in the data, such that the embedding space learned by the discriminator can be well-formed. Based on the well-learned embedding space supported by the discriminator, a non-parametric entropy estimator is designed to efficiently maximize the entropy of embedding vectors, playing as an approximation of maximizing the entropy of the generated distribution. By improving the discriminator and maximizing the distance of the most similar samples in the embedding space, our pipeline effectively reduces the mode collapse without sacrificing the quality of generated samples. Extensive experimental results show the effectiveness of our method, which outperforms the GAN baseline, MaF-GAN on CelebA (9.13 vs. 12.43 in FID) and surpasses the recent state-of-the-art energy-based model on the ANIME-FACE dataset (2.80 vs. 2.26 in Inception score). The code is available at https://github.com/HaozheLiu-ST/MEE
+
+Accepted by AAAI'2023 (Oral); Code is released at https://github.com/HaozheLiu-ST/MEE},
+ author = {Liu, Haozhe and Li, Bing and Wu, Haoqian and Liang, Hanbang and Huang, Yawen and Li, Yuexiang and Ghanem, Bernard and Zheng, Yefeng},
+ date = {2022},
+ title = {Combating Mode Collapse in GANs via Manifold Entropy Estimation},
+ publisher = {arXiv},
+ doi = {10.48550/arXiv.2208.12055}
 }
 
 
@@ -292,15 +324,15 @@ NIPS 2017, workshop on Machine Deception},
 }
 
 
-@misc{Liu.2022,
- abstract = {Generative Adversarial Networks (GANs) have shown compelling results in various tasks and applications in recent years. However, mode collapse remains a critical problem in GANs. In this paper, we propose a novel training pipeline to address the mode collapse issue of GANs. Different from existing methods, we propose to generalize the discriminator as feature embedding and maximize the entropy of distributions in the embedding space learned by the discriminator. Specifically, two regularization terms, i.e., Deep Local Linear Embedding (DLLE) and Deep Isometric feature Mapping (DIsoMap), are designed to encourage the discriminator to learn the structural information embedded in the data, such that the embedding space learned by the discriminator can be well-formed. Based on the well-learned embedding space supported by the discriminator, a non-parametric entropy estimator is designed to efficiently maximize the entropy of embedding vectors, playing as an approximation of maximizing the entropy of the generated distribution. By improving the discriminator and maximizing the distance of the most similar samples in the embedding space, our pipeline effectively reduces the mode collapse without sacrificing the quality of generated samples. Extensive experimental results show the effectiveness of our method, which outperforms the GAN baseline, MaF-GAN on CelebA (9.13 vs. 12.43 in FID) and surpasses the recent state-of-the-art energy-based model on the ANIME-FACE dataset (2.80 vs. 2.26 in Inception score). The code is available at https://github.com/HaozheLiu-ST/MEE
+@misc{Zhu.2017,
+ abstract = {Image-to-image translation is a class of vision and graphics problems where the goal is to learn the mapping between an input image and an output image using a training set of aligned image pairs. However, for many tasks, paired training data will not be available. We present an approach for learning to translate an image from a source domain $X$ to a target domain $Y$ in the absence of paired examples. Our goal is to learn a mapping {\$}G: X $\backslash$rightarrow Y{\$} such that the distribution of images from {\$}G(X){\$} is indistinguishable from the distribution $Y$ using an adversarial loss. Because this mapping is highly under-constrained, we couple it with an inverse mapping {\$}F: Y $\backslash$rightarrow X{\$} and introduce a cycle consistency loss to push {\$}F(G(X)) $\backslash$approx X{\$} (and vice versa). Qualitative results are presented on several tasks where paired training data does not exist, including collection style transfer, object transfiguration, season transfer, photo enhancement, etc. Quantitative comparisons against several prior methods demonstrate the superiority of our approach.
 
-Accepted by AAAI'2023 (Oral); Code is released at https://github.com/HaozheLiu-ST/MEE},
- author = {Liu, Haozhe and Li, Bing and Wu, Haoqian and Liang, Hanbang and Huang, Yawen and Li, Yuexiang and Ghanem, Bernard and Zheng, Yefeng},
- date = {2022},
- title = {Combating Mode Collapse in GANs via Manifold Entropy Estimation},
+An extended version of our ICCV 2017 paper, v7 fixed the typos and updated the implementation details. Code and data: https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix},
+ author = {Zhu, Jun-Yan and Park, Taesung and Isola, Phillip and Efros, Alexei A.},
+ date = {2017},
+ title = {Unpaired Image-to-Image Translation using Cycle-Consistent Adversarial Networks},
  publisher = {arXiv},
- doi = {10.48550/arXiv.2208.12055}
+ doi = {10.48550/arXiv.1703.10593}
 }
 
 
@@ -316,13 +348,3 @@ Accepted by AAAI'2023 (Oral); Code is released at https://github.com/HaozheLiu-S
 }
 
 
-@article{saxena2021generative,
-  title={Generative adversarial networks (GANs) challenges, solutions, and future directions},
-  author={Saxena, Divya and Cao, Jiannong},
-  journal={ACM Computing Surveys (CSUR)},
-  volume={54},
-  number={3},
-  pages={1--42},
-  year={2021},
-  publisher={ACM New York, NY, USA}
-}
