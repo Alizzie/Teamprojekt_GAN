@@ -21,29 +21,3 @@ def Generator():
     upsample(128, 4),  # (batch_size, 64, 64, 256)
     upsample(64, 4),  # (batch_size, 128, 128, 128)
   ]
-
-  initializer = tf.random_normal_initializer(0., 0.02)
-  last = tf.keras.layers.Conv2DTranspose(OUTPUT_CHANNELS, 4,
-                                         strides=2,
-                                         padding='same',
-                                         kernel_initializer=initializer,
-                                         activation='tanh')  # (batch_size, 256, 256, 3)
-
-  x = inputs
-
-  # Downsampling through the model
-  skips = []
-  for down in down_stack:
-    x = down(x)
-    skips.append(x)
-
-  skips = reversed(skips[:-1])
-
-  # Upsampling and establishing the skip connections
-  for up, skip in zip(up_stack, skips):
-    x = up(x)
-    x = tf.keras.layers.Concatenate()([x, skip])
-
-  x = last(x)
-
-  return tf.keras.Model(inputs=inputs, outputs=x)

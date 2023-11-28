@@ -1,5 +1,10 @@
 \section{CycleGAN: Ergebnisse und objekte Bewertung}
 
-Im vorliegenden Abschnitt liegt der Fokus auf der objektiven Evaluation der Leistung des CycleGAN-Algorithmus. Hierzu werden verschiedene Metriken und Kriterien herangezogen, darunter die Verluste der Generatoren und Diskriminatoren unter Variation der Hyperparameter. Zudem erfolgt eine eingehende Analyse der Genauigkeit des Diskriminators sowie der SSIM-Score. Diese quantitativen Maße dienen dazu, die Qualität der generierten Ergebnisse präzise zu erfassen und die Lernfähigkeit der Modelle umfassend zu beurteilen.
+Im vorliegenden Abschnitt liegt der Fokus auf der objektiven Evaluation der Leistung des CycleGAN-Algorithmus. Verschiedene Metriken und Kriterien werden herangezogen, um eine umfassende Beurteilung vorzunehmen. Hierzu zählen die Verluste der Generatoren und Diskriminatoren unter Variation der Hyperparameter. Zusätzlich erfolgt eine eingehende Analyse der Genauigkeit des Diskriminators sowie des SSIM-Scores. Diese quantitativen Maße dienen dazu, die Qualität der generierten Ergebnisse präzise zu erfassen und die Lernfähigkeit der Modelle umfassend zu bewerten.
 
-Die für die Evaluation genutzten Testdatensätze stammen aus dem Berkeley-Repository. Besondere Beachtung finden dabei die Datensätze 'horse2zebra' und 'maps', bei denen Transformationen von Pferden zu Zebras und vice versa sowie von Kartenansichten zu Satellitenbildern und umgekehrt durchgeführt wurden.
+Die für die Evaluation verwendeten Testdatensätze wurden dem Berkeley-Repository entnommen. Besondere Aufmerksamkeit gilt den Datensätzen 'horse2zebra' und 'maps', bei denen Transformationen von Pferden zu Zebras und umgekehrt sowie von Kartenansichten zu Satellitenbildern und zurück durchgeführt wurden. Das Training wurde unter verschiedenen Hyperparameterkonfigurationen mehrfach durchgeführt, wobei gleiche Hyperparameter mehrfach getestet wurden. Das Ziel besteht darin, eine Konfiguration zu identifizieren, bei der die generierten Bilder qualitativ ähnlich zu den Originalbildern liegen und der Diskriminator optimal arbeitet.
+
+Die subjektive Bewertung erfolgt durch die visuelle Beurteilung der generierten Bilder aus dem Testdatensatz hinsichtlich stimmiger Farben, Struktur und Rauschen im Vergleich zu den Originalbildern. Basierend auf diesen subjektiven Einschätzungen werden dann die Hyperparameter ausgewählt, die qualitativ hochwertige Bildergebnisse erzielt haben. Anschließend erfolgt eine objektive Bewertung dieser ausgewählten Hyperparameter mithilfe der definierten Metriken.
+
+\\\newline
+
