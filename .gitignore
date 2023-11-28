@@ -18,3 +18,4 @@ Manuskript/*.aux
 *.sznctex.gz
 *.toc
 *.gz
+*.synctex(busy)
