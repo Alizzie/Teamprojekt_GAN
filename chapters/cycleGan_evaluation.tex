@@ -1,10 +1,48 @@
 \section{CycleGAN: Ergebnisse und objekte Bewertung}
 
-Im vorliegenden Abschnitt liegt der Fokus auf der objektiven Evaluation der Leistung des CycleGAN-Algorithmus. Verschiedene Metriken und Kriterien werden herangezogen, um eine umfassende Beurteilung vorzunehmen. Hierzu zählen die Verluste der Generatoren und Diskriminatoren unter Variation der Hyperparameter. Zusätzlich erfolgt eine eingehende Analyse der Genauigkeit des Diskriminators sowie des SSIM-Scores. Diese quantitativen Maße dienen dazu, die Qualität der generierten Ergebnisse präzise zu erfassen und die Lernfähigkeit der Modelle umfassend zu bewerten.
+In diesem Abschnitt liegt der Fokus auf der objektiven Bewertung der Leistung des CycleGAN-Algorithmus. Es werden verschiedene Metriken und Kriterien herangezogen, um eine umfassende Bewertung durchzuführen, einschließlich der Verluste der Generatoren und Diskriminatoren bei Variation der Hyperparameter. Darüber hinaus wird eine detaillierte Analyse der Genauigkeit der Diskriminatoren und des SSIM-Scores durchgeführt. Diese Messungen sind sowohl für die genaue Bestimmung der Qualität der generierten Ergebnisse als auch für die Bewertung der Lernfähigkeit der Modelle von Bedeutung.
 
-Die für die Evaluation verwendeten Testdatensätze wurden dem Berkeley-Repository entnommen. Besondere Aufmerksamkeit gilt den Datensätzen 'horse2zebra' und 'maps', bei denen Transformationen von Pferden zu Zebras und umgekehrt sowie von Kartenansichten zu Satellitenbildern und zurück durchgeführt wurden. Das Training wurde unter verschiedenen Hyperparameterkonfigurationen mehrfach durchgeführt, wobei gleiche Hyperparameter mehrfach getestet wurden. Das Ziel besteht darin, eine Konfiguration zu identifizieren, bei der die generierten Bilder qualitativ ähnlich zu den Originalbildern liegen und der Diskriminator optimal arbeitet.
+Die verwendeteten Datensätze für die Evaluierung stammen aus dem Berkeley-Repository. Besondere Beachtung wird dem 'maps'-Datensatz geschenkt, bei dem Transformationen zwischen Kartenansichten und Satellitenbildern durchgeführt wurden. Das Training wurde mehrmals mit verschiedenen Hyperparameter-\\Konfigurationen durchgeführt, wobei Parameter wie der Lambda-Wert, die Anzahl der Epochen und die Lernrate des Optimizers variiert wurden. Ziel ist es, eine Konfiguration zu finden, bei der die Qualität der erzeugten Bilder nahe an der Qualität des Originals und die Leistung des Diskriminators optimal ist.
 
-Die subjektive Bewertung erfolgt durch die visuelle Beurteilung der generierten Bilder aus dem Testdatensatz hinsichtlich stimmiger Farben, Struktur und Rauschen im Vergleich zu den Originalbildern. Basierend auf diesen subjektiven Einschätzungen werden dann die Hyperparameter ausgewählt, die qualitativ hochwertige Bildergebnisse erzielt haben. Anschließend erfolgt eine objektive Bewertung dieser ausgewählten Hyperparameter mithilfe der definierten Metriken.
-
+Die subjektive Bewertung erfolgt durch die visuelle Beurteilung der generierten Bilder aus dem Testdatensatz hinsichtlich stimmiger Farben, Struktur und Rauschen im Vergleich zu den Originalbildern. Darauf aufbauend erfolgt eine objektive Bewertung mithilfe der definierten Metriken.
+\\\newline
+Seien die Datensätze $X: Maps$ und $Y: Sateliten$, $G: X\rightarrow Y$ und $F: Y\rightarrow X$ die Generatoren sowie $D_X$ und $D_Y$ die Diskriminatoren, die jeweils zwischen Bilder in der Domäne $X$ und $Y$ unterscheiden. 
 \\\newline
 
+In allen Durchläufen zeigt sich, dass die Generatoren Probleme mit feinen und detailreichen Details haben. Weil die meisten Trainingsbilder Straßen und Häuser zeigen, können die Generatoren besser die Straßenlinien erzeugen.
+
+Bilder mit einer größeren Vielfalt wie Flüsse und Wälder sind eine größere Herausforderung für die Generatoren. Die Erstellung der Karten gestaltet sich schwierig in Bezug auf die Struktur und Farbkodierung. Oft werden diese Flächen in derselben Farbe wie die Straßen erzeugt, und es wird versucht, auf der Grundlage dieser großen Freiflächen kleine Straßen zu erzeugen. Bei allen Versuchen gab es Probleme bei der Erfassung feiner Strukturen in den Wäldern sowie bei der einheitlichen Farbkodierung der Flüsse in den Satellitenbildern. 
+\\\newline
+Es stellt sich heraus, dass für den Lambda-Wert die Größen 0.0002 die besten Ergebnisse erzielen hinsichtlich des SSIM-Scores und der Test-Genauigkeiten bei den Diskriminatoren. 
+Die Genauigkeit
+
+\begin{figure}
+    \begin{subfigure}[t]{.4\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{example-image-a}
+      \caption{\textbf{Schnitt}: $A \cup B$: Element liegt in $A$ \textbf{oder} in $B$.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{.4\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{example-image-b}
+      \caption{\textbf{Vereinigung}: $A \cap B$: Element liegt in $A$ \textbf{und} in $B$.}
+    \end{subfigure}
+  
+    \medskip
+  
+    \begin{subfigure}[t]{.4\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{example-image-c}
+      \caption{\textbf{Differenz}: $A \setminus B$: Element liegt in $A$ \textbf{nicht} in $B$. (\textit{A ohne B})}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{.4\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{example-image-a}
+      \caption{\textbf{Symmetrische Differenz}: $A \Delta B$: Element liegt \textbf{entweder} in $A$ oder in $B$.}
+    \end{subfigure}
+  \end{figure}
+
+
+  Die Komplexität der Modelle spiegelt sich vor allem in der Laufzeit des Trainings wieder. Diese umfasst im Durchschnitt 2 Minuten pro Epoche auf der GPU, während die CPU 
