@@ -19,6 +19,8 @@ Der SSIM-Score ist ein Maß für die visuelle Ähnlichkeit zwischen den generier
   Für den Generator und den Diskriminator, wird der Adam-Optimierer mit einer Lernrate von 0.0002 und den Momentum-Parametern $\beta$1 = 0.5 und $\beta$2 = 0.999 verwendet. Diese Einstellungen einen guten Kompromiss zwischen der Lerngeschwindigkeit und der Stabilität des Trainingsprozesses zu finden. Die Batchgröße ist im Code auf 1 gesetzt. Eine kleine Batchgröße kann zu einer höheren Stabilität im Trainingsprozess beitragen. Der Hyperparameter $LAMBDA$ wird verwendet, um das Gewicht des L1-Verlustes im Generatorverlust zu steuern. Ein hoher Wert von $LAMBDA$ betont die Bedeutung der Inhaltsähnlichkeit zwischen den generierten und den Zielbildern. Die Anzahl der Trainingsepochen ist auf 450 gesetzt, was darauf hindeutet, dass das Modell eine umfangreiche Trainingsdauer durchläuft, um eine optimale Leistung zu erreichen.
 \section{CycleGAN: Ergebnisse und objekte Bewertung}
 \section{Vergleich und Bewertung von Pix2Pix und CycleGAN}
+
+\input{chapters/cycleGan_evaluation}
 \section{Vergleich von Pix2Pix und CycleGAN}
 - Matching Paare von Bildern sind ebenfalls für das Training nicht nötig (crewall)
 - Macht die Datenvorbereitung einfacher und öffnet neue Techniken für Applikationen (crewall)
