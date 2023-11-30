@@ -13,6 +13,34 @@ In einem ideal funktionierenden GAN sollte der Diskriminator eine Genauigkeit vo
 \subsection{SSIM-Score (Structural Similarity Index)}
 Der SSIM-Score ist ein Maß für die visuelle Ähnlichkeit zwischen den generierten Bildern und den entsprechenden Originalbildern. Er bewertet die Bildqualität anhand von Faktoren wie Helligkeit, Kontrast und Struktur. Ein hoher SSIM-Wert deutet darauf in, dass die generierten Bilder den echten Bildern sehr ähnlich sind, was ein Zeichen für eine hohe Bildqualität ist. Ein niedriger SSIM-Wert kann auf deutliche Unterschiede in der visuellen Struktur hinweisen, was Verbesserungsbedarf im Generator-Training oder in der Modellarchitektur signalisiert.
 
+\section{Pix2Pix: Ergebnisse und objektive Bewertung}
+\subsubsection{Evaluierung der Trainingsresultate nach 100 Epochen}
+Die Evaluierung der Trainingsresultate des Pix2Pix-Modells basiert auf einer Analyse der 100 durchgeführten Trainingsepochen. Während dieser Epochen wurden spezifische Metriken wie Generator- und Diskriminator-Verluste sowie Diskriminator-Genauigkeit und der Structural Similarity Index Measure (SSIM) überwacht. \newline
+Der Generatorverlust zeigte eine anfängliche Tendenz zur Reduktion von 13.782 auf 10.581, was auf eine erfolgreiche Anpassung des Modells an die Trainingsdaten hindeutet. Parallel dazu reduzierte sich der Diskriminatorverlust von 1.009 auf 0.323, was auf eine effiziente Differenzierung zwischen realen und generierten Bildern durch den Diskriminator hinweist.
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=1.0\textwidth]{images/Pix2PixResults/Verlust0-100.png}
+	\caption{Generator- und Diskriminatorverlust des 1. Trainingsdurchlaufs mit 100 Epochen, eigene Erstellung mittels matplotlib.pyplot-Bibliothek }
+	\label{fig:Verlustkurve 0-100}
+\end{figure}
+
+Die Genauigkeit des Diskriminators ist von anfänglich etwa 75$\%$ auf ungefähr 94$\%$ in der letzten Epoche gestiegen. Dies zeigt, dass der Diskriminator im Verlauf des Trainingsprozesses besser darin wurde, echte Bilder von den vom Generator erzeugten Bildern zu unterscheiden.
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=1.0\textwidth]{images/Pix2PixResults/Genauigkeit0-100.png}
+	\caption{Diskriminatorgenauigkeit des 1. Trainingsdurchlaufs mit 100 Epochen, eigene Erstellung mittels matplotlib.pyplot-Bibliothek }
+	\label{fig:Genauigkeit 0-100}
+\end{figure}
+
+Der SSIM-Wert, der die Bildqualität misst, begann bei 0.553 und endete bei 0.656. Diese kontinuierliche Verbesserung deutet darauf hin, dass die generierten Bilder im Laufe des Trainings eine zunehmende Ähnlichkeit mit den Zielbildern erreicht haben.
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.95\textwidth]{images/Pix2PixResults/SSIM0-100.png}
+	\caption{SSIM-Score des 1. Trainingsdurchlaufs mit 100 Epochen, eigene Erstellung mittels matplotlib.pyplot-Bibliothek}
+	\label{fig:SSIM 0-100}
+\end{figure}
+
+\newpage
 \section{CycleGAN: Ergebnisse und objekte Bewertung}
 \section{Vergleich und Bewertung von Pix2Pix und CycleGAN}
 
