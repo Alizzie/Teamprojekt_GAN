@@ -13,8 +13,27 @@ def load_image(image_path):
 \end{lstlisting}
 
 \newpage
-%% MARCEL
+
 \section*{Pix2Pix}
+\begin{lstlisting}[language=pyhaff, caption={Pix2Pix Generatorverlust}, label={cod:pix2pixGenLoss}]
+def generator_loss(disc_generated_output, gen_output, target):
+    gan_loss = loss_object(tf.ones_like(disc_generated_output), disc_generated_output)  
+    # Mean absolute error
+    l1_loss = tf.reduce_mean(tf.abs(target - gen_output))
+    total_gen_loss = gan_loss + (LAMBDA * l1_loss)
+    return total_gen_loss, gan_loss, l1_loss  
+\end{lstlisting}
+
+\begin{lstlisting}[language=pyhaff, caption={Residualblock Implementierung}, label={cod:residual}]
+    def generator_loss(disc_generated_output, gen_output, target):
+        gan_loss = loss_object(tf.ones_like(disc_generated_output), disc_generated_output)  
+        # Mean absolute error
+        l1_loss = tf.reduce_mean(tf.abs(target - gen_output))
+        total_gen_loss = gan_loss + (LAMBDA * l1_loss)
+        return total_gen_loss, gan_loss, l1_loss  
+\end{lstlisting}
+
+\newpage
 \lstinputlisting[language=pyhaff, caption=Pix2Pix Trainingsfunktion, label={cod:pix2pixTrain}]{code/Pix2Pix_Trainingfunktion.txt}
 
 \newpage
