@@ -13,53 +13,56 @@ In einem ideal funktionierenden GAN sollte der Diskriminator eine Genauigkeit vo
 \subsection{SSIM-Score (Structural Similarity Index)}
 Der SSIM-Score ist ein Maß für die visuelle Ähnlichkeit zwischen den generierten Bildern und den entsprechenden Originalbildern. Er bewertet die Bildqualität anhand von Faktoren wie Helligkeit, Kontrast und Struktur. Ein hoher SSIM-Wert deutet darauf in, dass die generierten Bilder den echten Bildern sehr ähnlich sind, was ein Zeichen für eine hohe Bildqualität ist. Ein niedriger SSIM-Wert kann auf deutliche Unterschiede in der visuellen Struktur hinweisen, was Verbesserungsbedarf im Generator-Training oder in der Modellarchitektur signalisiert.
 
-\section{Pix2Pix: Ergebnisse und objektive Bewertung}
-\subsubsection{Evaluierung der Trainingsresultate nach 100 Epochen}
-Die Evaluierung der Trainingsresultate des Pix2Pix-Modells basiert auf einer Analyse der 100 durchgeführten Trainingsepochen. Während dieser Epochen wurden spezifische Metriken wie Generator- und Diskriminator-Verluste sowie Diskriminator-Genauigkeit und der Structural Similarity Index Measure (SSIM) überwacht. \newline
-Der Generatorverlust zeigte eine anfängliche Tendenz zur Reduktion von 13.782 auf 10.581, was auf eine erfolgreiche Anpassung des Modells an die Trainingsdaten hindeutet. Parallel dazu reduzierte sich der Diskriminatorverlust von 1.009 auf 0.323, was auf eine effiziente Differenzierung zwischen realen und generierten Bildern durch den Diskriminator hinweist.
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=1.0\textwidth]{images/Pix2PixResults/Verlust0-100.png}
-	\caption{Generator- und Diskriminatorverlust des 1. Trainingsdurchlaufs mit 100 Epochen, eigene Erstellung mittels matplotlib.pyplot-Bibliothek }
-	\label{fig:Verlustkurve 0-100}
-\end{figure}
-
-Die Genauigkeit des Diskriminators ist von anfänglich etwa 75$\%$ auf ungefähr 94$\%$ in der letzten Epoche gestiegen. Dies zeigt, dass der Diskriminator im Verlauf des Trainingsprozesses besser darin wurde, echte Bilder von den vom Generator erzeugten Bildern zu unterscheiden.
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=1.0\textwidth]{images/Pix2PixResults/Genauigkeit0-100.png}
-	\caption{Diskriminatorgenauigkeit des 1. Trainingsdurchlaufs mit 100 Epochen, eigene Erstellung mittels matplotlib.pyplot-Bibliothek }
-	\label{fig:Genauigkeit 0-100}
-\end{figure}
-
-Der SSIM-Wert, der die Bildqualität misst, begann bei 0.553 und endete bei 0.656. Diese kontinuierliche Verbesserung deutet darauf hin, dass die generierten Bilder im Laufe des Trainings eine zunehmende Ähnlichkeit mit den Zielbildern erreicht haben.
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=0.95\textwidth]{images/Pix2PixResults/SSIM0-100.png}
-	\caption{SSIM-Score des 1. Trainingsdurchlaufs mit 100 Epochen, eigene Erstellung mittels matplotlib.pyplot-Bibliothek}
-	\label{fig:SSIM 0-100}
-\end{figure}
-
-\newpage
-\section{CycleGAN: Ergebnisse und objekte Bewertung}
-\section{Vergleich und Bewertung von Pix2Pix und CycleGAN}
-
 \section{Ergebnisse und objektive Bewertung}
 In diesem Abschnitt liegt der Fokus auf der objektiven Bewertung der Leistung des CycleGAN-Algorithmus. Es werden verschiedene Metriken und Kriterien herangezogen, um eine umfassende Bewertung durchzuführen, einschließlich der Verluste der Generatoren und Diskriminatoren bei Variation der Hyperparameter. Darüber hinaus wird eine detaillierte Analyse der Genauigkeit der Diskriminatoren und des SSIM-Scores durchgeführt. Diese Messungen sind sowohl für die genaue Bestimmung der Qualität der generierten Ergebnisse als auch für die Bewertung der Lernfähigkeit der Modelle von Bedeutung.
 
-Die verwendeteten Datensätze für die Evaluierung stammen aus dem Berkeley-Repository. Besondere Beachtung wird dem 'maps'-Datensatz geschenkt, bei dem Transformationen zwischen Kartenansichten und Satellitenbildern durchgeführt wurden. Das Training wurde mehrmals mit verschiedenen Hyperparameter-\\Konfigurationen durchgeführt, wobei Parameter wie der Lambda-Wert, die Anzahl der Epochen und die Lernrate des Optimizers variiert wurden. Ziel ist es, eine Konfiguration zu finden, bei der die Qualität der erzeugten Bilder nahe an der Qualität des Originals und die Leistung des Diskriminators optimal ist.
+Die verwendeten Datensätze für die Evaluierung stammen aus dem Berkeley-Repository. Besondere Beachtung wird dem 'maps'-Datensatz geschenkt, bei dem Transformationen zwischen Kartenansichten und Satellitenbildern durchgeführt wurden. Das Training wurde mehrmals mit verschiedenen Hyperparameter-\\Konfigurationen durchgeführt, wobei Parameter wie der Lambda-Wert, die Anzahl der Epochen und die Lernrate des Optimizers variiert wurden. Ziel ist es, eine Konfiguration zu finden, bei der die Qualität der erzeugten Bilder nahe an der Qualität des Originals und die Leistung des Diskriminators optimal ist.
 
 Die subjektive Bewertung erfolgt durch die visuelle Beurteilung der generierten Bilder aus dem Testdatensatz hinsichtlich stimmiger Farben, Struktur und Rauschen im Vergleich zu den Originalbildern. Darauf aufbauend erfolgt eine objektive Bewertung mithilfe der definierten Metriken.
 
 
 \subsection{Pix2Pix}
- Diese Flexibilität in der Kanalverarbeitung ermöglicht eine breitere Anwendung des Pix2Pix-Modells auf verschiedene Bildtypen. Die Bilder müssen nicht in einer bestimmten Weise vorverarbeitet werden, da das Modell direkt auf den Rohpixeln arbeitet. Diese Flexibilität in der Kanalverarbeitung und die Fähigkeit, direkt auf Rohpixeln zu arbeiten, unterstreichen die Vielseitigkeit des Pix2Pix-Modells.
-  Durch empirische Tests hat sich herausgestellt das eine initiale Lernrate von 0.0002 und die Momentum-Parameter von $\beta1$ = 0.5 und $\beta$ = 0.999 optimal sind, um die Balance zwischen Lerngeschwindigkeit und Stabilität des Trainingsprozesses zu optimieren. Auch die Wahl einer kleinen Batchgröße, typischerweise 1, spielt eine entscheidende Rolle, um die Trainingseffizienz zu maximieren und qualitativ hochwertige Ergebnisse zu erzielen. Diese spezifischen Einstellungen der Trainingsparameter tragen maßgeblich dazu bei, das Potenzial des Pix2Pix-Modells voll auszuschöpfen.\cite{PhillipIsola.}.\newline
-  Für den Generator und den Diskriminator, wird der Adam-Optimierer mit einer Lernrate von 0.0002 und den Momentum-Parametern $\beta$1 = 0.5 und $\beta$2 = 0.999 verwendet. Diese Einstellungen einen guten Kompromiss zwischen der Lerngeschwindigkeit und der Stabilität des Trainingsprozesses zu finden. Die Batchgröße ist im Code auf 1 gesetzt. Eine kleine Batchgröße kann zu einer höheren Stabilität im Trainingsprozess beitragen. Der Hyperparameter $LAMBDA$ wird verwendet, um das Gewicht des L1-Verlustes im Generatorverlust zu steuern. Ein hoher Wert von $LAMBDA$ betont die Bedeutung der Inhaltsähnlichkeit zwischen den generierten und den Zielbildern. Die Anzahl der Trainingsepochen ist auf 450 gesetzt, was darauf hindeutet, dass das Modell eine umfangreiche Trainingsdauer durchläuft, um eine optimale Leistung zu erreichen.
+Die Entwicklung eines Pix2Pix GANs stellt eine große Herausforderung dar, insbesondere im Hinblick auf das Training des Modells. Eine der zentralen Schwierigkeiten besteht darin, ein angemessenes Gleichgewicht zwischen effektivem Lernen und der Vermeidung von Overfitting zu finden. Overfitting tritt auf, wenn das Modell zu stark an die spezifischen Muster und Merkmale des Trainingsdatensatzes angepasst wird, was dazu führt, dass der Generator Probleme beim Übersetzen von unbekannten Daten hat. Dieses Problem tritt oft in Szenarien auf, in denen mit einem begrenzten Datensatz trainiert wird, wie in diesem Fall.\newline
+In der praktischen Anwendung des Pix2Pix-Modells, das in diesem Fall speziell für die Transformation von Satellitenbildern in Karten entwickelt wurde, ist aufgefallen, dass der Generator besonders effizient bei der Erzeugung von Straßenlinien ist. Dies deutet auf eine starke Fähigkeit des Modells hin, lineare, kontrastreiche Strukturen zu erkennen und wiederzugeben.
+Jedoch stößt das Modell an seine Grenzen, sobald es um die Darstellung von Farben und komplexeren Strukturen geht, insbesondere bei Grünflächen oder Wasser. Bei der Generierung dieser Elemente zeigt der Generator deutliche Schwierigkeiten, was sich in einer weniger präzisen und oft fehlerhaften Darstellung widerspiegelt. Die Beobachtungen ergaben, dass obwohl diese Elemente oftmals nur einen geringen Teil des Gesamtbildes ausmachen, sie dennoch einen großen negativen Einfluss auf das Gesamtergebnis haben.
 
+Für das Training des Pix2Pix-Modells wurde der Adam-Optimierer mit einer initialen Lernrate von 0.0002 und den Momentum-Parametern $\beta$1 = 0.5 und $\beta2$ = 0.999 eingesetzt. Diese Einstellungen erweisen sich als effektiv, um einen guten Kompromiss zwischen Lerngeschwindigkeit und Stabilität des Trainingsprozesses zu ermöglichen. Eine Batchgröße von 1 wurde gewählt, um die Trainingseffizienz zu maximieren und qualitativ hochwertigere Ergebnisse zu erzielen. Während verschiedener Testdurchläufe konnte beobachtet werden, dass eine größere Batchgröße zwar das Training beschleunigt, jedoch zu schlechteren Trainingsergebnissen führt. Der Hyperparameter $\lambda$ wird genutzt, um das Gewicht des L1-Verlusts im Generatorverlust zu steuern und die Inhaltsähnlichkeit zwischen den generierten und den Zielbildern zu regulieren. Insgesamt hat das Modell eine Trainingsdauer von 100 Epochen durchlaufen, wobei die ersten 80 Epochen mit $\lambda$ = 100 und die restlichen 20 mit $\lambda$ = 150 absolviert wurden.
+
+Die Evaluierung der Trainingsresultate des Pix2Pix-Modells basiert auf einer Analyse der 100 durchgeführten Trainingsepochen. Während des Durchlaufs dieser Epochen wurden spezifische Metriken wie Generator- und Diskriminator-Verluste sowie Diskriminator-Genauigkeit und der Structural Similarity Index Measure (SSIM) überwacht.\newline
+
+Der Verlust des Generator beginnt bei 14.44 in der ersten Epoche und sinkt dann kontinuierlich ab, was auf ein erfolgreiches Lernen hinweist. Es gibt Schwankungen im Verlauf des Trainings, aber insgesamt zeigt sich ein Abwärtstrend, was darauf hindeutet, dass der Generator zunehmend besser in der Lage ist, glaubwürdige Bilder zu erzeugen.\newline
+Der Diskriminator-Verlust beginnt bei 0.93 und zeigt eine leichte Abnahme über die Zeit. Dies deutet darauf hin, dass der Diskriminator im Laufe des Trainings besser darin wird, echte Bilder von gefälschten zu unterscheiden. Mit der Erhöhung von $\lambda$ bei Epoche 80 fokussiert sich der Generator mehr darauf, die exakten Pixelwerte des Zielbildes nachzubilden, dadurch muss sich der Diskriminator an die neuen Unterschiede zwischen realen und generierten Bildern anpassen. Aus diesem Grund kann dies anfänglich zu einem Anstieg des Diskriminatorverlusts führen, da seine Aufgabe nun schwieriger wird. In Abbildung \ref{fig:Verlustkurve 0-100} wird die Entwicklung der Verlustfunktionen nochmal grafisch dargestellt.
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=1.0\textwidth]{images/Pix2PixResults/Verlust0-100.png}
+	\caption{Generator- und Diskriminatorverlust des Trainingsdurchlaufs mit 100 Epochen, eigene Erstellung mittels matplotlib.pyplot-Bibliothek }
+	\label{fig:Verlustkurve 0-100}
+\end{figure}
+ \newpage
+
+Die Analyse der Diskriminatorgenauigkeit im Trainingsverlauf zeigt einen Anstieg der Genauigkeit über 90$\%$ was weit über den Idealwert 50$\%$. Dies ist ein Anzeichen dafür das der Diskriminator möglicherweise zu effektiv darin geworden ist, generierte Bilder von realen zu unterscheiden. Dieser Wert ist ein Indikator dafür, dass der Diskriminator fast immer richtig liegt und könnte darauf hindeuten, dass der Generator nicht genügend Raum bekommt, um zu lernen und sich zu verbessern. Zusätzlich weisen die Schwankungen, wie in Abbildung \ref{fig:Genauigkeit 0-100} gezeigt, auf eine gewisse Inkonsistenz im Lernprozess hin.
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=1.0\textwidth]{images/Pix2PixResults/Genauigkeit0-100.png}
+	\caption{Diskriminatorgenauigkeit des Trainingsdurchlaufs mit 100 Epochen, eigene Erstellung mittels matplotlib.pyplot-Bibliothek }
+	\label{fig:Genauigkeit 0-100}
+\end{figure}
+ \newpage
+Der SSIM-Score hatte anfänglich einen Wert von 0.5549 der allmählich anstieg, was auf eine Verbesserung der Bildqualität hindeutet, die der Generator im Laufe des Trainings erzielt. Dieser Trend ist ein positives Zeichen dafür, dass der Generator zunehmend besser darin wird, Bilder zu erzeugen, die den Zielbildern ähnlicher sind. Interessanterweise steigt der SSIM-Wert nicht kontinuierlich, wie in Abbildung \ref{fig:SSIM 0-100} zu sehen ist, sondern zeigt einige Schwankungen, was auf unterschiedliche Leitungen des Gnerators bei verschiedenen Bildern hinweist. Diese Inkonsistenzen könnten auf die Variabilität innerhalb des Trainingsdatensatzes oder auf die begrenzte Fähigkeit des Generator zurückzuführen sein bei bestimmten Strukturen wie beispielweise Grünflächen oder Wasser Probleme zu haben.\newline
+Bemerkenswert ist der Anstieg des SSIM-Wertes nach der 80. Epoche, was zeitlich mit der Erhöhung des Lambda-Wertes von 100 auf 150 korreliert. Dies könnte darauf hindeuten, dass die Erhöhung des Lambda-Wertes dazu beigetragen hat, die Qualität der generierten Bilder in Bezug auf ihre strukturelle Ähnlichkeit zu verbessern. Der höhere SSIM-Wert in späteren Epochen könnte ein Indikator dafür sein, dass der Generator lernt, sich auf die wichtigen Aspekte der Bilder zu konzentrieren, die zur Ähnlichkeit mit den Zielbildern beitragen. 
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=1.0\textwidth]{images/Pix2PixResults/SSIM0-100.png}
+	\caption{SSIM-Score des Trainingsdurchlaufs mit 100 Epochen, eigene Erstellung mittels matplotlib.pyplot-Bibliothek }
+	\label{fig:SSIM 0-100}
+\end{figure}
+
+Das Pix2Pix GAN-Modell demonstriert seine Stärken in der Umwandlung von Satellitenbildern zu Karten, mit besonderer Kompetenz in der Darstellung von Straßenstrukturen. Trotzdem stößt es bei der Generierung komplexerer Elemente wie Grünflächen und Wasser auf Herausforderungen. Die Feinabstimmung der Hyperparameter, einschließlich einer geringen Batchgröße und einer spezifischen Anpassung des Lambda-Wertes, hat die Trainingseffizienz verbessert, was sich in einem erhöhten SSIM-Score niederschlägt. Allerdings weist die hohe Diskriminatorgenauigkeit von über 90$\%$ darauf hin, dass das Modell weiter optimiert werden muss, um ein Gleichgewicht zwischen Generator und Diskriminator zu erlangen. Hervorzuheben ist die signifikante Zeitersparnis durch die Verwendung einer GPU im Vergleich zur CPU: Während eine Epoche auf der CPU 320 Sekunden dauert, wird diese Zeit auf der GPU auf nur 20 Sekunden reduziert.
+\newpage
 
 \subsection{CycleGAN}
 \input{chapters/cycleGan_evaluation}
 \section{Vergleich von Pix2Pix und CycleGAN}
 - Matching Paare von Bildern sind ebenfalls für das Training nicht nötig (crewall)
 - Macht die Datenvorbereitung einfacher und öffnet neue Techniken für Applikationen (crewall)
+\section{Vergleich und Bewertung von Pix2Pix und CycleGAN}
