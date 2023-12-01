@@ -4,8 +4,8 @@
 Die Struktur des Generator in der Pix2Pix-Implementierung ist ein wesentlicher Aspekt, der die Leistungsfähigkeit des Modells bestimmt. Der Generator ist als U-Net-Architektur aufgebaut, die aus dem Encoder und Decoder bestehen die wiederum  aufeinanderfolgende Downsampling- und Upsampling-Schritten beinhalten.
 \newline
 Im Encoder-Teil des Generators wird das Downsampling durch eine Reihe von Convolutional Neuronal Network (CNN) Schichten realisiert, die durch die downsample-Funktion innerhalb des downstack definiert sind. 
-\newpage
-\begin{lstlisting}[language=pyhaff, caption={Downsampling-Schritt in Pix2Pix}, label={cod:Pix2PixGAN Generator}]
+
+\begin{lstlisting}[language=pyhaff, caption={Downsampling-Schritt in Pix2Pix}, label={cod:Pix2PixGAN Generator}][H]
 down_stack = [
 	downsample(64, 4, apply_batchnorm=False),  # (batch_size, 128, 128, 64)
 	downsample(128, 4),  # (batch_size, 64, 64, 128)
@@ -35,8 +35,9 @@ def downsample(filters, size, apply_batchnorm=True):
 	return result
 \end{lstlisting}
 
+
 Im Anschluss daran erfolgt das Upsampling im Decoder-Teil des Generators, das durch die upsample-Funktion innerhalb des upstack repräsentiert wird. Diese Schichten arbeiten daran, die Merkmale auf ein höher ausgelöstes Format zu projizieren und die Bildgröße wiederherzustellen.
-\newpage
+
 \begin{lstlisting}[language=pyhaff, caption={Upsampling-Schritt in Pix2Pix}, label={cod:Pix2PixGAN Generator}]
 up_stack = [
 	upsample(512, 4, apply_dropout=True),  # (batch_size, 2, 2, 1024)
@@ -50,7 +51,8 @@ up_stack = [
 \end{lstlisting}
 
 Die upsampling-Funktion verwendet eine spezielle Art von Convolutional Layer, die Conv2DTranspose-Schicht, um die Bildgröße zu erhöhen. Diese Schicht kehrt den Prozess einer Convolutional Layer Schicht um, indem sie die Eingabedaten expandiert, was für das Wiederherstellen einer größerem Bildgröße im Generator unerlässlich ist. Zusätzlich zur Conv2DTranspose-Schicht integriert die upsample-Funktion eine Batch-Normalisierung, die zur Stabilisierung des Lernprozesses beiträgt, indem sie die Ausgaben der Conv2DTranspose-Schicht normalisiert. 
-
+\begin{figure}[H]
+	\centering
 \begin{lstlisting}[language=pyhaff, caption={Upsampling-Schritt in Pix2Pix}, label={cod:Pix2PixGAN Generator}]
 def upsample(filters, size, apply_dropout=True):
 	initializer = tf.random_normal_initializer(0., 0.02)
@@ -66,7 +68,7 @@ def upsample(filters, size, apply_dropout=True):
 	result.add(tf.keras.layers.ReLU())
 	return result
 \end{lstlisting} 
-\newpage
+\end{figure}
 Dies ist ein wichtiger Schritt, um die interne Kovariantenverschiebung zu reduzieren und die Leistung des Modells zu verbessern. Ein weiteres wichtiges Merkmal der Funktion ist die optional Anwendung von Dropout um Overfitting zu vermeiden. Dies trägt dazu bei dass das Modell robustere und generalisierbare Merkmale lernt. Schließlich wird eine ReLU-Aktivierungsfunktion angewendet, die dafür sorgt, dass das Modell nicht-lineare Zusammenhänge lernt. 
 \\\newline
 Die Skip-Verbindungen werden im Generator durch die Speicherung und spätere Verwendung der Ausgaben der Downsampling-Schichten in der skips-Liste realisiert. Nach dem Downsampling-Prozess werden diese gespeicherten Ausgaben in umgekehrter Reihenfolge durchlaufen und mit den Ausgaben der Upsampling-Schichten mittels einer Concatenate-Operation verbunden. Diese Kombination von hoch- und niedrigstufigen Merkmalen führt zu einer detaillierteren und genaueren Bildrekonstruktion.
@@ -96,19 +98,15 @@ Schließlich wird das endgültige Bild durch die letzte Schicht des Generators e
 \end{lstlisting}
 
 \subsection{Diskriminator}
-Der Diskriminator startet mit der Initialisierung seiner Eingabeschichten. Er empfängt zwei seperate Bilder - ein Eingabebild ($inp$) und ein Zielbild ($tar$). Diese Bilder werden dann entlang ihrer Farbkanäle zu einem einzigen Bild zusammengefügt.\newline
-Im Kern des Diskriminators des Pix2Pix-Modells finden sich mehrere Downsampling- oder Convolutional Layer, die eine Schlüsselrolle bei der Bewertung des Eingabebildes spielen. jede dieser Schichten führt Konvolutionen durch, um die Merkmale und Texturen aus den Bildern zu extrahieren. Dabei arbeitet jeder Convolutional Layer mit einem kleinen Bereich des Eingabebildes. Dieser Bereich gleitet über das gesamte Bild und bewertet bei jedem Schritt einen kleinen Teil, bekannt als $"Patch"$. Die Größe dieses Bereiches und damit die Größe des bewerteten Patches, wird durch die Größe des Konvolutionskerns bestimmt. Diese konsequente Analyse von Patches ermöglicht es dem Diskriminator, die räumliche Auflösung des Bildes schrittweise zu reduzieren, was wiederum die Komplexität des Problems verringert und eine effektive Bewertung der lokalen Bildmerkmale ermöglicht. \newline
-Nach den Downsampling-Schritten folgen Zero Padding und zusätzliche Convolutional Layer. Diese Schritte sind entscheidend, um den Diskriminator zu ermöglichen, feinere Details aus den Bildern herauszuarbeiten. \newline
-Die letzte Schicht im Diskriminator ist ein Convolutional Layer, die eine Karte von Werten erzeugt. Jeder dieser Werte repräsentiert das Urteil des Diskriminators über einen bestimmten Patch des Bildes.\newline
-Der Schlüssel des Diskriminators liegt im PatchGAN-Konzept. Dieses Konzept geschieht implizit durch die Art und Weise, wie die Convolutional Layer im Netzwerk strukturiert sind.
-\newpage
+Der Diskriminator im Pix2Pix-Modell ist eine tiefgehende neuronale Netzarchitektur, die zwei Eingabebilder - ein Eingabebild und ein Zielbild - verarbeitet. Diese Bilder werden entlang ihrer Farbkanäle zu einem einzigen Bild kombiniert. Anschließend durchläuft das Bild eine Reihe von Downsampling-Schritten mittels Convolutional Layern, um die räumliche Auflösung zu reduzieren und wichtige Bildmerkmale zu extrahieren. Nach mehreren Downsampling-Phasen folgt eine entscheidende Verarbeitungsschicht, die die Bildmerkmale weiter analysiert und normalisiert. Der finale Output des Diskriminators erfolgt durch einen spezialisierten Convolutional Layer, der eine Patch-basierte Bewertung des Bildes vornimmt. Diese Patch-basierte Analyse ist zentral für die Funktionsweise des Diskriminators, indem sie es ihm ermöglicht, die Echtheit jedes Bildbereichs unabhängig zu bewerten, was ein Schlüsselelement der PatchGAN-Architektur ist. Insgesamt handelt es sich um ein komplexes System zur Bildanalyse, das speziell für die Aufgabe der Bild-zu-Bild-Übersetzung entwickelt wurde.
 \lstinputlisting[language=pyhaff, caption=Pix2Pix Diskriminator in Tensorflow]{code/Pix2Pix_Diskriminator.txt}
 
-\newpage
+
+
 \subsection{Verlustfunktion}
 \subsubsection{Generatorverlust}
 Der Generatorverlust im Pix2Pix-Modell besteht aus zwei wesentlichen Komponenten: dem adversariellen Verlust ($gan\_loss$) und dem L1-Verlust ($l1\_loss$). Der adversarielle Verlust wird durch Anwendung der $BinaryCrossentropy$-Funktion von TensorFlow ermittelt. Hierbei wird die Ausgabe des Diskriminators für generierte Bilder ($disc\_generated\_output$) mit einem Tensor, der ausschließlich aus Einsen besteht, verglichen. Dies dient dazu, die Effektivität des Generators bei der Erzeugung von Bildern zu bewerten, die für den Diskriminator von echten Bildern nicht unterscheidbar sind. Der L1-Verlust hingegen berechnet den mittleren absoluten Fehler zwischen dem vom Generator erzeugten Bild ($gen\_output$) und dem tatsächlichen Zielbild ($target$). Dieser Verlust trägt maßgeblich dazu bei, die inhaltliche Übereinstimmung und Ähnlichkeit des generierten Bildes mit dem Zielbild zu fördern. \newline
-Der Gesamtverlust des Generators ($total\_gen\_loss$) ist die Summe des adversariellen Verlust und des L1-Verlusts, wobei der L1-Verlust mit einem Faktor $LAMBDA$ gewichtet wird. Die Gewichtung des L1-Verlusts hilft dabei, die strukturelle Integrität und die Genauigkeit des generierten Bildes zu verbessern,indem sie darauf abzielt, die Pixeldifferenzen zwischen dem generierten Bild und dem Zielbild zu minimieren.\newline
+Der Gesamtverlust des Generators ($total\_gen\_loss$) ist die Summe des adversariellen Verlust und des L1-Verlusts, wobei der L1-Verlust mit einem Faktor $\lambda$ gewichtet wird. Die Gewichtung des L1-Verlusts hilft dabei, die strukturelle Integrität und die Genauigkeit des generierten Bildes zu verbessern,indem sie darauf abzielt, die Pixeldifferenzen zwischen dem generierten Bild und dem Zielbild zu minimieren.\newline
 Nach der Berechnung des Gesamtverlusts werden Gradienten bezüglich der Generatorparameter berechnet ($gen\_tape.gradient$) und diese Gradienten werden dann verwendet, um den Generator mittels des Adam-Optimierers \\($generator\_optimizer.apply\_gradients$) zu aktualisieren. Dieser Prozess ist ein integraler Bestandteil des Trainings, da er dem Generator hilft, sich schrittweise zu verbessern und immer realistischere Bilder zu erzeugen.
 
 \subsubsection{Diskriminatorverlust}
