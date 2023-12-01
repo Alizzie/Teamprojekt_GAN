@@ -3,10 +3,9 @@
 
 Die Struktur des Generator in der Pix2Pix-Implementierung ist ein wesentlicher Aspekt, der die Leistungsfähigkeit des Modells bestimmt. Der Generator ist als U-Net-Architektur aufgebaut, die aus dem Encoder und Decoder bestehen die wiederum  aufeinanderfolgende Downsampling- und Upsampling-Schritten beinhalten.
 \newline
-Im Encoder-Teil des Generators wird das Downsampling durch eine Reihe von Convolutional Neuronal Network (CNN) Schichten realisiert, die durch die downsample-Funktion innerhalb des downstack definiert sind (Code \ref{cod:Pix2PixGAN Generator}). 
-
+Im Encoder-Teil des Generators wird das Downsampling durch eine Reihe von Convolutional Neuronal Network (CNN) Schichten realisiert, die durch die downsample-Funktion innerhalb des downstack definiert sind (Code \ref{cod:Encoder}). 
 \begin{lstlisting}[language=pyhaff, caption={Downsampling-Schritt in Pix2Pix}, 		label={cod:Encoder}]
-down_stack = [
+	down_stack = [
 	downsample(64, 4, apply_batchnorm=False),  # (batch_size, 128, 128, 64)
 	downsample(128, 4),  # (batch_size, 64, 64, 128)
 	downsample(256, 4),  # (batch_size, 32, 32, 256)
@@ -15,7 +14,7 @@ down_stack = [
 	downsample(512, 4),  # (batch_size, 4, 4, 512)
 	downsample(512, 4),  # (batch_size, 2, 2, 512)
 	downsample(512, 4),  # (batch_size, 1, 1, 512)
-]
+	]
 \end{lstlisting}
 
 Die downsample-Funktion erstellt eine Downsampling-Schicht, die mittels einer Conv2D-Schicht mit spezifischen Filtern und Kernel-Größen die räumlichen Dimensionen der Eingabebilder reduziert. Zur Verbesserung der Stabilität und Leistungsfähigkeit des Modells integriert die Funktion optional eine Batch-Normalisierung. Diese Normalisierung reguliert und standardisiert die Ausgabe der Conv2D-Schicht, was dazu beiträgt, das Training effizienter zu gestalten.
