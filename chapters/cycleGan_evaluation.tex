@@ -163,7 +163,7 @@ Trotz dieser Erfolge bleibt das Training instabil, und es besteht die Möglichke
 
 \end{figure}
 
-
+\\\newline
 Die generierten Bilder weisen bereits zu diesem Zeitpunkt eine grobe visuelle Ähnlichkeit mit der Struktur des zugrunde liegenden Originalbildes auf und zeigen nur minimale Variationen. Allerdings wird durch den SSIM-Score deutlich, dass die Generatoren Schwierigkeiten haben, bedeutende Verbesserungen hinsichtlich feinerer Details und Farbübereinstimmungen zu erzielen. Diese lassen sich auch visuell in den Differenzbilder, die mit Hilfe eines Histogrammsausgleich kontrastverstärkt wurden, erkennen. Helle Bereiche in diesen Differenzbildern stellen dabei größere Unterschiede dar. Dabei sammeln sich helle Bereiche vor allem bei den kleinen pixelweisen Details an, sowie bei unterschiedlichen Farbkodierungen. Ein konkretes Beispiel ist in Abbildung \ref{evaluation:cycleGan_Testergebnisse} zu sehen.
 \\
 Insbesondere in den frühen Epochen sind die Generatoren nicht in der Lage, Straßenlinien zuverlässig als gerade Linien zu generieren. Diese Schwächen verbessern sich im Laufe längerer Trainingszeiten, wobei bereits nach etwa 300 Epochen relativ konsistente, gerade Linien erzeugt werden.
