@@ -33,9 +33,9 @@ loss_obj = tf.keras.losses.BinaryCrossentropy(from_logits=True)
 
 
 \subsubsection{Gesamtverlust des Generators}
-Der Gesamtverlust des Generators setzt sich aus dem adversariellen Verlust und dem Zykluskonsistenz-Verlust zusammen. Optional kann der Identitätsverlust berücksichtigt werden, was zu einem konsistenteren Transformationsprozess führt (siehe Implementierung \ref{cod:cycleGanGeneratorVerlust}). Die Integration des Identitätsverlusts gewährleistet die Bewahrung der Struktur des Originalbildes.
+Der Gesamtverlust des Generators setzt sich aus dem adversariellen Verlust und dem Zykluskonsistenz-Verlust zusammen. Optional kann der Identitätsverlust berücksichtigt werden, was zu einem konsistenteren Transformationsprozess führt (Code \ref{cod:cycleGanGeneratorVerlust}). Die Integration des Identitätsverlusts gewährleistet die Bewahrung der Struktur des Originalbildes.
 
-Im adversariellen Verlust, implementiert durch die Funktion \\$generator\_adversarial\_loss$, werden die generierten Bilder mit einem Tensor aus Einsen verglichen, welcher die Zielwerte für 'echt' repräsentiert. Die Verlustberechnung erfolgt mittels einer spezifizierten Verlustfunktion.
+Im adversariellen Verlust, implementiert durch die Funktion \\$generator\_adversarial\_loss$, werden die generierten Bilder mit einem Tensor aus Einsen verglichen, welcher die Zielwerte für ''echt'' repräsentiert. Die Verlustberechnung erfolgt mittels einer spezifizierten Verlustfunktion.
 
 Für den Zykluskonsistenz-Verlust ($cycle\_loss$-Funktion) wird der mittlere absolute Unterschied zwischen einem echten Bild und seiner zyklisch transformierten Version berechnet. Dieser L1-Verlust stellt sicher, dass die Übersetzung zwischen den Domänen und zurück nahe an der Identitätsabbildung liegt.
 

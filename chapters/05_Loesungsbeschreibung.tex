@@ -43,16 +43,16 @@ Die vorverarbeiteten Trainings- und Testbilder werden darauf in TensorFlow-Datas
 \lstinputlisting[language=pyhaff, caption=Integration der vorverarbeiteten Trainingsbilder in Tensorflow-Datasets (CycleGAN Implementierung)]{code/LadenBild.txt}
 
 Diese umfassende Vorverarbeitung stellt sicher, dass das GAN-Modell auf optimal vorbereiteten Daten trainiert wird, um eine maximale Leistung und Generalisierungsfähigkeit zu erreichen.
- \newpage
+
 \input{chapters/pix2pix_implementierung.tex}
 \input{chapters/cycleGan_implementation.tex}
 
 \newpage
 \section{Training und Hyperparameter}
 
-Während des Trainings von Generative Adversarial Networks (GANs) wird eine iterative Methode angewendet, bei der der Generator und der Diskriminator abwechselnd trainiert werden. Dieser Trainingszyklus erstreckt sich über mehrere Epochen, wobei in jeder Epoche Bilder durch einen Feed-Forward-Prozess vom Generator generiert und vom Diskriminator bewertet werden. Gleichzeitig wird der Diskriminator mit den echten Zielbildern trainiert, um seine Fähigkeit zu verbessern, zwischen echten und generierten Bildern zu unterscheiden. Der Trainingsschritt beinhaltet die Berechnung und Anwendung von Gradienten für sowohl den Generator als auch den Diskriminator, basierend auf ihren jeweiligen Verlustfunktionen (Code \ref{cod:pix2pixTrain}, \ref{cod:cycleTrain1}, \ref{cod:cycleTrain2}).
+Während des Trainings von GANs wird eine iterative Methode angewendet, bei der der Generator und der Diskriminator abwechselnd trainiert werden. Dieser Trainingszyklus erstreckt sich über mehrere Epochen, wobei in jeder Epoche Bilder durch einen Feed-Forward-Prozess vom Generator generiert und vom Diskriminator bewertet werden. Gleichzeitig wird der Diskriminator mit den echten Zielbildern trainiert, um seine Fähigkeit zu verbessern, zwischen echten und generierten Bildern zu unterscheiden. Der Trainingsschritt beinhaltet die Berechnung und Anwendung von Gradienten für sowohl den Generator als auch den Diskriminator, basierend auf ihren jeweiligen Verlustfunktionen (Code \ref{cod:pix2pixTrain}, \ref{cod:cycleTrain1}, \ref{cod:cycleTrain2}).
 \\\newline
-Die Wahl der Hyperparameter, einschließlich der Anzahl der Epochen, Lernraten der Optimizer und der $LAMBDA$-Werte der jeweiligen Architekturen, wurde durch abgestimmte Experimente ermittelt. Dabei wurde darauf geachtet, dass die gewählten Werte zu einer stabilen und konvergenten Schulung führen.
+Die Wahl der Hyperparameter, einschließlich der Anzahl der Epochen, Lernraten der Optimizer und der $\lambda$-Werte der jeweiligen Architekturen, wurde durch abgestimmte Experimente ermittelt. Dabei wurde darauf geachtet, dass die gewählten Werte zu einer stabilen und konvergenten Schulung führen.
 \\\newline
 Um Überanpassung entgegenzuwirken, wird auf das Training mit umfangreichen Datensätzen zurückgegriffen. Die Integration zusätzlicher Regularisierung in Form von Dropout trägt dazu bei, die Generalisierungsfähigkeit des Modells zu steigern und seine Robustheit zu verbessern. Beim Dropout-Mechanismus werden während des Trainingsprozesses zufällig bestimmte Neuronen deaktiviert, was dazu führt, dass das Netzwerk nicht übermäßig abhängig von spezifischen neuronalen Pfaden wird. Diese Strategie fördert die Robustheit des Modells, indem sie es dazu zwingt, mit dem Fehlen bestimmter Neuronen umzugehen und alternative Pfade zu nutzen. Durch die erzwungene Redundanz werden verschiedene Teile des Netzwerks aktiviert, was zu einer breiteren Erfassung von Merkmalen und einer vielfältigeren Repräsentation führt. Dies ist entscheidend, um sicherzustellen, dass das Modell nicht zu stark auf spezifische Trainingsdaten reagiert, sondern stattdessen Merkmale erlernt, die auf einer breiteren Palette von Eingaben generalisiert werden können \cite{Yamashita.2018}. 
 
@@ -91,7 +91,7 @@ Diese Metriken werden verwendet, um den durchschnittlichen Verlust des Generator
 
 Während des Trainingsprozesses wird für jeden Batch von Trainingsbildern der Verlust und die Genauigkeit berechnet. Die Verluste werden durch die oben genannten Metriken erfasst und nach jeder Epoche in die CSV-Datei aufgezeichnet. Die Genauigkeit des Diskriminators wird durch die BinaryAccuracy-Metrik überwacht, wobei ein Schwellenwert von 0,5 festgelegt ist, was in binären Klassifikationsaufgaben typisch ist.
 \\\newline
-Die Berechnung und Aktualisierung der Metriken erfolgen wie folgt:
+Die Berechnung und Aktualisierung der Metriken erfolgen wie in dem Codeausschitt \ref{cod:updateMetrics} gezeigt.
 
 \begin{lstlisting}[language=pyhaff, caption={Aktualisierung der Metriken}, label={cod:updateMetrics}]
 gen_loss, disc_loss, disc_real_output, disc_generated_output = train_step(input_image, target, epoch, train_discriminator=True)
