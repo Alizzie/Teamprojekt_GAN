@@ -1,81 +1,106 @@
-Die Datensätze $X$ (Karten) und $Y$ (Satellitenbilder) werden durch die Generatoren $G: X\rightarrow Y$ und $F: Y\rightarrow X$ sowie die Diskriminatoren $D_X$ und $D_Y$ repräsentiert, die jeweils darauf abzielen, Bilder in den Domänen $X$ und $Y$ zu unterscheiden. Die Hyperparameter basieren zunächst auf den in dem Originalpaper von Zhu ausgewählten Parametern und wurden anschließend durch explorative Anpassungen verfeinert.
+Die Datensätze $X$ (Karten) und $Y$ (Satellitenbilder) werden durch die Generatoren $G: X\rightarrow Y$ und $F: Y\rightarrow X$ sowie die Diskriminatoren $D_X$ und $D_Y$ repräsentiert, die jeweils darauf abzielen, Bilder in den Domänen $X$ und $Y$ zu unterscheiden. Die Hyperparameter wurden initial gemäß den Angaben in der Originalarbeit von Zhu et al. \cite{Zhu.2017} festgelegt und nachfolgend durch explorative Anpassungen basierend auf der Bildqualität und der Genauigkeit der Diskriminatoren verfeinert. Die Evaluierung der Leistungsfähigkeit erfolgt nach dem Training anhand einer definierten Anzahl von Testdaten.
 \\\newline
-Ein herausforderndes Problem, dem sich die Generatoren gegenübersehen, besteht in der Reproduktion feiner und detaillierter Strukturen. Insbesondere fällt auf, dass die Generatoren besser darin sind, Straßenlinien zu erzeugen, was auf die Dominanz von Straßen- und Häusermotiven in den Trainingsdaten zurückzuführen ist.
-Die Vielfalt in den Bildern, wie Flüsse und Wälder, stellt hingegen eine größere Herausforderung dar. Die Generatoren haben Schwierigkeiten, die Struktur und Farbkodierung dieser Bereiche präzise zu erfassen. Häufig resultiert dies in der Generierung von Flächen mit ähnlicher Farbe wie Straßen, und es werden Versuche unternommen, basierend auf diesen großen Freiflächen kleine Straßen zu generieren.
+Ein schwieriges Problem für die Generatoren ist die Wiedergabe feiner und detaillierter Strukturen. Insbesondere ist festzustellen, dass die Generatoren bei der Erzeugung von Straßenlinien effizienter sind. Dies ist auf die Überrepräsentation von Straßen und Häusern in den Trainingsdaten zurückzuführen. Dagegen stellt die Vielfalt der Bilder, wie Flüsse und Wälder, eine Herausforderung dar. Die genaue Erfassung der Struktur und Farbcodierung dieser Gebiete stellt die Generatoren vor Schwierigkeiten. Das Ergebnis ist oft die Generierung von Flächen mit ähnlichen Farben wie Straßen, wobei versucht wird, kleine Straßen auf der Basis dieser großen offenen Flächen zu generieren.
+\\
+Die Anwendung eines anderen Datensatzes, 'zebra2horse', zeigt ähnliche Herausforderungen. Die Umwandlung eines Pferdes in ein Zebra bereitet dem Generator weniger Schwierigkeiten als die umgekehrte Umwandlung. Es ist einfacher, Strukturen auf eine homogene Pferdefläche zu projizieren als unterschiedliche Kontraste und Muster auf eine homogene Zebrafläche.
 \\\newline
-Die Wahl der Lernrate erwies sich als kritisch, wobei die besten Ergebnisse bei einer Lernrate von $0,0002$ erzielt wurden. Diese Einstellung führte zu den höchsten SSIM-Werten und Diskriminator-Testgenauigkeiten. Insbesondere erzielte der Generator $F$ einen SSIM-Score von $0.592$, während der Generator $G$ einen Wert von $0.198$ erreichte. Die Diskriminatoren zeigten mit $50.1\%$ für $D_Y$ und $48,5\%$ für $D_X$ nahezu optimale Genauigkeiten. Trotz der zunächst hoch erscheinenden visuellen Ähnlichkeit zwischen den generierten Satellitenbildern zeigte eine genauere Analyse, dass kleinere Strukturen im generierten Bild fehlten. Dies spiegelte sich in den vergleichsweise niedrigen SSIM-Wert wider.
+Die Wahl der Lernrate erwies sich als kritisch, wobei die besten Ergebnisse mit einer Lernrate von $0,0002$ erzielt wurden. Diese Einstellung führte zu den höchsten SSIM-Werten und Diskriminator-Testgenauigkeiten. Insbesondere erzielte der Generator $F$ einen SSIM-Score von $0.592$, während der Generator $G$ einen Wert von $0.198$ erreichte. Die Diskriminatoren zeigten mit $50.1\%$ für $D_Y$ und $48.5\%$ für $D_X$ nahezu optimale Genauigkeiten. Trotz der auf den ersten Blick großen visuellen Ähnlichkeit der generierten Satellitenbilder zeigte eine genauere Analyse, dass kleinere Strukturen im generierten Bild fehlten. Dies spiegelte sich im vergleichsweise niedrigen SSIM-Wert wider.
+\\\newline
+Bei einem Gewichtungsfaktor von $\lambda = 120$ wurden sowohl bei der visuellen Beurteilung als auch beim SSIM-Score die besten Ergebnisse erzielt.
+Die Abbildung \ref{evaluation:cycleGan_Testergebnisse} zeigt einen Teil der Ergebnisse.
+Dieser spezifische Wert für $\lambda$ führte zu erzeugten Bildern, deren Signal-Rausch-Verhältnis (SNR) entweder besser oder nahezu gleich dem des Originalbildes war. Der SNR-Wert gibt das Verhältnis zwischen dem Signal, repräsentiert durch relevante Bildinformationen, und dem Rauschen, repräsentiert durch unerwünschte Störungen, an. Ein höherer SNR-Wert bedeutet eine bessere Bildqualität und Klarheit gegenüber dem Rauschen.
 
-
-
-\begin{figure}
-  \begin{subfigure}[t]{.3\textwidth}
+\begin{figure}[ht]
+  \begin{subfigure}[t]{.14\textwidth}
     \centering
-    \caption{Input}
-    \includegraphics[width=\linewidth]{example-image-a}
+    \caption*{Input}
+    \includegraphics[width=\linewidth]{images/cycleGanResults/Maps19Ld120_E100_Lr0002.jpg}
+  \end{subfigure}
+  \begin{subfigure}[t]{.14\textwidth}
+    \centering
+    \caption*{Output}
+    \includegraphics[width=\linewidth]{images/cycleGanResults/Maps19Ld120_E100_Lr0002.jpg}
+  \end{subfigure}
+  \begin{subfigure}[t]{.14\textwidth}
+    \centering
+    \caption*{Differenzbild}
+    \includegraphics[width=\linewidth]{images/cycleGanResults/Maps19Ld120_E100_Lr0002.jpg}
   \end{subfigure}
   \hfill
-  \begin{subfigure}[t]{.3\textwidth}
+  \begin{subfigure}[t]{.14\textwidth}
     \centering
-    \caption{Output}
-    \includegraphics[width=\linewidth]{example-image-b}
+    \caption*{Input}
+    \includegraphics[width=\linewidth]{images/cycleGanResults/Maps19Ld120_E100_Lr0002.jpg}
   \end{subfigure}
-  \hfill
-  \begin{subfigure}[t]{.3\textwidth}
+  \begin{subfigure}[t]{.14\textwidth}
     \centering
-    \caption{Differenzbild}
-    \includegraphics[width=\linewidth]{example-image-b}
+    \caption*{Output}
+    \includegraphics[width=\linewidth]{images/cycleGanResults/Maps19Ld120_E100_Lr0002.jpg}
+  \end{subfigure}
+  \begin{subfigure}[t]{.14\textwidth}
+    \centering
+    \caption*{Differenzbild}
+    \includegraphics[width=\linewidth]{images/cycleGanResults/Maps19Ld120_E100_Lr0002.jpg}
   \end{subfigure}
 
   \medskip
 
-  \begin{subfigure}[t]{.3\textwidth}
+  \begin{subfigure}[t]{.14\textwidth}
     \centering
-    \includegraphics[width=\linewidth]{example-image-a}
+    \includegraphics[width=\linewidth]{images/cycleGanResults/Maps19Ld120_E100_Lr0002.jpg}
+  \end{subfigure}
+  \begin{subfigure}[t]{.14\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{images/cycleGanResults/Maps19Ld120_E100_Lr0002.jpg}
+  \end{subfigure}
+  \begin{subfigure}[t]{.14\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{images/cycleGanResults/Maps19Ld120_E100_Lr0002.jpg}
   \end{subfigure}
   \hfill
-  \begin{subfigure}[t]{.3\textwidth}
+  \begin{subfigure}[t]{.14\textwidth}
     \centering
-    \includegraphics[width=\linewidth]{example-image-b}
+    \includegraphics[width=\linewidth]{images/cycleGanResults/Maps19Ld120_E100_Lr0002.jpg}
   \end{subfigure}
-  \hfill
-  \begin{subfigure}[t]{.3\textwidth}
+  \begin{subfigure}[t]{.14\textwidth}
     \centering
-    \includegraphics[width=\linewidth]{example-image-b}
+    \includegraphics[width=\linewidth]{images/cycleGanResults/Maps19Ld120_E100_Lr0002.jpg}
+  \end{subfigure}
+  \begin{subfigure}[t]{.14\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{images/cycleGanResults/Maps19Ld120_E100_Lr0002.jpg}
   \end{subfigure}
   \caption{Testergebnisse nach dem Training mit $\lambda=120$, Lernrate $=0.0002$ und $100$ Epochen}
   \label{evaluation:cycleGan_Testergebnisse}
 \end{figure}
 
-\begin{figure}
-  \begin{subfigure}[t]{.24\textwidth}
+\begin{figure}[H]
+  \begin{subfigure}[t]{.45\textwidth}
     \centering
-    \includegraphics[width=\linewidth]{example-image-a}
-    \caption{(a) Generator-Verlust}
+    \includegraphics[width=\linewidth]{images/cycleGanResults/Generator_Verlust.jpg}
   \end{subfigure}
-  \begin{subfigure}[t]{.24\textwidth}
+  \hfill
+  \begin{subfigure}[t]{.45\textwidth}
     \centering
-    \includegraphics[width=\linewidth]{example-image-b}
-    \caption{(b) Diskriminator-Metriken}
+    \includegraphics[width=\linewidth]{images/cycleGanResults/Diskriminator_Metrics.jpg}
   \end{subfigure}
-  \begin{subfigure}[t]{.24\textwidth}
+  \medskip
+  \begin{subfigure}[t]{.45\textwidth}
     \centering
-    \includegraphics[width=\linewidth]{example-image-b}
-    \caption{(c) SSIM-Score}
+    \includegraphics[width=\linewidth]{images/cycleGanResults/SSIM.jpg}
   \end{subfigure}
-  \begin{subfigure}[t]{.24\textwidth}
+  \hfill
+  \begin{subfigure}[t]{.45\textwidth}
     \centering
-    \includegraphics[width=\linewidth]{example-image-b}
-    \caption{(d) SSIM-Score Zyklus}
+    \includegraphics[width=\linewidth]{images/cycleGanResults/SSIM_Cycle.jpg}
   \end{subfigure}
 
-  \caption{Metriken nach dem Training mit $\lambda=120$, Lernrate $=0.0002$ und $100$ Epochen}
+  \caption{Verlauf der Metriken beim Training mit $\lambda=120$, Lernrate $=0.0002$ und $100$ Epochen. Die Metriken umfassen: Generator-Verlust (oben links), Diskriminator-Genauigkeiten auf den Trainings- und Testdaten (oben rechts), sowie SSIM-Score (unten links) und Zyklus-SSIM-Score (unten rechts).
+  Die Metriken werden in Abhängigkeit von der Anzahl der Epochen auf der x-Achse untersucht.}
   \label{evaluation:cycleGan_Metriken}
 \end{figure}
 
-
-Ebenso zeigten die Bilder bei einem Gewichtungsfaktor von $\lambda = 120$ die besten Resultate, sowohl basierend auf visueller Beurteilung als auch auf dem SSIM-Score (\ref{evaluation:cycleGan_Testergebnisse}). Dieser spezifische Wert für $\lambda$ führte zu generierten Bildern, deren Signal-Rausch-Verhältnis (SNR) entweder besser oder nahezu dem des Originalbildes entspricht. Der SNR-Wert gibt dabei das Verhältnis zwischen dem Signal, repräsentiert durch die relevanten Bildinformationen, und dem Rauschen, repräsentiert durch unerwünschte Störungen, an. In diesem Zusammenhang zeigt ein höherer SNR-Wert eine bessere Qualität und Klarheit der generierten Bilder im Vergleich zu Rauschen.
-\\\newline
-Trotz dieser Erfolge bleibt das Training instabil, und es besteht die Möglichkeit eines Modekollapses. Die Generatoren zeigen Anzeichen eines exponentiellen Verfalls in ihren Verlustkurven, während der SSIM-Score nur langsam ansteigt. Dies deutet darauf hin, dass die Generatoren zwar ihre Verluste minimieren, jedoch möglicherweise nicht die gewünschte visuelle Qualität erreichen (\ref{evaluation:cycleGan_Metriken}).
+Trotz dieser Erfolge bleibt das Training instabil, und es besteht die Möglichkeit eines Modekollapses. Die Generatoren zeigen Anzeichen eines exponentiellen Verfalls in ihren Verlustkurven, während der SSIM-Score nur langsam ansteigt (Abbildung \ref{evaluation:cycleGan_Metriken}). Dies deutet darauf hin, dass die Generatoren zwar ihre Verluste minimieren, jedoch möglicherweise nicht die gewünschte visuelle Qualität erreichen.\\
 
 \begin{figure}
   \begin{subfigure}[t]{.2\textwidth}
@@ -86,18 +111,38 @@ Trotz dieser Erfolge bleibt das Training instabil, und es besteht die Möglichke
   \begin{subfigure}[t]{.2\textwidth}
     \caption{Output}
     \centering
-    \includegraphics[width=\linewidth]{example-image-b}
+    \includegraphics[width=\linewidth]{images/cycleGanResults/Maps10_Ld120_E100_Lr0002.jpg}
   \end{subfigure}
   \hfill
   \begin{subfigure}[t]{.2\textwidth}
     \caption{Input}
     \centering
-    \includegraphics[width=\linewidth]{example-image-a}
+    \includegraphics[width=\linewidth]{images/cycleGanResults/horse_input1.png}
   \end{subfigure}
   \begin{subfigure}[t]{.2\textwidth}
     \caption{Output}
     \centering
-    \includegraphics[width=\linewidth]{example-image-b}
+    \includegraphics[width=\linewidth]{images/cycleGanResults/horse_output1.png}
+  \end{subfigure}
+
+  \medskip
+
+  \begin{subfigure}[t]{.2\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{images/cycleGanResults/horse_input1.png}
+  \end{subfigure}
+  \begin{subfigure}[t]{.2\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{images/cycleGanResults/Maps6Ld120_E100_Lr0002.jpg}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{.2\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{images/cycleGanResults/horse_input2.png}
+  \end{subfigure}
+  \begin{subfigure}[t]{.2\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{images/cycleGanResults/horse_output2.png}
   \end{subfigure}
 
   \medskip
@@ -108,16 +153,16 @@ Trotz dieser Erfolge bleibt das Training instabil, und es besteht die Möglichke
   \end{subfigure}
   \begin{subfigure}[t]{.2\textwidth}
     \centering
-    \includegraphics[width=\linewidth]{example-image-b}
+    \includegraphics[width=\linewidth]{images/cycleGanResults/Satelite10_Ld120_E100_Lr0002.jpg}
   \end{subfigure}
   \hfill
   \begin{subfigure}[t]{.2\textwidth}
     \centering
-    \includegraphics[width=\linewidth]{example-image-a}
+    \includegraphics[width=\linewidth]{images/cycleGanResults/zebra_input1.png}
   \end{subfigure}
   \begin{subfigure}[t]{.2\textwidth}
     \centering
-    \includegraphics[width=\linewidth]{example-image-b}
+    \includegraphics[width=\linewidth]{images/cycleGanResults/zebra_output1.png}
   \end{subfigure}
 
   \medskip
@@ -128,47 +173,27 @@ Trotz dieser Erfolge bleibt das Training instabil, und es besteht die Möglichke
   \end{subfigure}
   \begin{subfigure}[t]{.2\textwidth}
     \centering
-    \includegraphics[width=\linewidth]{example-image-b}
+    \includegraphics[width=\linewidth]{images/cycleGanResults/Satelite6Ld120_E100_Lr0002.jpg}
   \end{subfigure}
   \hfill
   \begin{subfigure}[t]{.2\textwidth}
     \centering
-    \includegraphics[width=\linewidth]{example-image-a}
+    \includegraphics[width=\linewidth]{images/cycleGanResults/zebra_input2.png}
   \end{subfigure}
   \begin{subfigure}[t]{.2\textwidth}
     \centering
-    \includegraphics[width=\linewidth]{example-image-b}
-  \end{subfigure}
-
-  \medskip
-
-  \begin{subfigure}[t]{.2\textwidth}
-    \centering
-    \includegraphics[width=\linewidth]{example-image-a}
-  \end{subfigure}
-  \begin{subfigure}[t]{.2\textwidth}
-    \centering
-    \includegraphics[width=\linewidth]{example-image-b}
-  \end{subfigure}
-  \hfill
-  \begin{subfigure}[t]{.2\textwidth}
-    \centering
-    \includegraphics[width=\linewidth]{example-image-a}
-  \end{subfigure}
-  \begin{subfigure}[t]{.2\textwidth}
-    \centering
-    \includegraphics[width=\linewidth]{example-image-b}
+    \includegraphics[width=\linewidth]{images/cycleGanResults/zebra_output2.png}
   \end{subfigure}
   \caption{Beste Ergebnisse des Trainings}
 
 \end{figure}
 
 
-Die generierten Bilder weisen bereits zu diesem Zeitpunkt eine grobe visuelle Ähnlichkeit mit der Struktur des zugrunde liegenden Originalbildes auf und zeigen nur minimale Variationen. Allerdings wird durch den SSIM-Score deutlich, dass die Generatoren Schwierigkeiten haben, bedeutende Verbesserungen hinsichtlich feinerer Details und Farbübereinstimmungen zu erzielen. Diese lassen sich auch visuell in den Differenzbilder, die mit Hilfe eines Histogrammsausgleich kontrastverstärkt wurden, erkennen. Helle Bereiche in diesen Differenzbildern stellen dabei größere Unterschiede dar. Dabei sammeln sich helle Bereiche vor allem bei den kleinen pixelweisen Details an, sowie bei unterschiedlichen Farbkodierungen. Ein konkretes Beispiel ist in Abbildung \ref{evaluation:cycleGan_Testergebnisse} zu sehen.
+Die generierten Bilder zeigen bereits zu diesem Zeitpunkt eine grobe visuelle Ähnlichkeit mit der zugrunde liegenden Originalbildstruktur mit minimalen Abweichungen. Im SSIM-Score werden jedoch die Schwierigkeiten der Generatoren bei der Erzielung signifikanter Verbesserungen in Bezug auf feinere Details und Farbübereinstimmungen deutlich. Dies ist auch visuell an den Differenzbildern zu erkennen, die mit Hilfe eines Histogrammabgleichs kontrastverbessert wurden. Helle Bereiche in diesen Differenzbildern zeigen größere Unterschiede. Insbesondere bei kleinen pixelweisen Details sowie bei unterschiedlichen Farbkodierungen häufen sich die hellen Bereiche. Die Abbildung \ref{evaluation:cycleGan_Testergebnisse} zeigt ein solches Beispiel.
 \\
-Insbesondere in den frühen Epochen sind die Generatoren nicht in der Lage, Straßenlinien zuverlässig als gerade Linien zu generieren. Diese Schwächen verbessern sich im Laufe längerer Trainingszeiten, wobei bereits nach etwa 300 Epochen relativ konsistente, gerade Linien erzeugt werden.
+Insbesondere in den frühen Epochen sind die Generatoren nicht in der Lage, Straßenlinien zuverlässig als gerade Linien zu generieren. Diese Schwächen verbessern sich mit zunehmender Trainingsdauer, so dass nach ca. 300 Epochen relativ konsistente Geraden erzeugt werden.
 \\\newline
-Die Analyse des SSIM-Scores im Kontext der Zyklusübersetzung offenbart eine exponentielle Zunahme. Diese Beobachtung legt nahe, dass der Zykluskonsistenz-Verlust einen erheblichen Einfluss auf das Training ausübt. Die exponentielle Steigerung des SSIM-Scores deutet darauf hin, dass die Konsistenz zwischen den Original- und zurückübersetzten Bildern im Laufe der Zeit kontinuierlich zunimmt. Dies könnte auf eine fortlaufende Verbesserung der Generatoren hinsichtlich ihrer Fähigkeit zur Zyklusübersetzung hindeuten. Insgesamt erreichen die SSIM-Scores für die Zyklusübersetzung Werte von $80\%$ für $Y$ und $90\%$ für $X$ (\ref{evaluation:cycleGan_Metriken}).
+Die Analyse des SSIM-Wertes in Abhängigkeit von der Zyklusübersetzung zeigt einen exponentiellen Anstieg. Diese Beobachtung deutet darauf hin, dass der Verlust der Zykluskonsistenz einen signifikanten Einfluss auf das Training hat. Der exponentielle Anstieg des SSIM-Wertes deutet darauf hin, dass die Konsistenz zwischen den Originalbildern und den rückübersetzten Bildern mit der Zeit kontinuierlich zunimmt. Dies kann auf eine kontinuierliche Verbesserung der Generatoren hinsichtlich ihrer Fähigkeit zur Zyklusübersetzung hindeuten. Insgesamt erreichen die SSIM-Scores für die Zyklusübersetzung Werte von $80\%$ für $Y$ und $90\%$ für $X$ (Abbildung \ref{evaluation:cycleGan_Metriken}).\\
 
 \begin{table}
 \centering
@@ -222,9 +247,7 @@ Die Analyse des SSIM-Scores im Kontext der Zyklusübersetzung offenbart eine exp
 \end{table}
 
 
-Im Kontrast dazu bleibt die Genauigkeit der Diskriminatoren für Trainingsdaten stabil bei etwa $50\%$. Jedoch zeigen sich erhebliche Schwankungen je nach Epoche für die Testdaten, insbesondere für $D_Y$. Dies legt nahe, dass die Diskriminatoren möglicherweise Schwierigkeiten haben, mit neuen, nicht trainierten Daten umzugehen. Diese Schwankungen könnten auf Überanpassung oder eine mangelnde Generalisierungsfähigkeit des Modells hinweisen, trotz der implementierten Maßnahmen wie dem Hinzufügen von Rauschen und Dropout-Schichten (\ref{evaluation:cycleGan_Metriken}).
+Im Gegensatz dazu bleibt die Genauigkeit der Diskriminatoren für die Trainingsdaten stabil bei etwa $50\%$. Für die Testdaten, insbesondere für $D_Y$, sind jedoch erhebliche Schwankungen in Abhängigkeit von der Epoche festzustellen  (Abbildung \ref{evaluation:cycleGan_Metriken}). Dies deutet darauf hin, dass die Diskriminatoren möglicherweise Schwierigkeiten haben, mit neuen, untrainierten Daten umzugehen. Diese Schwankungen können auf eine Überanpassung oder eine mangelnde Generalisierungsfähigkeit des Modells hinweisen, trotz der implementierten Maßnahmen wie dem Hinzufügen von Rauschen und Dropout-Schichten.\\\newline
+Die Trainingszeit spiegelt die Komplexität der Modelle wider, insbesondere auf der GPU, wo jede Epoche im Durchschnitt etwa 2 Minuten dauert. Im Vergleich dazu benötigt die CPU, selbst nach Reduktion der Residualblöcke auf einen Block, etwa 6 Minuten pro Epoche. Die Verwendung der Instanznormalisierung trägt zur Beschleunigung der Konvergenz und zur Verbesserung der Laufzeit bei. Auch im Vergleich zu Generatoren mit zusätzlichen Schichten zeigt sich, dass die Verwendung von Restblöcken eine bessere Laufzeit ermöglicht. 
 \\\newline
-Die Laufzeit des Trainings spiegelt die Komplexität der Modelle wider, insbesondere auf der GPU, wo jede Epoche im Durchschnitt etwa 2 Minuten dauert. Im Vergleich dazu benötigt die CPU, selbst nach einer Reduzierung der Residualblöcke auf einen Block, rund 6 Minuten pro Epoche. Die Nutzung von Instanznormalisierung trägt zur beschleunigten Konvergenz und Verbesserung der Laufzeit bei. Zudem zeigt sich, dass die Verwendung von Residualblöcken eine bessere Laufzeit ermöglicht im Vergleich zu Generatoren mit zusätzlichen Schichten. 
-\\\newline
-Insgesamt zeigt die Evaluation, dass das CycleGAN-Modell trotz einiger Herausforderungen in der Generierung von detaillierten Strukturen und der Generalisierung auf neue Daten vielversprechende Ergebnisse erzielt.
-
+Insgesamt zeigt die Evaluierung, dass das CycleGAN-Modell trotz einiger Herausforderungen bei der Generierung detaillierter Strukturen und der Generalisierung auf neue Daten vielversprechende Ergebnisse liefert.
