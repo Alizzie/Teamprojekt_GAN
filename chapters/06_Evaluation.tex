@@ -28,6 +28,40 @@ Jedoch stößt das Modell an seine Grenzen, sobald es um die Darstellung von Far
 
 Für das Training des Pix2Pix-Modells wurde der Adam-Optimierer mit einer initialen Lernrate von 0.0002 und den Momentum-Parametern $\beta$1 = 0.5 und $\beta2$ = 0.999 eingesetzt. Diese Einstellungen erweisen sich als effektiv, um einen guten Kompromiss zwischen Lerngeschwindigkeit und Stabilität des Trainingsprozesses zu ermöglichen. Eine Batchgröße von 1 wurde gewählt, um die Trainingseffizienz zu maximieren und qualitativ hochwertigere Ergebnisse zu erzielen. Während verschiedener Testdurchläufe konnte beobachtet werden, dass eine größere Batchgröße zwar das Training beschleunigt, jedoch zu schlechteren Trainingsergebnissen führt. Der Hyperparameter $\lambda$ wird genutzt, um das Gewicht des L1-Verlusts im Generatorverlust zu steuern und die Inhaltsähnlichkeit zwischen den generierten und den Zielbildern zu regulieren. Insgesamt hat das Modell eine Trainingsdauer von 100 Epochen durchlaufen, wobei die ersten 80 Epochen mit $\lambda$ = 100 und die restlichen 20 mit $\lambda$ = 150 absolviert wurden.
 
+\begin{figure}[ht]
+	\begin{subfigure}[t]{.14\textwidth}
+		\centering
+		\caption*{Eingabe}
+		\includegraphics[width=\linewidth]{images/Pix2PixResults/Eingabe-Bild.png}
+	\end{subfigure}
+	\begin{subfigure}[t]{.14\textwidth}
+		\centering
+		\caption*{Ausgabe}
+		\includegraphics[width=\linewidth]{images/Pix2PixResults/Generiertes-Bild.png}
+	\end{subfigure}
+	\begin{subfigure}[t]{.14\textwidth}
+		\centering
+		\caption*{Zielbild}
+		\includegraphics[width=\linewidth]{images/Pix2PixResults/Ziel-Bild.png}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[t]{.14\textwidth}
+		\centering
+		\caption*{Eingabe}
+		\includegraphics[width=\linewidth]{images/Pix2PixResults/Eingabe-Bild2.png}
+	\end{subfigure}
+	\begin{subfigure}[t]{.14\textwidth}
+		\centering
+		\caption*{Ausgabe}
+		\includegraphics[width=\linewidth]{images/Pix2PixResults/Generiertes-Bild2.png}
+	\end{subfigure}
+	\begin{subfigure}[t]{.14\textwidth}
+		\centering
+		\caption*{Zielbild}
+		\includegraphics[width=\linewidth]{images/Pix2PixResults/Ziel-Bild2.png}
+	\end{subfigure}
+\end{figure}
+
 Die Evaluierung der Trainingsresultate des Pix2Pix-Modells basiert auf einer Analyse der 100 durchgeführten Trainingsepochen. Während des Durchlaufs dieser Epochen wurden spezifische Metriken wie Generator- und Diskriminator-Verluste sowie Diskriminator-Genauigkeit und der Structural Similarity Index Measure (SSIM) überwacht.\newline
 
 Der Verlust des Generator beginnt bei 14.44 in der ersten Epoche und sinkt dann kontinuierlich ab, was auf ein erfolgreiches Lernen hinweist. Es gibt Schwankungen im Verlauf des Trainings, aber insgesamt zeigt sich ein Abwärtstrend, was darauf hindeutet, dass der Generator zunehmend besser in der Lage ist, glaubwürdige Bilder zu erzeugen.\newline
