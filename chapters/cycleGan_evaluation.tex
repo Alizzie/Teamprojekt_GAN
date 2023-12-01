@@ -103,88 +103,126 @@ Dieser spezifische Wert für $\lambda$ führte zu erzeugten Bildern, deren Signa
 Trotz dieser Erfolge bleibt das Training instabil, und es besteht die Möglichkeit eines Modekollapses. Die Generatoren zeigen Anzeichen eines exponentiellen Verfalls in ihren Verlustkurven, während der SSIM-Score nur langsam ansteigt (Abbildung \ref{evaluation:cycleGan_Metriken}). Dies deutet darauf hin, dass die Generatoren zwar ihre Verluste minimieren, jedoch möglicherweise nicht die gewünschte visuelle Qualität erreichen.\\
 
 \begin{figure}
-  \begin{subfigure}[t]{.2\textwidth}
-    \caption{Input}
+  \begin{subfigure}[t]{.14\textwidth}
+    \caption*{Input}
     \centering
     \includegraphics[width=\linewidth]{images/cycleGanResults/Maps10_Or_Ld120_E100_Lr0002.jpg}
   \end{subfigure}
-  \begin{subfigure}[t]{.2\textwidth}
-    \caption{Output}
+  \begin{subfigure}[t]{.14\textwidth}
+    \caption*{Output}
     \centering
     \includegraphics[width=\linewidth]{images/cycleGanResults/Maps10_Ld120_E100_Lr0002.jpg}
   \end{subfigure}
   \hfill
-  \begin{subfigure}[t]{.2\textwidth}
-    \caption{Input}
+  \begin{subfigure}[t]{.14\textwidth}
+    \caption*{Input}
+    \centering
+    \includegraphics[width=\linewidth]{images/cycleGanResults/monet_input1.png}
+  \end{subfigure}
+  \begin{subfigure}[t]{.14\textwidth}
+    \caption*{Output}
+    \centering
+    \includegraphics[width=\linewidth]{images/cycleGanResults/monet_output1.png}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{.14\textwidth}
+    \caption*{Input}
     \centering
     \includegraphics[width=\linewidth]{images/cycleGanResults/horse_input1.png}
   \end{subfigure}
-  \begin{subfigure}[t]{.2\textwidth}
-    \caption{Output}
+  \begin{subfigure}[t]{.14\textwidth}
+    \caption*{Output}
     \centering
     \includegraphics[width=\linewidth]{images/cycleGanResults/horse_output1.png}
   \end{subfigure}
 
   \medskip
 
-  \begin{subfigure}[t]{.2\textwidth}
+  \begin{subfigure}[t]{.14\textwidth}
     \centering
     \includegraphics[width=\linewidth]{images/cycleGanResults/Maps6_Or_Ld120_E100_Lr0002.jpg}
   \end{subfigure}
-  \begin{subfigure}[t]{.2\textwidth}
+  \begin{subfigure}[t]{.14\textwidth}
     \centering
     \includegraphics[width=\linewidth]{images/cycleGanResults/Maps6Ld120_E100_Lr0002.jpg}
   \end{subfigure}
   \hfill
-  \begin{subfigure}[t]{.2\textwidth}
+  \begin{subfigure}[t]{.14\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{images/cycleGanResults/monet_input2.png}
+  \end{subfigure}
+  \begin{subfigure}[t]{.14\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{images/cycleGanResults/monet_output2.png}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{.14\textwidth}
     \centering
     \includegraphics[width=\linewidth]{images/cycleGanResults/horse_input2.png}
   \end{subfigure}
-  \begin{subfigure}[t]{.2\textwidth}
+  \begin{subfigure}[t]{.14\textwidth}
     \centering
     \includegraphics[width=\linewidth]{images/cycleGanResults/horse_output2.png}
   \end{subfigure}
 
   \medskip
 
-  \begin{subfigure}[t]{.2\textwidth}
+  \begin{subfigure}[t]{.14\textwidth}
     \centering
     \includegraphics[width=\linewidth]{images/cycleGanResults/Satelite10_Or_Ld120_E100_Lr0002.jpg}
   \end{subfigure}
-  \begin{subfigure}[t]{.2\textwidth}
+  \begin{subfigure}[t]{.14\textwidth}
     \centering
     \includegraphics[width=\linewidth]{images/cycleGanResults/Satelite10_Ld120_E100_Lr0002.jpg}
   \end{subfigure}
   \hfill
-  \begin{subfigure}[t]{.2\textwidth}
+  \begin{subfigure}[t]{.14\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{images/cycleGanResults/photo_input1.png}
+  \end{subfigure}
+  \begin{subfigure}[t]{.14\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{images/cycleGanResults/photo_output1.png}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{.14\textwidth}
     \centering
     \includegraphics[width=\linewidth]{images/cycleGanResults/zebra_input1.png}
   \end{subfigure}
-  \begin{subfigure}[t]{.2\textwidth}
+  \begin{subfigure}[t]{.14\textwidth}
     \centering
     \includegraphics[width=\linewidth]{images/cycleGanResults/zebra_output1.png}
   \end{subfigure}
 
   \medskip
 
-  \begin{subfigure}[t]{.2\textwidth}
+  \begin{subfigure}[t]{.14\textwidth}
     \centering
     \includegraphics[width=\linewidth]{images/cycleGanResults/Satelite6_Or_Ld120_E100_Lr0002.jpg}
   \end{subfigure}
-  \begin{subfigure}[t]{.2\textwidth}
+  \begin{subfigure}[t]{.14\textwidth}
     \centering
     \includegraphics[width=\linewidth]{images/cycleGanResults/Satelite6Ld120_E100_Lr0002.jpg}
   \end{subfigure}
   \hfill
-  \begin{subfigure}[t]{.2\textwidth}
+  \begin{subfigure}[t]{.14\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{images/cycleGanResults/photo_input2.png}
+  \end{subfigure}
+  \begin{subfigure}[t]{.14\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{images/cycleGanResults/photo_output2.png}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{.14\textwidth}
     \centering
     \includegraphics[width=\linewidth]{images/cycleGanResults/zebra_input2.png}
   \end{subfigure}
-  \begin{subfigure}[t]{.2\textwidth}
+  \begin{subfigure}[t]{.14\textwidth}
     \centering
     \includegraphics[width=\linewidth]{images/cycleGanResults/zebra_output2.png}
   \end{subfigure}
-  \caption{CycleGAN-Ergebnisse aus verschiedenen Datensätzen}
+  \caption{CycleGAN-Ergebnisse aus verschiedenen Datensätzen aus dem Berkeley-Repository: 'maps' (links), 'monet2photo' (mitte), 'horse2zebra' (rechts)}
 
 \end{figure}
 
@@ -249,7 +287,7 @@ Die Analyse des SSIM-Wertes in Abhängigkeit von der Zyklusübersetzung zeigt ei
 \end{table}
 
 
-Im Gegensatz dazu bleibt die Genauigkeit der Diskriminatoren für die Trainingsdaten stabil bei etwa $50\%$. Für die Testdaten, insbesondere für $D_Y$, sind jedoch erhebliche Schwankungen in Abhängigkeit von der Epoche festzustellen  (Abbildung \ref{evaluation:cycleGan_Metriken}). Dies deutet darauf hin, dass die Diskriminatoren möglicherweise Schwierigkeiten haben, mit neuen, untrainierten Daten umzugehen. Diese Schwankungen können auf eine Überanpassung oder eine mangelnde Generalisierungsfähigkeit des Modells hinweisen, trotz der implementierten Maßnahmen wie dem Hinzufügen von Rauschen und Dropout-Schichten.\\\newline
+Im Gegensatz dazu bleibt die Genauigkeit der Diskriminatoren für die Trainingsdaten stabil bei etwa $50\%$. Für die Testdaten, insbesondere für $D_Y$, sind jedoch erhebliche Schwankungen in Abhängigkeit von der Epoche festzustellen. Dennoch liegt die Genauigkeit am Ende des Trainings in den meisten Fällen in einem nahezu optimalen Wertebereich (Abbildung \ref{evaluation:cycleGan_Metriken}). Dies deutet darauf hin, dass die Diskriminatoren möglicherweise Schwierigkeiten haben, mit neuen, untrainierten Daten umzugehen. Diese Schwankungen können auf eine Überanpassung oder eine mangelnde Generalisierungsfähigkeit des Modells hinweisen, trotz der implementierten Maßnahmen wie dem Hinzufügen von Rauschen und Dropout-Schichten.\\\newline
 Die Trainingszeit spiegelt die Komplexität der Modelle wider, insbesondere auf der GPU, wo jede Epoche im Durchschnitt etwa 2 Minuten dauert. Im Vergleich dazu benötigt die CPU, selbst nach Reduktion der Residualblöcke auf einen Block, etwa 6 Minuten pro Epoche. Die Verwendung der Instanznormalisierung trägt zur Beschleunigung der Konvergenz und zur Verbesserung der Laufzeit bei. Auch im Vergleich zu Generatoren mit zusätzlichen Schichten zeigt sich, dass die Verwendung von Restblöcken eine bessere Laufzeit ermöglicht. 
 \\\newline
 Insgesamt zeigt die Evaluierung, dass das CycleGAN-Modell trotz einiger Herausforderungen bei der Generierung detaillierter Strukturen und der Generalisierung auf neue Daten vielversprechende Ergebnisse liefert.

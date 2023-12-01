@@ -36,7 +36,7 @@ CycleGAN führt zusätzlich eine Cycle-Konsistenz ein. Diese stellt sicher, dass
 \\
 Die Kernidee besteht darin, dass nach der Übersetzung von $X$ nach $Y$ und zurück nach $X$ das resultierende Bild dem ursprünglichen $X$ entsprechen sollte. Um dies zu erreichen, wird die Differenz zwischen dem Originalbild $x$ und dem zyklisch übersetzten Bild $F(G(x))$ mit Hilfe der L1-Verlust minimiert. 
 \\
-Durch die Einführung dieser zyklischen Konsistenz wird das Problem des Modekollapses gelöst. Die weitere Verlustfunktion stellt sicher, dass die generierten Bilder mehr Strukturen enthalten und somit konsistentere Übersetzungen zwischen den Domänen liefern \cite{Zhu.2017}.
+Durch die Einführung dieser zyklischen Konsistenz stellt ein Ansatz zur Lösung des Problem des Modekollapses dar. Die weitere Verlustfunktion stellt sicher, dass die generierten Bilder mehr Strukturen enthalten und somit konsistentere Übersetzungen zwischen den Domänen liefern \cite{Zhu.2017}.
 
 \begin{figure}[ht]
 	\centering
