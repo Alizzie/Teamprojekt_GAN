@@ -2,11 +2,11 @@ Die Datensätze $X$ (Karten) und $Y$ (Satellitenbilder) werden durch die Generat
 \\\newline
 Ein schwieriges Problem für die Generatoren ist die Wiedergabe feiner und detaillierter Strukturen. Insbesondere ist festzustellen, dass die Generatoren bei der Erzeugung von Straßenlinien effizienter sind. Dies ist auf die Überrepräsentation von Straßen und Häusern in den Trainingsdaten zurückzuführen. Dagegen stellt die Vielfalt der Bilder, wie Flüsse und Wälder, eine Herausforderung dar. Die genaue Erfassung der Struktur und Farbcodierung dieser Gebiete stellt die Generatoren vor Schwierigkeiten. Das Ergebnis ist oft die Generierung von Flächen mit ähnlichen Farben wie Straßen, wobei versucht wird, kleine Straßen auf der Basis dieser großen offenen Flächen zu generieren.
 \\
-Die Anwendung eines anderen Datensatzes, 'zebra2horse', zeigt ähnliche Herausforderungen. Die Umwandlung eines Pferdes in ein Zebra bereitet dem Generator weniger Schwierigkeiten als die umgekehrte Umwandlung. Es ist einfacher, Strukturen auf eine homogene Pferdefläche zu projizieren als unterschiedliche Kontraste und Muster auf eine homogene Zebrafläche.
+Die Anwendung eines anderen Datensatzes, ''zebra2horse'', zeigt ähnliche Herausforderungen. Die Umwandlung eines Pferdes in ein Zebra bereitet dem Generator weniger Schwierigkeiten als die umgekehrte Umwandlung. Es ist einfacher, Strukturen auf eine homogene Pferdefläche zu projizieren als unterschiedliche Kontraste und Muster auf eine homogene Zebrafläche.
 \\\newline
-Die Wahl der Lernrate erwies sich als kritisch, wobei die besten Ergebnisse mit einer Lernrate von $0,0002$ erzielt wurden. Diese Einstellung führte zu den höchsten SSIM-Werten und Diskriminator-Testgenauigkeiten. Insbesondere erzielte der Generator $F$ einen SSIM-Score von $0.592$, während der Generator $G$ einen Wert von $0.198$ erreichte. Die Diskriminatoren zeigten mit $50.1\%$ für $D_Y$ und $48.5\%$ für $D_X$ nahezu optimale Genauigkeiten. Trotz der auf den ersten Blick großen visuellen Ähnlichkeit der generierten Satellitenbilder zeigte eine genauere Analyse, dass kleinere Strukturen im generierten Bild fehlten. Dies spiegelte sich im vergleichsweise niedrigen SSIM-Wert wider.
+Die Wahl der Lernrate erwies sich als kritisch, wobei die besten Ergebnisse mit einer Lernrate von $0,0002$ und Batchgröße$=1$ erzielt wurden. Diese Einstellung führte zu den höchsten SSIM-Werten und Diskriminator-Testgenauigkeiten. Insbesondere erzielte der Generator $F$ einen SSIM-Score von $0.592$, während der Generator $G$ einen Wert von $0.198$ erreichte. Die Diskriminatoren zeigten mit $50.1\%$ für $D_Y$ und $48.5\%$ für $D_X$ nahezu optimale Genauigkeiten für die Generatoren. Trotz der auf den ersten Blick großen visuellen Ähnlichkeit der generierten Satellitenbilder zeigte eine genauere Analyse, dass kleinere Strukturen im generierten Bild fehlten. Dies spiegelte sich im vergleichsweise niedrigen SSIM-Wert wider.
 \\\newline
-Bei einem Gewichtungsfaktor von $\lambda = 120$ wurden sowohl bei der visuellen Beurteilung als auch beim SSIM-Score die besten Ergebnisse erzielt.
+Bei einem Gewichtungsfaktor von $\lambda=120$ wurden sowohl bei der visuellen Beurteilung als auch beim SSIM-Score die besten Ergebnisse erzielt.
 Die Abbildung \ref{evaluation:cycleGan_Testergebnisse} zeigt einen Teil der Ergebnisse.
 Dieser spezifische Wert für $\lambda$ führte zu erzeugten Bildern, deren Signal-Rausch-Verhältnis (SNR) entweder besser oder nahezu gleich dem des Originalbildes war. Der SNR-Wert gibt das Verhältnis zwischen dem Signal, repräsentiert durch relevante Bildinformationen, und dem Rauschen, repräsentiert durch unerwünschte Störungen, an. Ein höherer SNR-Wert bedeutet eine bessere Bildqualität und Klarheit gegenüber dem Rauschen.
 
@@ -70,7 +70,7 @@ Dieser spezifische Wert für $\lambda$ führte zu erzeugten Bildern, deren Signa
     \centering
     \includegraphics[width=\linewidth]{images/cycleGanResults/Satelite1_diff.png}
   \end{subfigure}
-  \caption{Testergebnisse nach dem Training mit $\lambda=120$, Lernrate $=0.0002$ und $100$ Epochen}
+  \caption{Testergebnisse nach dem Training mit $\lambda=120$, Batchgröße$=1$, Lernrate $=0.0002$ und $100$ Epochen}
   \label{evaluation:cycleGan_Testergebnisse}
 \end{figure}
 
@@ -229,11 +229,11 @@ Trotz dieser Erfolge bleibt das Training instabil, und es besteht die Möglichke
 
 Die generierten Bilder zeigen bereits zu diesem Zeitpunkt eine grobe visuelle Ähnlichkeit mit der zugrunde liegenden Originalbildstruktur mit minimalen Abweichungen. Im SSIM-Score werden jedoch die Schwierigkeiten der Generatoren bei der Erzielung signifikanter Verbesserungen in Bezug auf feinere Details und Farbübereinstimmungen deutlich. Dies ist auch visuell an den Differenzbildern zu erkennen, die mit Hilfe eines Histogrammabgleichs kontrastverbessert wurden. Helle Bereiche in diesen Differenzbildern zeigen größere Unterschiede. Insbesondere bei kleinen pixelweisen Details sowie bei unterschiedlichen Farbkodierungen häufen sich die hellen Bereiche. Die Abbildung \ref{evaluation:cycleGan_Testergebnisse} zeigt ein solches Beispiel.
 \\
-Insbesondere in den frühen Epochen sind die Generatoren nicht in der Lage, Straßenlinien zuverlässig als gerade Linien zu generieren. Diese Schwächen verbessern sich mit zunehmender Trainingsdauer, so dass nach ca. 300 Epochen relativ konsistente Geraden erzeugt werden.
+Insbesondere in den frühen Epochen sind die Generatoren nicht in der Lage, Straßenlinien zuverlässig als gerade Linien zu generieren. Diese Schwächen verbessern sich mit zunehmender Trainingsdauer, so dass nach 300 Epochen relativ konsistente Geraden erzeugt werden.
 \\\newline
-Die Analyse des SSIM-Wertes in Abhängigkeit von der Zyklusübersetzung zeigt einen exponentiellen Anstieg. Diese Beobachtung deutet darauf hin, dass der Verlust der Zykluskonsistenz einen signifikanten Einfluss auf das Training hat. Der exponentielle Anstieg des SSIM-Wertes deutet darauf hin, dass die Konsistenz zwischen den Originalbildern und den rückübersetzten Bildern mit der Zeit kontinuierlich zunimmt. Dies kann auf eine kontinuierliche Verbesserung der Generatoren hinsichtlich ihrer Fähigkeit zur Zyklusübersetzung hindeuten. Insgesamt erreichen die SSIM-Scores für die Zyklusübersetzung Werte von $80\%$ für $Y$ und $90\%$ für $X$ (Abbildung \ref{evaluation:cycleGan_Metriken}).\\
+Die Analyse des SSIM-Wertes in Abhängigkeit von der Zyklusübersetzung zeigt einen exponentiellen Anstieg. Diese Beobachtung deutet darauf hin, dass der Verlust der Zykluskonsistenz einen signifikanten Einfluss auf das Training hat. Der exponentielle Anstieg des SSIM-Wertes deutet darauf hin, dass die Konsistenz zwischen den Originalbildern und den rückübersetzten Bildern mit der Zeit kontinuierlich zunimmt.
 
-\begin{table}
+\begin{table}[t]
 \centering
 \begin{tabular}{|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|}
 \hline
@@ -255,11 +255,11 @@ Die Analyse des SSIM-Wertes in Abhängigkeit von der Zyklusübersetzung zeigt ei
 100 & 300 & 0.0002   & 0.510 & 0.484 & 0.470 & 0.676 \\ \hline
 120 & 300 & 0.0002   & 0.508 & 0.495 & 0.468 & 0.709  \\ \hline
 \end{tabular}
-\caption{CycleGAN Ergebnisse unter verschiedenen Hyperparametern mit Batchgröße 1, Teil1}
+\caption{CycleGAN Ergebnisse unter verschiedenen Hyperparametern, Trainingsgenauigkeit (Tr-Acc), Testgenauigkeit (Te-Acc) der Diskriminatoren und Batchgröße 1, Teil1}
 \label{evaluation:cycleGan_table1}
 \end{table}
 
-\begin{table}
+\begin{table}[H]
 \centering
 \begin{tabular}{|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|}
 \hline
@@ -282,10 +282,11 @@ Die Analyse des SSIM-Wertes in Abhängigkeit von der Zyklusübersetzung zeigt ei
 34.881 & 20.899 & 0.577 & 0.191 & 0.931 & 0.756 & -2.705 & 1.373  \\ \hline
 46.652 & 26.360 & 0.585 & 0.207 & 0.901 & 0.707 & -3.409 & 1.248\\ \hline
 \end{tabular}
-\caption{CycleGAN Ergebnisse unter verschiedenen Hyperparametern mit Batchgröße 1, Teil2}
+\caption{CycleGAN Ergebnisse unter verschiedenen Hyperparametern, $F$ und $G$ Generatorverlust, SSIM und SSIM für Zyklusübersetzung (Z-SSIM) und  Batchgröße 1, Teil2}
 \label{evaluation:cycleGan_table2}
 \end{table}
 
+Dies kann auf eine kontinuierliche Verbesserung der Generatoren hinsichtlich ihrer Fähigkeit zur Zyklusübersetzung hindeuten. Insgesamt erreichen die SSIM-Scores für die Zyklusübersetzung Werte von $80\%$ für $Y$ und $90\%$ für $X$ (Abbildung \ref{evaluation:cycleGan_Metriken}).\\
 
 Im Gegensatz dazu bleibt die Genauigkeit der Diskriminatoren für die Trainingsdaten stabil bei etwa $50\%$. Für die Testdaten, insbesondere für $D_Y$, sind jedoch erhebliche Schwankungen in Abhängigkeit von der Epoche festzustellen. Dennoch liegt die Genauigkeit am Ende des Trainings in den meisten Fällen in einem nahezu optimalen Wertebereich (Abbildung \ref{evaluation:cycleGan_Metriken}). Dies deutet darauf hin, dass die Diskriminatoren möglicherweise Schwierigkeiten haben, mit neuen, untrainierten Daten umzugehen. Diese Schwankungen können auf eine Überanpassung oder eine mangelnde Generalisierungsfähigkeit des Modells hinweisen, trotz der implementierten Maßnahmen wie dem Hinzufügen von Rauschen und Dropout-Schichten.\\\newline
 Die Trainingszeit spiegelt die Komplexität der Modelle wider, insbesondere auf der GPU, wo jede Epoche im Durchschnitt etwa 2 Minuten dauert. Im Vergleich dazu benötigt die CPU, selbst nach Reduktion der Residualblöcke auf einen Block, etwa 6 Minuten pro Epoche. Die Verwendung der Instanznormalisierung trägt zur Beschleunigung der Konvergenz und zur Verbesserung der Laufzeit bei. Auch im Vergleich zu Generatoren mit zusätzlichen Schichten zeigt sich, dass die Verwendung von Restblöcken eine bessere Laufzeit ermöglicht. 

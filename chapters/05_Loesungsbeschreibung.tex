@@ -35,7 +35,7 @@ def random_jitter(image):
     return image
 \end{lstlisting}
 
-Diese Methode skaliert Bilder einfach und effizient, indem sie für jedes Pixel im skalierten Bild den Farbwert des nächstgelegenen Pixels im Originalbild übernimmt\footnote{\url{https://en.wikipedia.org/wiki/Nearest-neighbor_interpolation} \label{note:nearestNeighbor}}.
+Diese Methode skaliert Bilder einfach und effizient, indem sie füdr jedes Pixel im skalierten Bild den Farbwert des nächstgelegenen Pixels im Originalbild übernimmt\footnote{\url{https://en.wikipedia.org/wiki/Nearest-neighbor_interpolation} \label{note:nearestNeighbor}}.
 Nach dem Skalieren wird das Bild zufällig auf die Originalgröße reduziert und gleichzeitig mit einer Wahrscheinlichkeit von 50\% gespiegelt.
 Anschließend werden die Bildpfade mittels der $load\_image$-Funktion geladen und in das resultierende JPEG-Format decodiert (Code \ref{cod:imageLoading}).
 \\\newline
@@ -60,7 +60,7 @@ Um Überanpassung entgegenzuwirken, wird auf das Training mit umfangreichen Date
 Als Optimierungstechnik wird das Gradientenabstiegsverfahren angewendet, bei dem die Parameter in Richtung des negativen Gradienten der Verlustfunktion aktualisiert werden, um den Verlust zu minimieren. Die Parameter beider Modelle werden mittels korrespondierenden Optimizern aktualisiert. Die Lernrate der Optimizer bestimmt die Geschwindigkeit, mit der das Modell lernt, und sie wird sorgfältig abgestimmt, um eine stabile und konvergente Schulung sicherzustellen.
 
 In der Implementierung wird der Adam-Optimizer verwendet, eine gängige Wahl in der GAN-Literatur. Dieser Optimizer ist eine verbesserte Variante des stochastischen Gradientenabstiegsverfahrens und passt die Lernraten für jede Variable dynamisch an. Dadurch wird die Konvergenz des Trainingsprozesses beschleunigt und das Modell wird robuster gegenüber unterschiedlichen Lernraten \cite{Kingma.2014}.
-
+\newpage
 \begin{lstlisting}[language=pyhaff, caption={Initialisierung der Adam-Optimizers aus der Pix2Pix Implementierung}, label={cod:optimizer}]
 generator_optimizer = tf.keras.optimizers.Adam(learning_rate=0.0002, beta_1=0.5)
 discriminator_optimizer= tf.keras.optimizers.Adam(learning_rate=0.0002, beta_1=0.5)

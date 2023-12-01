@@ -16,7 +16,7 @@ Der SSIM-Score ist ein Maß für die visuelle Ähnlichkeit zwischen den generier
 \section{Ergebnisse und objektive Bewertung}
 In diesem Abschnitt liegt der Fokus auf der objektiven Bewertung der Leistung des CycleGAN-Algorithmus. Es werden verschiedene Metriken und Kriterien herangezogen, um eine umfassende Bewertung durchzuführen, einschließlich der Verluste der Generatoren und Diskriminatoren bei Variation der Hyperparameter. Darüber hinaus wird eine detaillierte Analyse der Genauigkeit der Diskriminatoren und des SSIM-Scores durchgeführt. Diese Messungen sind sowohl für die genaue Bestimmung der Qualität der generierten Ergebnisse als auch für die Bewertung der Lernfähigkeit der Modelle von Bedeutung.
 
-Die verwendeten Datensätze für die Evaluierung stammen aus dem Berkeley-Repository. Besondere Beachtung wird dem 'maps'-Datensatz geschenkt, bei dem Transformationen zwischen Kartenansichten und Satellitenbildern durchgeführt wurden. Das Training wurde mehrmals mit verschiedenen Hyperparameter-\\Konfigurationen durchgeführt, wobei Parameter wie der Lambda-Wert, die Anzahl der Epochen und die Lernrate des Optimizers variiert wurden. Ziel ist es, eine Konfiguration zu finden, bei der die Qualität der erzeugten Bilder nahe an der Qualität des Originals und die Leistung des Diskriminators optimal ist.
+Die verwendeten Datensätze für die Evaluierung stammen aus dem Berkeley-Repository. Besondere Beachtung wird dem 'maps'-Datensatz geschenkt, bei dem Transformationen zwischen Kartenansichten und Satellitenbildern durchgeführt wurden. Das Training wurde mehrmals mit verschiedenen Hyperparameter-\\Konfigurationen durchgeführt, wobei Parameter wie der $\lambda$-Wert, die Anzahl der Epochen und die Lernrate des Optimizers variiert wurden. Ziel ist es, eine Konfiguration zu finden, bei der die Qualität der erzeugten Bilder nahe an der Qualität des Originals und die Leistung des Diskriminators optimal ist.
 
 Die subjektive Bewertung erfolgt durch die visuelle Beurteilung der generierten Bilder aus dem Testdatensatz hinsichtlich stimmiger Farben, Struktur und Rauschen im Vergleich zu den Originalbildern. Darauf aufbauend erfolgt eine objektive Bewertung mithilfe der definierten Metriken.
 
@@ -60,7 +60,6 @@ Für das Training des Pix2Pix-Modells wurde der Adam-Optimierer mit einer initia
 		\caption*{Zielbild}
 		\includegraphics[width=\linewidth]{images/Pix2PixResults/Ziel-Bild2.png}
 	\end{subfigure}
-	\label{fig:StreePic}
 \end{figure}
 
 Die Evaluierung der Trainingsresultate des Pix2Pix-Modells basiert auf einer Analyse der 100 durchgeführten Trainingsepochen. Während des Durchlaufs dieser Epochen wurden spezifische Metriken wie Generator- und Diskriminator-Verluste sowie Diskriminator-Genauigkeit und der Structural Similarity Index Measure (SSIM) überwacht.\newline
@@ -102,7 +101,7 @@ Das Pix2Pix GAN-Modell demonstriert seine Stärken in der Umwandlung von Satelli
 Pix2Pix und CycleGAN sind beides Modelle von Generative Adversarial Networks, die für Bild-zu-Bild-Übersetzungen eingesetzt werden, jedoch unterscheiden sie sich wesentlich in ihrer Methodik und den Anwendungsbereichen aufgrund ihrer strukturellen Unterschiede.
 \\\newline
 Die Pix2Pix-Architektur verwendet typischerweise einen U-Net-basierten Generator und einen PatchGAN-Diskriminator, der auf die einzelnen Bildabschnitte einwirkt, um festzustellen, ob sie echt oder gefälscht sind. Diese Architektur ermöglicht eine effektivere Erfassung hochauflösender Details. 
-Der Diskriminator von CycleGAN basiert ebenfalls auf PatchGAN, verwendet jedoch Instanznormalisierung anstelle von Batchnormalisierung. Ein wesentlicher Unterschied besteht in den Generatoren. Diese basieren auf dem ResNet-Ansatz und erweitern Pix2Pix um einen Zykluskonsistenzverlust. Dieser stellt sicher, dass das Eingabebild in die Zieldomäne übersetzt und anschließend wieder in die Ursprungsdomäne zurückübersetzt wird, ohne dass der ursprüngliche Inhalt verloren geht. Diese bidirektionale Struktur soll helfen, die Mode-Kollapse zu vermeiden, und stellt sicher, dass der Generator vielfältige Ausgaben erzeugt.
+Der Diskriminator von CycleGAN basiert ebenfalls auf PatchGAN, verwendet jedoch Instanznormalisierung anstelle von Batchnormalisierung. Ein wesentlicher Unterschied besteht in den Generatoren. Diese basieren auf dem ResNet-Ansatz und erweitern Pix2Pix um einen Zykluskonsistenzverlust. Dieser stellt sicher, dass das Eingabebild in die Zieldomäne übersetzt und anschließend wieder in die Ursprungsdomäne zurückübersetzt wird, ohne dass der ursprüngliche Inhalt verloren geht. Diese bidirektionale Struktur soll helfen, die Modekollapse zu vermeiden, und stellt sicher, dass der Generator vielfältige Ausgaben erzeugt.
 \\\newline
 Pix2Pix benötigt paarweise Trainingsdaten. Das bedeutet, dass jedes Trainingsbeispiel aus einem korrespondierenden Bildpaar, einem Eingabe- und einem Zielbild, besteht. Daher eignet sich das Pix2Pix-Modell besonders für Aufgaben, bei denen eine strukturierte und koordinierte Beziehung zwischen Eingabe- und Ausgabebild besteht, wie bei der Umwandlung von Satellitenbildern in Karten oder beim Einfärben von Schwarzweißfotos. 
 Im Gegensatz dazu ist CycleGAN für die Arbeit mit ungepaarten Trainingsdaten konzipiert, die das Lernen von Übersetzungen ohne eine Eins-zu-Eins-Zuordnung zwischen Quell- und Zielbildern ermöglichen. Dies ist besonders nützlich für Stiltransformationen, beispielsweise für Pferde in Zebras oder Äpfel in Orangen, für die es keine gepaarten Beispiele gibt. Des Weiteren wird eine größere Flexibilität und Unabhängigkeit spezifischer Datensätze ermöglicht.
@@ -132,7 +131,7 @@ Die Testgenauigkeit bei Pix2Pix ist mit $37.5\%$ dagegen niedrig, obwohl die Tra
 	  \includegraphics[width=\linewidth]{images/cycleGanResults/Maps6Ld120_E100_Lr0002.jpg}
 	\end{subfigure}
 	\begin{subfigure}[t]{.2\textwidth}
-	  \caption*{Output}
+	  \caption*{Zielbild}
 	  \centering
 	  \includegraphics[width=\linewidth]{images/cycleGanResults/Maps6_Or_Ld120_E100_Lr0002.jpg}
 	\end{subfigure}
@@ -201,7 +200,7 @@ Die Testgenauigkeit bei Pix2Pix ist mit $37.5\%$ dagegen niedrig, obwohl die Tra
 
 
 
-Des Weiteren ist die Komplexität der Pix2Pix-Architektur aufgrund der 6-mal schnelleren Laufzeit geringer. Darüber hinaus wurde festgestellt, dass die Anpassung der Hyperparameter und die Stabilität gegenüber Mode-Kollapse bei CycleGAN schwieriger sind als bei Pix2Pix.
+Des Weiteren ist die Komplexität der Pix2Pix-Architektur aufgrund der 6-mal schnelleren Laufzeit geringer. Darüber hinaus wurde festgestellt, dass die Anpassung der Hyperparameter und die Stabilität gegenüber Modekollapse bei CycleGAN schwieriger sind als bei Pix2Pix.
 \\\newline
 Aufgrund der direkten Korrespondenz zwischen Eingangs- und Ausgangsbildern zeigt Pix2Pix bessere Tendenzen bei der Projektion von Farbkodierungen als CycleGAN. Letzteres hat bereits große Schwierigkeiten, die richtige Stelle für die Farbkodierung zu finden. 
 Andererseits ist es mit den beiden Generatoren von CycleGAN möglich, nach dem Training beide Bilddomänen abzubilden, während Pix2Pix auf die Abbildung nur einer Bilddomäne beschränkt ist. Die Wahl zwischen Pix2Pix und CycleGAN hängt daher stark von den verfügbaren Daten und den spezifischen Anforderungen der jeweiligen Aufgabe ab.

@@ -2,9 +2,9 @@
 \subsection{Generator}
 
 Die Struktur des Generator in der Pix2Pix-Implementierung ist ein wesentlicher Aspekt, der die Leistungsfähigkeit des Modells bestimmt. Der Generator ist als U-Net-Architektur aufgebaut, die aus dem Encoder und Decoder bestehen die wiederum  aufeinanderfolgende Downsampling- und Upsampling-Schritten beinhalten.
-\newline
 Im Encoder-Teil des Generators wird das Downsampling durch eine Reihe von Convolutional Neuronal Network (CNN) Schichten realisiert, die durch die downsample-Funktion innerhalb des downstack definiert sind (Code \ref{cod:Encoder}). 
-\begin{lstlisting}[language=pyhaff, caption={Downsampling-Schritt in Pix2Pix}, 		label={cod:Encoder}]
+\newpage
+\begin{lstlisting}[language=pyhaff, caption={Downsampling-Schritt in Pix2Pix},label={cod:Encoder}]
 	down_stack = [
 	downsample(64, 4, apply_batchnorm=False),  # (batch_size, 128, 128, 64)
 	downsample(128, 4),  # (batch_size, 64, 64, 128)
@@ -16,9 +16,8 @@ Im Encoder-Teil des Generators wird das Downsampling durch eine Reihe von Convol
 	downsample(512, 4),  # (batch_size, 1, 1, 512)
 	]
 \end{lstlisting}
-
-Die downsample-Funktion erstellt eine Downsampling-Schicht, die mittels einer Conv2D-Schicht mit spezifischen Filtern und Kernel-Größen die räumlichen Dimensionen der Eingabebilder reduziert. Zur Verbesserung der Stabilität und Leistungsfähigkeit des Modells integriert die Funktion optional eine Batch-Normalisierung. Diese Normalisierung reguliert und standardisiert die Ausgabe der Conv2D-Schicht, was dazu beiträgt, das Training effizienter zu gestalten.
-Darüber hinaus beinhaltet die Funktion eine LeakyReLU-Aktivierung, eine Variation der herkömmlichen ReLU-Aktivierungsfunktion. LeakyReLU ermöglicht es, dass auch für negative Eingabewerte ein kleiner Gradient erhalten bleibt, wodurch das Problem der inaktiven Neuronen, bekannt als "sterbende ReLUs", vermieden wird (Code \ref{cod:Encoder-Function}).
+Die downsample-Funktion erstellt eine Downsampling-Schicht, die mittels einer Conv2D-Schicht mit spezifischen Filtern und Kernel-Größen die räumlichen Dimensionen der Eingabebilder reduziert. Zur Verbesserung der Stabilität und Leistungsfähigkeit des Modells integriert die Funktion optional eine Batch-\\Normalisierung. Diese Normalisierung reguliert und standardisiert die Ausgabe der Conv2D-Schicht, was dazu beiträgt, das Training effizienter zu gestalten.
+Darüber hinaus beinhaltet die Funktion eine LeakyReLU-Aktivierung, eine Variation der herkömmlichen ReLU-Aktivierungsfunktion. LeakyReLU ermöglicht es, dass auch für negative Eingabewerte ein kleiner Gradient erhalten bleibt, wodurch das Problem der inaktiven Neuronen, bekannt als ''sterbende ReLUs'', vermieden wird (Code \ref{cod:Encoder-Function}).
 
 \begin{lstlisting}[language=pyhaff, caption={Downsampling-Schicht in Pix2Pix}, label={cod:Encoder-Function}]
 def downsample(filters, size, apply_batchnorm=True):
@@ -32,7 +31,6 @@ def downsample(filters, size, apply_batchnorm=True):
 	
 	result.add(tf.keras.layers.LeakyReLU())
 	return result
-	
 \end{lstlisting}
 
 
@@ -50,7 +48,7 @@ up_stack = [
 ]
 \end{lstlisting}
 
-Die upsampling-Funktion verwendet eine spezielle Art von Convolutional Layer, die Conv2DTranspose-Schicht, um die Bildgröße zu erhöhen. Diese Schicht kehrt den Prozess einer Convolutional Layer Schicht um, indem sie die Eingabedaten expandiert, was für das Wiederherstellen einer größerem Bildgröße im Generator unerlässlich ist. Zusätzlich zur Conv2DTranspose-Schicht integriert die upsample-Funktion eine Batch-Normalisierung, die zur Stabilisierung des Lernprozesses beiträgt, indem sie die Ausgaben der Conv2DTranspose-Schicht normalisiert (Code \ref{cod:Decoder-Function}). 
+Die upsampling-Funktion verwendet eine spezielle Art von Convolutional Layer, die Conv2DTranspose-Schicht, um die Bildgröße zu erhöhen. Diese Schicht kehrt den Prozess einer Convolutional Layer Schicht um, indem sie die Eingabedaten expandiert, was für das Wiederherstellen einer größerem Bildgröße im Generator unerlässlich ist. Zusätzlich zur Conv2DTranspose-Schicht integriert die upsample-Funktion eine Batch-\\Normalisierung, die zur Stabilisierung des Lernprozesses beiträgt, indem sie die Ausgaben der Conv2DTranspose-Schicht normalisiert (Code \ref{cod:Decoder-Function}). 
 
 \begin{lstlisting}[language=pyhaff, caption={Upsampling-Schritt in Pix2Pix}, label={cod:Decoder-Function}]
 def upsample(filters, size, apply_dropout=True):
@@ -98,6 +96,7 @@ Schließlich wird das endgültige Bild durch die letzte Schicht des Generators e
 
 \subsection{Diskriminator}
 Der Diskriminator im Pix2Pix-Modell ist eine tiefgehende neuronale Netzarchitektur, die zwei Eingabebilder - ein Eingabebild und ein Zielbild - verarbeitet. Diese Bilder werden entlang ihrer Farbkanäle zu einem einzigen Bild kombiniert. Anschließend durchläuft das Bild eine Reihe von Downsampling-Schritten mittels Convolutional Layern, um die räumliche Auflösung zu reduzieren und wichtige Bildmerkmale zu extrahieren. Nach mehreren Downsampling-Phasen folgt eine entscheidende Verarbeitungsschicht, die die Bildmerkmale weiter analysiert und normalisiert. Der finale Output des Diskriminators erfolgt durch einen spezialisierten Convolutional Layer, der eine Patch-basierte Bewertung des Bildes vornimmt. Diese Patch-basierte Analyse ist zentral für die Funktionsweise des Diskriminators, indem sie es ihm ermöglicht, die Echtheit jedes Bildbereichs unabhängig zu bewerten, was ein Schlüsselelement der PatchGAN-Architektur ist. Insgesamt handelt es sich um ein komplexes System zur Bildanalyse, das speziell für die Aufgabe der Bild-zu-Bild-Übersetzung entwickelt wurde (Code \ref{cod:Diskriminator}).
+\newpage
 
 \begin{lstlisting}[language=pyhaff, caption={Diskriminator Pix2Pix}, label={cod:Diskriminator}]
 def Discriminator():
@@ -124,7 +123,7 @@ def Discriminator():
 	return tf.keras.Model(inputs=[inp, tar], outputs=patch_out)
 \end{lstlisting}
 
-
+\newpage
 \subsection{Verlustfunktion}
 \subsubsection{Generatorverlust}
 Der Generatorverlust im Pix2Pix-Modell besteht aus zwei wesentlichen Komponenten: dem adversariellen Verlust ($gan\_loss$) und dem L1-Verlust ($l1\_loss$). Der adversarielle Verlust wird durch Anwendung der $BinaryCrossentropy$-Funktion von TensorFlow ermittelt. Hierbei wird die Ausgabe des Diskriminators für generierte Bilder ($disc\_generated\_output$) mit einem Tensor, der ausschließlich aus Einsen besteht, verglichen. Dies dient dazu, die Effektivität des Generators bei der Erzeugung von Bildern zu bewerten, die für den Diskriminator von echten Bildern nicht unterscheidbar sind. Der L1-Verlust hingegen berechnet den mittleren absoluten Fehler zwischen dem vom Generator erzeugten Bild ($gen\_output$) und dem tatsächlichen Zielbild ($target$). Dieser Verlust trägt maßgeblich dazu bei, die inhaltliche Übereinstimmung und Ähnlichkeit des generierten Bildes mit dem Zielbild zu fördern. \newline

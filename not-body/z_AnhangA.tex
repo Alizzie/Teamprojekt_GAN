@@ -77,7 +77,7 @@ def cycle_loss(real_image, cycled_image):
   loss1 = tf.reduce_mean(tf.abs(real_image - cycled_image))
   return LAMBDA * loss1
 \end{lstlisting}
-
+\newpage
 \begin{lstlisting}[language=pyhaff, caption={Identitätsverlust in CycleGAN}, label={cod:identityLoss}]
 def identity_loss(real_image, same_image):
   loss = tf.reduce_mean(tf.abs(real_image - same_image))
