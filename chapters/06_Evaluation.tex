@@ -92,7 +92,7 @@ Bemerkenswert ist der Anstieg des SSIM-Wertes nach der 80. Epoche, was zeitlich 
 \end{figure}
 
 Das Pix2Pix GAN-Modell demonstriert seine Stärken in der Umwandlung von Satellitenbildern zu Karten, mit besonderer Kompetenz in der Darstellung von Straßenstrukturen. Trotzdem stößt es bei der Generierung komplexerer Elemente wie Grünflächen und Wasser auf Herausforderungen. Die Feinabstimmung der Hyperparameter, einschließlich einer geringen Batchgröße und einer spezifischen Anpassung des Lambda-Wertes, hat die Trainingseffizienz verbessert, was sich in einem erhöhten SSIM-Score niederschlägt. Allerdings weist die hohe Diskriminatorgenauigkeit von über 90$\%$ darauf hin, dass das Modell weiter optimiert werden muss, um ein Gleichgewicht zwischen Generator und Diskriminator zu erlangen. Hervorzuheben ist die signifikante Zeitersparnis durch die Verwendung einer GPU im Vergleich zur CPU: Während eine Epoche auf der CPU 320 Sekunden dauert, wird diese Zeit auf der GPU auf nur 20 Sekunden reduziert.
-
+\newpage
 \subsection{CycleGAN}
 \input{chapters/cycleGan_evaluation}
 
@@ -114,6 +114,7 @@ Die Testgenauigkeit bei Pix2Pix ist mit $37.5\%$ dagegen niedrig, obwohl die Tra
 \\
 
 \begin{figure}
+	\centering
 	\begin{subfigure}[t]{.2\textwidth}
 	  \caption*{Input}
 	  \centering

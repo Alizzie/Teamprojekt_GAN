@@ -6,10 +6,9 @@ Die Architektur der Generatoren in CycleGAN spielt eine entscheidende Rolle bei 
 	\centering
 	\includegraphics[width=0.8\linewidth]{./images/cycleGanGeneratorArchitecture.png}
 	\caption{Eine Architektur eines CycleGAN Generator. Instanznormalisierung und ReLU Aktivierung erfolgt nach jeder Schicht
-	\protect\footnotemark}
+	\protect\footnote{\url{https://towardsdatascience.com/cyclegan-learning-to-translate-images-without-paired-training-data-5b4e93862c8d}}}
 	\label{fig:cycleGanGeneratorArchitecture}
 \end{figure}
-\footnote[1]{https://towardsdatascience.com/cyclegan-learning-to-translate-images-without-paired-training-data-5b4e93862c8d}
 
 Im Rahmen der Architektur von Zhu et al. manifestiert sich der Generator im CycleGAN in drei zentralen Abschnitten, wie graphisch in Abbildung \ref{fig:cycleGanGeneratorArchitecture} illustriert. Der Encoder besteht aus drei Convolutional-Schichten, welche unmittelbar auf das Eingabebild einwirken und dabei die Repräsentationsgröße reduzieren, sowie die Kanalanzahl erhöhen. Das resultierende Bild unterzieht sich einem Transformer, zusammengesetzt aus mehreren Residualblöcken. Die aus dieser Transformation hervorgehende Repräsentation durchläuft den Decoder, welcher aus zwei Transpose-Convolutional-Schichten besteht und somit das Bild erneut vergrößert. Die finale RGB-Ausgabe wird durch eine Ausgabeschicht generiert. Jede dieser Schichten ist mit einer Instanznormalisierung und ReLU-Aktivierung versehen, was sowohl die Trainingsstabilität fördert, als auch die Qualität der generierten Bilder optimiert\cite{Ulyanov.2016,Nair.2010}. 
 \\
@@ -29,7 +28,7 @@ In Pix2Pix ist die gängige Architektur für Diskriminatoren ein PatchGAN, bei d
 In den Implementierungen von CycleGAN wird im Unterschied zu Pix2Pix auf die Verwendung von Batch-Normalisierung verzichtet, und stattdessen wird Instanznormalisierung bevorzugt. Bei der Instanznormalisierung wird jedes Bild individuell betrachtet, ohne Berücksichtigung über die gesamte Batch-Dimension hinweg. Dieser Ansatz bietet eine effektivere Stilübertragung im Feed-Forward-Modus und weist eine schnellere Konvergenz auf im Vergleich zur Batch Normalisierung \cite{Huang.2017}. Eine mögliche Architektur ist in Abbildung \ref{fig:PatchGANDiskriminator} veranschaulicht.
 
 \subsubsection{Training}
-Das Training von CycleGAN erfolgt nach einem kompetitiven Verfahren. Die Generatoren $G:X\rightarrow Y$ und $F:Y\rightarrow X$ konkurrieren mit den entsprechenden Diskriminatoren $D_X$ und $D_Y$. $D_X$ versucht, die von $F$ erzeugten Bilder von den echten Bildern aus $X$ zu unterscheiden, während $D_Y$ versucht, die von $G$ erzeugten Bilder von den echten Bildern aus der Domäne $Y$ zu unterscheiden \ref{fig:cycleConsistency}. Die adversen Verluste sind so optimiert, dass die erzeugten Bilder für die Diskriminatoren kaum von den echten Bildern zu unterscheiden sind. \cite{Zhu.2017}.
+Das Training von CycleGAN erfolgt nach einem kompetitiven Verfahren. Die Generatoren $G:X\rightarrow Y$ und $F:Y\rightarrow X$ konkurrieren mit den entsprechenden Diskriminatoren $D_X$ und $D_Y$. $D_X$ versucht, die von $F$ erzeugten Bilder von den echten Bildern aus $X$ zu unterscheiden, während $D_Y$ versucht, die von $G$ erzeugten Bilder von den echten Bildern aus der Domäne $Y$ zu unterscheiden (Abbildung \ref{fig:cycleConsistency}). Die adversen Verluste sind so optimiert, dass die erzeugten Bilder für die Diskriminatoren kaum von den echten Bildern zu unterscheiden sind. \cite{Zhu.2017}.
 
 \subsubsection{Cycle - Konsistenz}
 CycleGAN führt zusätzlich eine Cycle-Konsistenz ein. Diese stellt sicher, dass die Übersetzungen zwischen den Domänen sowohl vorwärts ($X$ nach $Y$), als auch rückwärts ($Y$ nach $X$) konsistent sind. Dies ist in der Abbildung \ref{fig:cycleConsistency} dargestellt.
@@ -50,7 +49,7 @@ Durch die Einführung dieser zyklischen Konsistenz stellt ein Ansatz zur Lösung
 \subsubsection{Identity - Loss}
 Zusätzlich zu den adversariellen und zyklischen Verlusten kann ein Identitätsverlust in die Gesamtverlustfunktion integriert werden, um sicherzustellen, dass die Farbkomposition des Eingabebildes beibehalten wird, während es ins Ausgabebild übersetzt wird. Insbesondere bei der Erstellung von Fotografien aus Gemälden hat sich diese Methode bewährt.  
 Wenn der Generator $G$ ein Bild aus dem Bereich $Y$ erhält, darf es sich aufgrund seiner bereits vorhandenen Zugehörigkeit zu diesem Bereich nicht mehr verändern. Diese Unveränderlichkeit ist visuell veranschaulicht in Abbildung \ref{fig:IdentityMapping}.
-Der Verlust wird dabei mittels des L1-Verlust ermittelt, bei dem die Differenz zwischen den Pixeln des generierten Bildes $G(y)$ und dem Referenzbild $y\in Y$ erfasst wird. Das gleiche Verfahren wird für den anderen Generator $F$ angewendet \cite{Zhu.2017}
+Der Verlust wird dabei mittels des L1-Verlust ermittelt, bei dem die Differenz zwischen den Pixeln des generierten Bildes $G(y)$ und dem Referenzbild $y\in Y$ erfasst wird. Das gleiche Verfahren wird für den anderen Generator $F$ angewendet \cite{Zhu.2017}.
 
 \begin{figure}[h]
 	\centering
@@ -67,6 +66,6 @@ Ein weiterer bedeutender Anwendungsbereich von CycleGAN ist die Gesichtsalterung
 
 In der Stenografie eröffnet CycleGAN ebenfalls interessante Anwendungsmöglichkeiten. Hier kann es genutzt werden, um Satellitenbilder in Karten von Google Maps umzuwandeln und umgekehrt. Diese Anwendung zeigt die Anpassungsfähigkeit des Modells im Umgang mit unterschiedlichen Datenmodalitäten \cite{Chu.2017}.
 
-Darüber hinaus spielt CycleGAN eine bedeutende Rolle in der medizinischen Bildverarbeitung, indem es die Möglichkeit bietet, Bilder von einer Bildgebungsmodalität in eine andere zu übersetzen, um die Diagnose zu verbessern. Bemerkenswerte Erfolge wurden bereits in der Synthese von MRT-Bildern des Beckenbereichs zu CT-Bildern erzielt \cite{Liu.2021}.
+Darüber hinaus spielt CycleGAN eine bedeutende Rolle in der medizinischen Bildverarbeitung, indem es die Möglichkeit bietet, Bilder von einer Bildgebungsmodalität in eine andere zu übersetzen, um die Diagnose zu verbessern. Erfolge wurden bereits in der Synthese von MRT-Bildern des Beckenbereichs zu CT-Bildern erzielt \cite{Liu.2021}.
 
 Die Flexibilität und Vielseitigkeit von CycleGAN machen es zu einem bedeutenden Werkzeug in der Bildverarbeitung, das innovative Möglichkeiten in verschiedenen Branchen eröffnet. Die fortlaufende Erforschung und Anwendung dieses Modells versprechen weiterhin bedeutende Fortschritte in der digitalen Bildtransformation und -interpretation.
