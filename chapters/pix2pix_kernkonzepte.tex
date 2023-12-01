@@ -22,12 +22,11 @@ Im Kontext von Pix2Pix GANs, spielt der PatchGAN-Diskriminator eine besonders wi
 Ein solches Vorgehen hat den klaren Vorteil, dass feinere Strukturen und Details in den Bildern erkannt und beurteilt werden können. Durch diese segmentierte Beurteilung kann der Diskriminator besser einschätzen, ob die Struktur und Beschaffenheit eines bestimmten Bildteils realistisch ist. Dies ist besonders nützlich, da kleinere Unstimmigkeiten in den Bildern, die ein allgemeiner Diskriminator möglicherweise übersieht, vom PatchGAN erfasst werden können. \newline
 Ein weiterer Vorteil des PatchGAN-Diskriminators ist seine Skalierbarkeit. Da er auf festen Patchgrößen basiert, kann er flexibel auf Bilder unterschiedlicher Größen angewendet werden, ohne dass das zugrunde liegende Modell geändert werden muss. Dies führt nicht nur zu einer schnelleren Bildverarbeitung, sondern ermöglicht auch eine effiziente Ausführung auf großen Bildern. Darüber hinaus reduziert es potenzielle Kachelartefakte, die bei allgemeinen Diskriminatoren auftreten können \cite{PhillipIsola.}.\newline
 Der PatchGAN-Diskriminator kann wenn er effektiv eingesetzt wird, zu besseren und realistischeren Bildern im adverseriellen Lernprozess beitragen. Seine Fähigkeit, lokale Bildinformationen zu bewerten, ermöglicht es auch subtile Unterschiede in den Bildern zu erkennen, was zu einer verbesserten Qualität der generierten Bilder führt \cite{PhillipIsola.}.
-\footnote[1]{https://towardsdatascience.com/cyclegan-learning-to-translate-images-without-paired-training-data-5b4e93862c8d}
 
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=0.7\linewidth]{./images/cycleGanDiscriminatorArchitecutre.png}
-	\caption{Eine mögliche Architektur eines PatchGAN Diskriminator\protect\footnotemark[1]}
+	\caption{Eine mögliche Architektur eines PatchGAN Diskriminator\protect\footnote{\url{https://towardsdatascience.com/cyclegan-learning-to-translate-images-without-paired-training-data-5b4e93862c8d}}}
 	\label{fig:PatchGANDiskriminator}
 \end{figure}
 \newpage

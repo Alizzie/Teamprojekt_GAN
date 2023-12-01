@@ -1,34 +1,34 @@
 \chapter{Grundlagen}
 
 \section{Generative Adversarial Networks}
-Generative Adversarial Networks, kurz GANs, sind eine aufstrebende Technologie im Bereich des maschinellen Lernens und der künstlichen Intelligenz. Inspiriert von Ian Goodfellow und seinen Kollegen im Jahr 2014, bieten GANs eine effiziente Möglichkeit, tiefe Repräsentationen von Daten zu erlernen, ohne dass große Mengen an annotierten Trainingsdaten benötigt werden\cite{Creswell.2018}. 
+Generative Adversarial Networks, kurz GANs, sind eine aufstrebende Technologie im Bereich des maschinellen Lernens und der künstlichen Intelligenz. Inspiriert von Ian Goodfellow und seinen Kollegen im Jahr 2014, bieten GANs eine effiziente Möglichkeit, tiefe Repräsentationen von Daten zu erlernen, ohne dass große Mengen an annotierten Trainingsdaten benötigt werden \cite{Creswell.2018}. 
 Dies wird durch die Verwendung von Backpropagation und den Wettbewerb zwischen zwei neuronalen Netzen - dem Generator und dem Diskriminator - erreicht. 
 Daraus ergeben sich zahlreiche neue Ansätze zur Generierung realistischer Inhalte. 
 Die Anwendungen reichen von der Bildgenerierung bis hin zur Superauflösung und Textgenerierung \cite{Aggarwal.2021}.
 
 \subsection{Funktionsweise}
-Der Generator und der Diskriminator sind die Hauptkomponenten eines GAN. Die beiden neuronalen Netze werden gleichzeitig trainiert und konkurrieren miteinander, wobei der Generator versucht, den Diskriminator zu täuschen, indem er synthetische Inhalte erzeugt. Um die Glaubwürdigkeit des Generators zu erhöhen, so dass der Diskriminator nicht mehr zwischen den Eingaben unterscheiden kann, wird das gesamte Netz trainiert. Die Netze werden in der Regel als mehrschichtige Netzwerke implementiert, die aus Convolutional und Fully-Connected Schichten bestehen\cite{Creswell.2018}.
+Der Generator und der Diskriminator sind die Hauptkomponenten eines GAN. Die beiden neuronalen Netze werden gleichzeitig trainiert und konkurrieren miteinander, wobei der Generator versucht, den Diskriminator zu täuschen, indem er synthetische Inhalte erzeugt. Um die Glaubwürdigkeit des Generators zu erhöhen, so dass der Diskriminator nicht mehr zwischen den Eingaben unterscheiden kann, wird das gesamte Netz trainiert. Die Netze werden in der Regel als mehrschichtige Netzwerke implementiert, die aus Convolutional und Fully-Connected Schichten bestehen \cite{Creswell.2018}.
 
 \subsubsection*{Generator}
 Der Generator dient zur Erzeugung künstlicher Daten wie Bilder und Texte. 
-Der Generator ist nicht mit dem realen Datensatz verbunden und lernt daher nur durch die Interaktion mit dem Diskriminator. Wenn der Diskriminator nur noch 50\% der Eingaben richtig vorhersagt, gilt der Generator als optimal\cite{Creswell.2018}.
+Dieser ist nicht mit dem realen Datensatz verbunden und lernt daher nur durch die Interaktion mit dem Diskriminator. Wenn der Diskriminator nur noch 50\% der Eingaben richtig vorhersagt, gilt der Generator als optimal \cite{Creswell.2018}.
 
 \subsubsection*{Diskriminator}
 Die Unterscheidung zwischen echten und unechten Eingaben ist Aufgabe des Diskriminators. Der Diskriminator kann sowohl künstliche als auch reale Daten verwenden. 
-Wenn der Diskriminator nicht mehr richtig unterscheiden kann, wird er als konvergierend bezeichnet\cite{Aggarwal.2021}. Andernfalls wird er als optimal bezeichnet, wenn seine Klassifizierungsgenauigkeit maximiert ist. Im Falle eines optimalen Diskriminators wird das Training des Diskriminators gestoppt und der Generator trainiert alleine weiter, um die Genauigkeit des Diskriminators wieder zu verbessern\cite{Creswell.2018}.
+Wenn der Diskriminator nicht mehr richtig unterscheiden kann, wird er als konvergierend bezeichnet \cite{Aggarwal.2021}. Andernfalls wird er als optimal bezeichnet, wenn seine Klassifizierungsgenauigkeit maximiert ist. Im Falle eines optimalen Diskriminators wird das Training des Diskriminators gestoppt und der Generator trainiert alleine weiter, um die Genauigkeit des Diskriminators wieder zu verbessern \cite{Creswell.2018}.
 
 \subsection{Training}
-Das Training besteht in der Optimierung der Parameter für sowohl den Generator als auch den Diskriminator durch die Anwendung von Backpropagation zur Verbesserung dieser Parameter. Dieses Verfahren wird häufig als anspruchsvoll und instabil beschrieben. Einerseits gestaltet sich die Herausforderung, beide Modelle konvergieren zu lassen. Andererseits besteht die Problematik darin, dass der Generator Muster erzeugen kann, die für verschiedene Eingaben äußerst ähnlich sind, was als "Mode-Collapse-Problem" bekannt ist. Der Diskriminatorverlust kann sich rasch gegen Null konvergieren, wodurch ein zuverlässiger Gradientenfluss für die Aktualisierung des Generators verhindert wird.
+Das Training besteht in der Optimierung der Parameter für sowohl den Generator als auch den Diskriminator durch die Anwendung von Backpropagation zur Verbesserung dieser Parameter. Dieses Verfahren wird häufig als anspruchsvoll und instabil beschrieben. Einerseits gestaltet sich die Herausforderung, beide Modelle konvergieren zu lassen. Andererseits besteht die Problematik darin, dass der Generator Muster erzeugen kann, die für verschiedene Eingaben äußerst ähnlich sind, was als ''Modekollaps-Problem'' bekannt ist. Der Diskriminatorverlust kann sich rasch gegen Null konvergieren, wodurch ein zuverlässiger Gradientenfluss für die Aktualisierung des Generators verhindert wird.
 Zur Bewältigung dieser Herausforderungen wurden verschiedene Lösungsansätze vorgeschlagen. Ein Beispiel ist die Verwendung heuristischer Verlustfunktionen. Eine alternative Strategie, die von Sonderby et al. vorgeschlagen wurde, besteht darin, den Datensatz vor der Verwendung zu verrauschen \cite{Creswell.2018}.
 
 \subsubsection*{Adversarieller Verlust}
-Der adversarielle Verlust, auch als GAN-Verlust bekannt, spielt eine zentrale Rolle im Trainingsprozess. Dieser Verlust basiert auf dem Konzept des Minimax-Spiels zwischen dem Generator und dem Diskriminator. Der Generator strebt danach, den Diskriminator zu überlisten und Daten zu erzeugen, die von echten Daten nicht zu unterscheiden sind. Gleichzeitig ist es das Ziel des Diskriminators, zwischen echten und generierten Daten zu differenzieren. Der adversarielle Verlust wird in der Gleichung 2.1 repräsentiert.
+Der adversarielle Verlust, auch als GAN-Verlust bekannt, spielt eine zentrale Rolle im Trainingsprozess. Dieser Verlust basiert auf dem Konzept des MinMax-Spiels zwischen dem Generator und dem Diskriminator. Der Generator strebt danach, den Diskriminator zu überlisten und Daten zu erzeugen, die von echten Daten nicht zu unterscheiden sind. Gleichzeitig ist es das Ziel des Diskriminators, zwischen echten und generierten Daten zu differenzieren. Der adversarielle Verlust wird in der Gleichung 2.1 repräsentiert.
 
 \begin{equation}
     \min_G \max_D V(D, G) = \mathbb{E}_{x\sim p_{\text{data}}(x)}[\log D(x)] + \mathbb{E}_{z\sim p_z(z)}[\log(1 - D(G(z)))]
 \end{equation}
 
-Hierbei bezeichnet $G$ den Generator, $D$ den Diskriminator, $x$ echte Daten, $z$ das Rauschen und $p_{data}$ sowie $p_z$ die Wahrscheinlichkeitsverteilungen von echten Daten und Rauschen. Der Minimax-Ansatz impliziert, dass der Generator versucht, den Verlust zu minimieren, während der Diskriminator versucht, ihn zu maximieren. Eine gezielte Optimierung und Anpassung des adversariellen Verlusts ist entscheidend, um Herausforderungen wie dem Mode-Collapse-Problem und den Konvergenzproblemen zu begegnen \cite{Hong.2020}.
+Hierbei bezeichnet $G$ den Generator, $D$ den Diskriminator, $x$ echte Daten, $z$ das Rauschen und $p_{data}$ sowie $p_z$ die Wahrscheinlichkeitsverteilungen von echten Daten und Rauschen. Der MinMax-Ansatz impliziert, dass der Generator versucht, den Verlust zu minimieren, während der Diskriminator versucht, ihn zu maximieren. Eine gezielte Optimierung und Anpassung des adversariellen Verlusts ist entscheidend, um Herausforderungen wie dem Modekollaps Problem und den Konvergenzproblemen zu begegnen \cite{Hong.2020}.
 
 \subsection{Anwendungen}
 GANs wurden ursprünglich im Kontext des unüberwachten maschinellen Lernens konzipiert, haben jedoch herausragende Leistungen sowohl im halbüberwachten Lernen als auch im Reinforcement Learning gezeigt \cite{Aggarwal.2021}. Diese Vielseitigkeit hat dazu geführt, dass GANs in verschiedenen Domänen wie dem Gesundheitswesen und dem Bankwesen Anwendung finden.
@@ -41,8 +41,8 @@ Des Weiteren wurden Forschungsanstrengungen unternommen, um mittels GANs menschl
 Die Vielseitigkeit von GANs eröffnet somit ein breites Spektrum an Potenzialen für verschiedene Anwendungsbereiche.
 
 \subsection{Limitationen}
-Ein kritisches Problem von GANs ist die Instabilität des Trainings aufgrund von Mode-Collapse, was die Weiterentwicklung des generativen Lernens und potentielle Anwendungen einschränkt\cite{Liu.2022}. Der Generator lernt nur Bilder bestimmter Arten der Datenverteilung.  Andere Arten, die ebenfalls in der Verteilung vorkommen, werden hingegen vernachlässigt\cite{Srivastava.2017}. Ansätze wie das Hinzufügen von Rauschen zum Netzwerk, eine Manifold Entropy Estimation \cite{Liu.2022} und implizites Variationslernen \cite{Srivastava.2017} wurden bereits vorgeschlagen, um dieses Problem zu lösen.
-Des Weiteren birgt die Fähigkeit eines GANs zur Generierung von Inhalten, die nahezu identisch mit authentischen Inhalten sind, potenzielle Herausforderungen in realen Szenarien, insbesondere im Zusammenhang mit der menschlichen Bildsynthese. Diese Fähigkeit ermöglicht es Betrügern, gefälschte Profile in sozialen Medien zu erstellen. Gezielte Anwendungen von GANs, die darauf ausgelegt sind, einzigartige und realistische Bilder von Personen zu erzeugen, die in der Realität nicht existieren, könnten die Erstellung falscher Profile erschweren\cite{Aggarwal.2021}.
+Ein kritisches Problem von GANs ist die Instabilität des Trainings aufgrund von Modekollaps, was die Weiterentwicklung des generativen Lernens und potentielle Anwendungen einschränkt \cite{Liu.2022}. Der Generator lernt nur Bilder bestimmter Arten der Datenverteilung.  Andere Arten, die ebenfalls in der Verteilung vorkommen, werden hingegen vernachlässigt \cite{Srivastava.2017}. Ansätze wie das Hinzufügen von Rauschen zum Netzwerk, eine Manifold Entropy Estimation \cite{Liu.2022} und implizites Variationslernen \cite{Srivastava.2017} wurden bereits vorgeschlagen, um dieses Problem zu lösen.
+Des Weiteren birgt die Fähigkeit eines GANs zur Generierung von Inhalten, die nahezu identisch mit authentischen Inhalten sind, potenzielle Herausforderungen in realen Szenarien, insbesondere im Zusammenhang mit der menschlichen Bildsynthese. Diese Fähigkeit ermöglicht es Betrügern, gefälschte Profile in sozialen Medien zu erstellen. Gezielte Anwendungen von GANs, die darauf ausgelegt sind, einzigartige und realistische Bilder von Personen zu erzeugen, die in der Realität nicht existieren, könnten die Erstellung falscher Profile erschweren \cite{Aggarwal.2021}.
 
 
 \section{Pix2Pix}
@@ -61,7 +61,7 @@ Die Transformation von Tagesaufnahmen in Nachtbilder ist eine weitere beeindruck
 \newline
 Schließlich wird Pix2Pix auch zur Vervollständigung von Fotos mit fehlenden Pixeln verwendet, beispielsweise um unvollständige Bilder, die aus Paris StreetView stammen, zu reparieren und zu vervollständigen \cite{PhillipIsola.}.
 \newline
-Jedoch kann Pix2Pix auch bei medizinischen Anwendungen, insbesondere in der Augenheilkunde, hilfreich sein. Hier wird Pix2Pix für die Post-Interventions-Prognose eingesetzt, um zu zeigen, wie sich die Netzhaut nach einer Anti-VEGF-\\Injektionsbehandlung verändert. Dies basiert auf Bildern, die vor der Injektion bei Patienten mit exsudativer altersbedingter Makuladegeneration aufgenommen wurden. Durch diese Technik können Ärzte und Patienten eine Vorstellung davon bekommen, welche Veränderungen im Auge nach der Behandlung zu erwarten sind \cite{AramYouJinKukKimIkHeeRyuTaeKeunYoo.2022}.
+Jedoch kann Pix2Pix auch bei medizinischen Anwendungen, insbesondere in der Augenheilkunde, hilfreich sein. Hier wird Pix2Pix für die Post-Interventions-\\Prognose eingesetzt, um zu zeigen, wie sich die Netzhaut nach einer Anti-VEGF-\\Injektionsbehandlung verändert. Dies basiert auf Bildern, die vor der Injektion bei Patienten mit exsudativer altersbedingter Makuladegeneration aufgenommen wurden. Durch diese Technik können Ärzte und Patienten eine Vorstellung davon bekommen, welche Veränderungen im Auge nach der Behandlung zu erwarten sind \cite{AramYouJinKukKimIkHeeRyuTaeKeunYoo.2022}.
 
 \section{CycleGAN}
 CycleGAN, das 2017 von Jun-Yan Zhu et al. vorgestellt wurde, stellt eine neue Entwicklung im Bereich des maschinellen Lernens und insbesondere der Bildübersetzung zwischen unpaaren Domänen dar. Es erweitert die Pix2Pix-Architektur durch die Einführung einer Zykluskonsistenz-Verlustfunktion (Cycle Consistency Loss), die sicherstellt, dass das Originalbild nach einem Übersetzungs- und Rückübersetzungszyklus erhalten bleibt. Der Generator $G$ transformiert Bilder aus der Domäne $X$ in die Domäne $Y$, während der Generator $F$ den umgekehrten Prozess durchführt. Diese Transformationen werden ohne gepaarte Trainingsdaten durchgeführt.
@@ -77,7 +77,7 @@ Die Funktionsweise dieser Schicht basiert auf der schrittweisen Verschiebung der
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.5\linewidth]{./images/convolutionalLayer.png}
-	\caption{Beispiel einer Convolutional-Operation mit einem 3x3 Kernel und Stride 1\cite{Yamashita.2018}}
+	\caption{Beispiel einer Convolutional-Operation mit einem 3x3 Kernel und Stride 1 \cite{Yamashita.2018}}
 	\label{fig:convolutionalLayer}
 \end{figure}
 
@@ -85,9 +85,9 @@ Die Verwendung verschiedener Kernels, sowohl in Bezug auf Größe als auch Anzah
 
 Zusätzlich fungieren die Kernels als Subsampling-Mechanismus, bedingt durch die begrenzte Ausdehnung der Convolution-Operation bis zum Bildrand. Die Wahl der Strides, als die Distanz zwischen zwei verschobenen Kernelpositionen, beeinflusst diesen Subsampling-Effekt. Die Anwendung von Padding, um das Bild vor jeder Convolution zu vergrößern, kann dazu beitragen, ungewollte Unterabtastung (Downsampling) zu minimieren.
 
-Ein wesentlicher Vorzug von Convolutional Layers besteht in der signifikanten Reduzierung der zu trainierenden Parameter und der Komplexität des Modells. Dies führt zu einer verbesserten Effizienz, da weniger Gewichte optimiert werden müssen, und trägt zur Prävention von Overfitting bei\cite{Yamashita.2018,OShea.2015}.
+Ein wesentlicher Vorzug von Convolutional Layers besteht in der signifikanten Reduzierung der zu trainierenden Parameter und der Komplexität des Modells. Dies führt zu einer verbesserten Effizienz, da weniger Gewichte optimiert werden müssen, und trägt zur Prävention von Overfitting bei \cite{Yamashita.2018,OShea.2015}.
 
-Die Ergebnisse der Convolutional Layer werden anschließend durch eine nicht-lineare Aktivierungsfunktion weitergereicht, um die Fähigkeit des Netzwerks zur Modellierung komplexer, nicht-linearer Zusammenhänge zu verbessern. Die Einbeziehung einer Aktivierungsfunktion, wie beispielsweise der ReLU (Rectified Linear Unit), ermöglicht es dem Netzwerk, nicht-linear separierbare Muster und Merkmale zu erfassen. Ohne Aktivierungsfunktionen würden die Convolutional Layers nur lineare Transformationen durchführen, was die Lernfähigkeit des Modells deutlich einschränken würde\cite{Sharma.2017}.
+Die Ergebnisse der Convolutional Layer werden anschließend durch eine nicht-lineare Aktivierungsfunktion weitergereicht, um die Fähigkeit des Netzwerks zur Modellierung komplexer, nicht-linearer Zusammenhänge zu verbessern. Die Einbeziehung einer Aktivierungsfunktion, wie beispielsweise der ReLU (Rectified Linear Unit), ermöglicht es dem Netzwerk, nicht-linear separierbare Muster und Merkmale zu erfassen. Ohne Aktivierungsfunktionen würden die Convolutional Layers nur lineare Transformationen durchführen, was die Lernfähigkeit des Modells deutlich einschränken würde \cite{Sharma.2017}.
 
 \section{Bibliotheken}
 \subsection{Tensorflow}
