@@ -3,9 +3,9 @@
 
 Die Struktur des Generator in der Pix2Pix-Implementierung ist ein wesentlicher Aspekt, der die Leistungsfähigkeit des Modells bestimmt. Der Generator ist als U-Net-Architektur aufgebaut, die aus dem Encoder und Decoder bestehen die wiederum  aufeinanderfolgende Downsampling- und Upsampling-Schritten beinhalten.
 \newline
-Im Encoder-Teil des Generators wird das Downsampling durch eine Reihe von Convolutional Neuronal Network (CNN) Schichten realisiert, die durch die downsample-Funktion innerhalb des downstack definiert sind. 
+Im Encoder-Teil des Generators wird das Downsampling durch eine Reihe von Convolutional Neuronal Network (CNN) Schichten realisiert, die durch die downsample-Funktion innerhalb des downstack definiert sind (Code \ref{cod:Pix2PixGAN Generator}). 
 
-\begin{lstlisting}[language=pyhaff, caption={Downsampling-Schritt in Pix2Pix}, label={cod:Pix2PixGAN Generator}][H]
+\begin{lstlisting}[language=pyhaff, caption={Downsampling-Schritt in Pix2Pix}, 		label={cod:Encoder}]
 down_stack = [
 	downsample(64, 4, apply_batchnorm=False),  # (batch_size, 128, 128, 64)
 	downsample(128, 4),  # (batch_size, 64, 64, 128)
@@ -19,9 +19,9 @@ down_stack = [
 \end{lstlisting}
 
 Die downsample-Funktion erstellt eine Downsampling-Schicht, die mittels einer Conv2D-Schicht mit spezifischen Filtern und Kernel-Größen die räumlichen Dimensionen der Eingabebilder reduziert. Zur Verbesserung der Stabilität und Leistungsfähigkeit des Modells integriert die Funktion optional eine Batch-Normalisierung. Diese Normalisierung reguliert und standardisiert die Ausgabe der Conv2D-Schicht, was dazu beiträgt, das Training effizienter zu gestalten.
-Darüber hinaus beinhaltet die Funktion eine LeakyReLU-Aktivierung, eine Variation der herkömmlichen ReLU-Aktivierungsfunktion. LeakyReLU ermöglicht es, dass auch für negative Eingabewerte ein kleiner Gradient erhalten bleibt, wodurch das Problem der inaktiven Neuronen, bekannt als "sterbende ReLUs", vermieden wird.
+Darüber hinaus beinhaltet die Funktion eine LeakyReLU-Aktivierung, eine Variation der herkömmlichen ReLU-Aktivierungsfunktion. LeakyReLU ermöglicht es, dass auch für negative Eingabewerte ein kleiner Gradient erhalten bleibt, wodurch das Problem der inaktiven Neuronen, bekannt als "sterbende ReLUs", vermieden wird (Code \ref{cod:Encoder-Function}).
 
-\begin{lstlisting}[language=pyhaff, caption={Downsampling-Schicht in Pix2Pix}, label={cod:Pix2PixGAN Generator}]
+\begin{lstlisting}[language=pyhaff, caption={Downsampling-Schicht in Pix2Pix}, label={cod:Encoder-Function}]
 def downsample(filters, size, apply_batchnorm=True):
 	initializer = tf.random_normal_initializer(0., 0.02)
 	result = tf.keras.Sequential()
@@ -33,12 +33,13 @@ def downsample(filters, size, apply_batchnorm=True):
 	
 	result.add(tf.keras.layers.LeakyReLU())
 	return result
+	
 \end{lstlisting}
 
 
-Im Anschluss daran erfolgt das Upsampling im Decoder-Teil des Generators, das durch die upsample-Funktion innerhalb des upstack repräsentiert wird. Diese Schichten arbeiten daran, die Merkmale auf ein höher ausgelöstes Format zu projizieren und die Bildgröße wiederherzustellen.
+Im Anschluss daran erfolgt das Upsampling im Decoder-Teil des Generators, das durch die upsample-Funktion innerhalb des upstack repräsentiert wird. Diese Schichten arbeiten daran, die Merkmale auf ein höher ausgelöstes Format zu projizieren und die Bildgröße wiederherzustellen (Code \ref{cod:Decoder}).
 
-\begin{lstlisting}[language=pyhaff, caption={Upsampling-Schritt in Pix2Pix}, label={cod:Pix2PixGAN Generator}]
+\begin{lstlisting}[language=pyhaff, caption={Upsampling-Schritt in Pix2Pix}, label={cod:Decoder}]
 up_stack = [
 	upsample(512, 4, apply_dropout=True),  # (batch_size, 2, 2, 1024)
 	upsample(512, 4, apply_dropout=True),  # (batch_size, 4, 4, 1024)
@@ -50,10 +51,9 @@ up_stack = [
 ]
 \end{lstlisting}
 
-Die upsampling-Funktion verwendet eine spezielle Art von Convolutional Layer, die Conv2DTranspose-Schicht, um die Bildgröße zu erhöhen. Diese Schicht kehrt den Prozess einer Convolutional Layer Schicht um, indem sie die Eingabedaten expandiert, was für das Wiederherstellen einer größerem Bildgröße im Generator unerlässlich ist. Zusätzlich zur Conv2DTranspose-Schicht integriert die upsample-Funktion eine Batch-Normalisierung, die zur Stabilisierung des Lernprozesses beiträgt, indem sie die Ausgaben der Conv2DTranspose-Schicht normalisiert. 
-\begin{figure}[H]
-	\centering
-\begin{lstlisting}[language=pyhaff, caption={Upsampling-Schritt in Pix2Pix}, label={cod:Pix2PixGAN Generator}]
+Die upsampling-Funktion verwendet eine spezielle Art von Convolutional Layer, die Conv2DTranspose-Schicht, um die Bildgröße zu erhöhen. Diese Schicht kehrt den Prozess einer Convolutional Layer Schicht um, indem sie die Eingabedaten expandiert, was für das Wiederherstellen einer größerem Bildgröße im Generator unerlässlich ist. Zusätzlich zur Conv2DTranspose-Schicht integriert die upsample-Funktion eine Batch-Normalisierung, die zur Stabilisierung des Lernprozesses beiträgt, indem sie die Ausgaben der Conv2DTranspose-Schicht normalisiert (Code \ref{cod:Decoder-Function}). 
+
+\begin{lstlisting}[language=pyhaff, caption={Upsampling-Schritt in Pix2Pix}, label={cod:Decoder-Function}]
 def upsample(filters, size, apply_dropout=True):
 	initializer = tf.random_normal_initializer(0., 0.02)
 	result = tf.keras.Sequential()
@@ -68,14 +68,14 @@ def upsample(filters, size, apply_dropout=True):
 	result.add(tf.keras.layers.ReLU())
 	return result
 \end{lstlisting} 
-\end{figure}
+
 Dies ist ein wichtiger Schritt, um die interne Kovariantenverschiebung zu reduzieren und die Leistung des Modells zu verbessern. Ein weiteres wichtiges Merkmal der Funktion ist die optional Anwendung von Dropout um Overfitting zu vermeiden. Dies trägt dazu bei dass das Modell robustere und generalisierbare Merkmale lernt. Schließlich wird eine ReLU-Aktivierungsfunktion angewendet, die dafür sorgt, dass das Modell nicht-lineare Zusammenhänge lernt. 
 \\\newline
 Die Skip-Verbindungen werden im Generator durch die Speicherung und spätere Verwendung der Ausgaben der Downsampling-Schichten in der skips-Liste realisiert. Nach dem Downsampling-Prozess werden diese gespeicherten Ausgaben in umgekehrter Reihenfolge durchlaufen und mit den Ausgaben der Upsampling-Schichten mittels einer Concatenate-Operation verbunden. Diese Kombination von hoch- und niedrigstufigen Merkmalen führt zu einer detaillierteren und genaueren Bildrekonstruktion.
 \newline
-Schließlich wird das endgültige Bild durch die letzte Schicht des Generators erzeugt, eine Conv2DTranspose-Schicht, die die Ausgabe des Generators darstellt. Diese letzte Schicht spielt eine entscheidende Rolle bei der Erzeugung des endgültigen Bildes, das die kombinierten Merkmale aus dem gesamten Netzwerk nutzt.
+Schließlich wird das endgültige Bild durch die letzte Schicht des Generators erzeugt, eine Conv2DTranspose-Schicht, die die Ausgabe des Generators darstellt. Diese letzte Schicht spielt eine entscheidende Rolle bei der Erzeugung des endgültigen Bildes, das die kombinierten Merkmale aus dem gesamten Netzwerk nutzt (Code \ref{cod:Skip-Verbindungen}).
 
-\begin{lstlisting}[language=pyhaff, caption={Skip Verbindungen in Pix2Pix}, label={cod:Pix2PixGAN Generator}]
+\begin{lstlisting}[language=pyhaff, caption={Skip Verbindungen in Pix2Pix}, label={cod:Skip-Verbindungen}]
 	initializer = tf.random_normal_initializer(0., 0.02)
 	last = tf.keras.layers.Conv2DTranspose(OUTPUT_CHANNELS, 4, strides=2, padding='same',
 	kernel_initializer=initializer, activation='tanh')  # (batch_size, 256, 256, 3)
@@ -98,9 +98,32 @@ Schließlich wird das endgültige Bild durch die letzte Schicht des Generators e
 \end{lstlisting}
 
 \subsection{Diskriminator}
-Der Diskriminator im Pix2Pix-Modell ist eine tiefgehende neuronale Netzarchitektur, die zwei Eingabebilder - ein Eingabebild und ein Zielbild - verarbeitet. Diese Bilder werden entlang ihrer Farbkanäle zu einem einzigen Bild kombiniert. Anschließend durchläuft das Bild eine Reihe von Downsampling-Schritten mittels Convolutional Layern, um die räumliche Auflösung zu reduzieren und wichtige Bildmerkmale zu extrahieren. Nach mehreren Downsampling-Phasen folgt eine entscheidende Verarbeitungsschicht, die die Bildmerkmale weiter analysiert und normalisiert. Der finale Output des Diskriminators erfolgt durch einen spezialisierten Convolutional Layer, der eine Patch-basierte Bewertung des Bildes vornimmt. Diese Patch-basierte Analyse ist zentral für die Funktionsweise des Diskriminators, indem sie es ihm ermöglicht, die Echtheit jedes Bildbereichs unabhängig zu bewerten, was ein Schlüsselelement der PatchGAN-Architektur ist. Insgesamt handelt es sich um ein komplexes System zur Bildanalyse, das speziell für die Aufgabe der Bild-zu-Bild-Übersetzung entwickelt wurde.
-\lstinputlisting[language=pyhaff, caption=Pix2Pix Diskriminator in Tensorflow]{code/Pix2Pix_Diskriminator.txt}
+Der Diskriminator im Pix2Pix-Modell ist eine tiefgehende neuronale Netzarchitektur, die zwei Eingabebilder - ein Eingabebild und ein Zielbild - verarbeitet. Diese Bilder werden entlang ihrer Farbkanäle zu einem einzigen Bild kombiniert. Anschließend durchläuft das Bild eine Reihe von Downsampling-Schritten mittels Convolutional Layern, um die räumliche Auflösung zu reduzieren und wichtige Bildmerkmale zu extrahieren. Nach mehreren Downsampling-Phasen folgt eine entscheidende Verarbeitungsschicht, die die Bildmerkmale weiter analysiert und normalisiert. Der finale Output des Diskriminators erfolgt durch einen spezialisierten Convolutional Layer, der eine Patch-basierte Bewertung des Bildes vornimmt. Diese Patch-basierte Analyse ist zentral für die Funktionsweise des Diskriminators, indem sie es ihm ermöglicht, die Echtheit jedes Bildbereichs unabhängig zu bewerten, was ein Schlüsselelement der PatchGAN-Architektur ist. Insgesamt handelt es sich um ein komplexes System zur Bildanalyse, das speziell für die Aufgabe der Bild-zu-Bild-Übersetzung entwickelt wurde (Code \ref{cod:Diskriminator}).
 
+\begin{lstlisting}[language=pyhaff, caption={Diskriminator Pix2Pix}, label={cod:Diskriminator}]
+def Discriminator():
+	inp = tf.keras.layers.Input(shape=[256, 256, 3], name='input_image')
+	tar = tf.keras.layers.Input(shape=[256, 256, 3], name='target_image')
+	
+	x = tf.keras.layers.concatenate([inp, tar])  # (batch_size, 256, 256, channels*2)
+	
+	down1 = downsample(64, 4, False)(x)  # (batch_size, 128, 128, 64)
+	down2 = downsample(128, 4)(down1)  # (batch_size, 64, 64, 128)
+	down3 = downsample(256, 4)(down2)  # (batch_size, 32, 32, 256)
+	down4 = downsample(512,4)(down3)
+	
+	# Zweite letzte Ausgabeschicht
+	initializer = tf.random_normal_initializer(0., 0.02)
+	last = tf.keras.layers.Conv2D(512, 4, padding='same', kernel_initializer=initializer)(down4)
+	last = tf.keras.layers.BatchNormalization()(last)
+	last = tf.keras.layers.LeakyReLU()(last)
+	
+	# Patch-Ausgang
+	patch_out = tf.keras.layers.Conv2D(1, 4, padding='same', kernel_initializer=initializer)(last)
+	patch_out = tf.keras.layers.Activation('sigmoid')(patch_out)
+	
+	return tf.keras.Model(inputs=[inp, tar], outputs=patch_out)
+\end{lstlisting}
 
 
 \subsection{Verlustfunktion}
